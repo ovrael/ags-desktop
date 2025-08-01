@@ -1,0 +1,11 @@
+{
+    "general": {
+        "languageCode": "pl"
+    },
+    "timer": {
+        "defaultTimerTimeSeconds": 600,
+        "maxRunningTimers": 10,
+        "alarmSoundFilePath": "data/timer/timer_alarm_sound.mp3",
+        "alarmSoundLengthInSeconds": 30
+    }
+}

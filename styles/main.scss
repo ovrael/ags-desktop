@@ -1,0 +1,51 @@
+@use "saveTimerWindowStyle.scss";
+@use "timer.scss";
+
+// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+$fg-color: #{"@theme_fg_color"};
+// $bg-color: #d31a1a;
+$bg-color: #{"@theme_bg_color"};
+
+* {
+  font-family: "FiraCode Nerd Font", "FiraCode Nerd Font Bold", monospace;
+  font-feature-settings: "liga" on;
+  font-size: 14px;
+}
+
+window.Bar {
+  background: transparent;
+  color: $fg-color;
+  font-weight: bold;
+
+  > centerbox {
+    background: transparent;
+    border-radius: 10px;
+    margin: 0px 8px 4px 8px;
+  }
+
+  centerbox > box {
+    background-color: transparent;
+  }
+
+  .icon-button {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .clock {
+    background: rgb(94, 108, 236);
+    padding: 0px 10px;
+    border-radius: 4px;
+    font-family: "Fira Code";
+  }
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.no-margin {
+  margin: 0;
+}

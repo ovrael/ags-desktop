@@ -1,0 +1,12 @@
+{
+    "ADD": " Dodaj",
+    "CANCEL": " Anuluj",
+    "addTimer": " Dodaj minutnik",
+    "runTimer": " Start",
+    "timerEnterEditMode": "Edytuj zapisane minutniki",
+    "timerExitEditMode": "Wyjdź z trybu edycji",
+    "savedTimers": "Zapisane minutniki",
+    "runningTimers": "Uruchomione minutniki",
+    "saveTimerAskLabel": "Ustaw czas oraz nazwę aby zapisać minutnik",
+    "saveTimerNamePlaceholder": "Nazwa minutnika, na przykład: pizza, nauka, drzemka"
+}

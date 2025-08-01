@@ -1,0 +1,12 @@
+{
+    "ADD": " Add",
+    "CANCEL": " Cancel",
+    "addTimer": " Add timer",
+    "runTimer": " Start",
+    "timerEnterEditMode": "Edit saved timers",
+    "timerExitEditMode": "Exit edit mode",
+    "savedTimers": "Saved timers",
+    "runningTimers": "Running timers",
+    "saveTimerAskLabel": "Set timer's time and name to save it.",
+    "saveTimerNamePlaceholder": "Provide timer name eg. pizza, lesson, nap"
+}
