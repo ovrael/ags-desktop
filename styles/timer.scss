@@ -1,47 +1,46 @@
-// BUTTON
+//#region Main button
 menubutton > button {
   margin: 0px;
   padding: 0px;
 }
-
 .timer-button {
   margin: 0px;
   padding: 0px;
 }
 
 .timer-button-free {
-  color: rgba(36, 73, 196, 0.95);
+  color: rgba(0, 120, 255, 0.95);
   border-radius: 4px;
-  border: 2px solid rgba(36, 73, 196, 0.2);
-  background-color: rgba(36, 73, 196, 0.1);
+  border: 2px solid rgba(0, 120, 255, 0.2);
+  background-color: rgba(0, 120, 255, 0.1);
 }
 
 .timer-button-free:hover {
-  background-color: rgba(36, 73, 196, 0.215);
+  background-color: rgba(0, 120, 255, 0.215);
 }
 
 .timer-button-running {
-  color: rgba(196, 36, 36, 0.95);
+  color: rgba(200, 35, 35, 0.95);
   border-radius: 4px;
-  border: 2px solid rgba(196, 36, 36, 0.2);
-  background-color: rgba(196, 36, 36, 0.1);
+  border: 2px solid rgba(200, 35, 35, 0.2);
+  background-color: rgba(200, 35, 35, 0.1);
 }
 
 .timer-button-running:hover {
-  background-color: rgb(230, 40, 40, 0.215);
+  background-color: rgb(200, 35, 35, 0.215);
 }
 
 .timer-button-running-as-left {
-  color: rgba(196, 36, 36, 0.95);
+  color: rgba(200, 35, 35, 0.95);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
-  border-left: 2px solid rgba(196, 36, 36, 0.2);
-  border-top: 2px solid rgba(196, 36, 36, 0.2);
-  border-bottom: 2px solid rgba(196, 36, 36, 0.2);
+  border-left: 2px solid rgba(200, 35, 35, 0.2);
+  border-top: 2px solid rgba(200, 35, 35, 0.2);
+  border-bottom: 2px solid rgba(200, 35, 35, 0.2);
   border-right: 0px none transparent;
-  background-color: rgba(196, 36, 36, 0.1);
+  background-color: rgba(200, 35, 35, 0.1);
 }
 
 .timer-button:hover .timer-button-running-as-left {
@@ -49,32 +48,32 @@ menubutton > button {
 }
 
 .timer-button-done {
-  color: rgba(81, 196, 36, 0.95);
+  color: rgba(80, 200, 35, 0.95);
   border-radius: 4px;
-  border: 2px solid rgba(73, 196, 36, 0.2);
-  background-color: rgba(63, 196, 36, 0.1);
+  border: 2px solid rgba(80, 200, 35, 0.2);
+  background-color: rgba(80, 200, 35, 0.1);
 }
 
 .timer-button-done:hover {
-  background-color: rgba(72, 230, 40, 0.215);
+  background-color: rgba(80, 200, 35, 0.215);
 }
 
 .timer-button-done-as-right {
   color: rgba(81, 196, 36, 0.95);
-  border: 2px solid rgba(73, 196, 36, 0.2);
+  border: 2px solid rgba(80, 200, 35, 0.2);
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
-  border-right: 2px solid rgba(73, 196, 36, 0.2);
-  border-top: 2px solid rgba(73, 196, 36, 0.2);
-  border-bottom: 2px solid rgba(73, 196, 36, 0.2);
+  border-right: 2px solid rgba(80, 200, 35, 0.2);
+  border-top: 2px solid rgba(80, 200, 35, 0.2);
+  border-bottom: 2px solid rgba(80, 200, 35, 0.2);
   border-left: 0px none transparent;
-  background-color: rgba(63, 196, 36, 0.1);
+  background-color: rgba(80, 200, 35, 0.1);
 }
 
 .timer-button:hover .timer-button-done-as-right {
-  background-color: rgba(72, 230, 40, 0.215);
+  background-color: rgba(80, 200, 35, 0.215);
 }
 
 .timer-button-label {
@@ -83,13 +82,176 @@ menubutton > button {
   padding: 4px 12px;
 }
 
-// POPOVER
-.timer-popover-saved-timer {
-  border: 2px solid blue;
+//#endregion
+
+//#region Popover
+.timer-popover {
+  background-color: transparent;
 }
 
+popover.timer-popover contents {
+  background-color: rgba(0, 0, 0, 0.75);
+  color: rgba(255, 255, 255, 0.45);
+  padding: 16px;
+  border-radius: 0px;
+}
+
+//#endregion
+
+//#region PopoverContent
+.small-button {
+  padding: 1px 2px;
+}
+
+.small-button > label {
+  font-size: 12px;
+}
+
+//#region Clock - time entry
+.timer-popover-label-digit-container {
+  background-color: rgba(25, 0, 0, 0.6);
+}
+
+.timer-popover-label-digit {
+  font-family: "FS Sevegment", sans-serif;
+  font-size: 50px;
+  color: rgba(175, 5, 5, 0.55);
+  background-color: transparent;
+}
+
+.timer-popover-label-digit-background {
+  font-family: "FS Sevegment", sans-serif;
+  font-size: 50px;
+  color: rgb(40, 5, 5);
+  background-color: transparent;
+}
+//#endregion
+
+//#region Start timer button
+.timer-popover-start-button {
+  color: rgba(50, 200, 35, 0.95);
+  border-radius: 0px;
+  border: 2px solid rgba(50, 200, 35, 0.2);
+  background-color: rgba(50, 200, 35, 0.1);
+}
+
+.timer-popover-start-button:hover {
+  background-color: rgba(50, 200, 35, 0.215);
+}
+//#endregion
+
+//#region Pause timer button
+.timer-popover-pause-timer-button {
+  color: rgba(235, 190, 50, 0.95);
+  border-radius: 0px;
+  border: 2px solid rgba(235, 190, 50, 0.2);
+  background-color: rgba(235, 190, 50, 0.1);
+}
+
+.timer-popover-pause-timer-button:hover {
+  background-color: rgba(235, 190, 50, 0.215);
+}
+//#endregion
+
+//#region Add timer button
+.timer-popover-add-timer-button {
+  color: rgba(70, 230, 250, 0.95);
+  border-radius: 0px;
+  border: 2px solid rgba(70, 230, 250, 0.2);
+  background-color: rgba(70, 230, 250, 0.1);
+}
+
+.timer-popover-add-timer-button:hover {
+  background-color: rgba(70, 230, 250, 0.215);
+}
+//#endregion
+
+//#region Edit saved timers button
+.timer-popover-edit-timers-button {
+  color: rgba(255, 160, 35, 0.95);
+  border-radius: 0px;
+  border: 2px solid rgba(255, 160, 35, 0.2);
+  background-color: rgba(255, 160, 35, 0.1);
+}
+
+.timer-popover-edit-timers-button:hover {
+  background-color: rgba(255, 160, 35, 0.215);
+}
+//#endregion
+
+//#region Remove timer button
+.timer-popover-remove-timer-button {
+  color: rgba(210, 20, 20, 0.95);
+  border-radius: 0px;
+  border: 2px solid rgba(210, 20, 20, 0.2);
+  background-color: rgba(210, 20, 20, 0.1);
+  padding: 2px;
+}
+
+.timer-popover-remove-timer-button:hover {
+  background-color: rgba(210, 20, 20, 0.215);
+}
+//#endregion
+
+//#region Remove done timer button
+.timer-popover-remove-done-timer-button {
+  color: rgba(210, 20, 170, 0.95);
+  border-radius: 0px;
+  border: 2px solid rgba(210, 20, 170, 0.2);
+  background-color: rgba(210, 20, 170, 0.1);
+  padding: 2px;
+}
+
+.timer-popover-remove-done-timer-button:hover {
+  background-color: rgba(210, 20, 170, 0.215);
+}
+//#endregion
+
+//#region Move timer button
+.timer-popover-move-timer-button {
+  color: rgba(175, 175, 175, 0.95);
+  border-radius: 0px;
+  border: 1px solid rgba(175, 175, 175, 0.2);
+  background-color: rgba(175, 175, 175, 0.1);
+  margin-right: 6px;
+  padding: 0px;
+}
+
+.timer-popover-move-timer-button:hover {
+  background-color: rgba(175, 175, 175, 0.215);
+}
+//#endregion
+
+//#region Saved timer container
+.timer-popover-saved-timers-container {
+}
+
+//#endregion
+
+//#region Running timer progress bar
 .running-timer-bar {
-  background-color: #e5ff00;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0px;
+  background-color: transparent;
+}
+
+.running-timer-bar > trough > block.empty {
+  background-color: transparent;
+  border-radius: 0px;
+}
+
+.running-timer-bar > trough > block.filled.low {
+  background-color: rgb(200, 0, 0, 0.25);
+  border-radius: 0px;
+}
+
+.running-timer-bar > trough > block.filled.high {
+  background-color: rgb(255, 150, 0, 0.25);
+  border-radius: 0px;
+}
+
+.running-timer-bar > trough > block.filled.full {
+  background-color: rgb(140, 255, 0, 0.25);
   border-radius: 0px;
 }
 
@@ -97,3 +259,4 @@ menubutton > button {
   background-color: transparent;
   border-radius: 0px;
 }
+//#endregion

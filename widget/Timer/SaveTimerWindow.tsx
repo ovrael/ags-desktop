@@ -44,13 +44,14 @@ export class SaveTimerWindow {
 
     // Description
     const askLabel = new Gtk.Label();
-    askLabel.label = configuration.getTexts().saveTimerAskLabel;
+    askLabel.label = configuration.getTexts().timer.saveAskLabel;
     content.append(askLabel);
 
     // Text entry
     const nameEntry = new Gtk.Entry();
     nameEntry.name = "UserEntry";
-    nameEntry.placeholderText = configuration.getTexts().saveTimerAskLabel;
+    nameEntry.maxLength = 16;
+    nameEntry.placeholderText = configuration.getTexts().timer.saveAskLabel;
     nameEntry.buffer.connect("inserted-text", (buffer) => {
       this.timerName = buffer.get_text();
     });
@@ -146,7 +147,7 @@ export class SaveTimerWindow {
 
   private createAddButton(): Gtk.Button {
     const addButton = new Gtk.Button();
-    addButton.label = configuration.getTexts().ADD;
+    addButton.label = configuration.getTexts().general.add;
     addButton.cssClasses = [
       "save-timer-window-button",
       "save-timer-window-button-add",
@@ -176,7 +177,7 @@ export class SaveTimerWindow {
 
   private createCancelButton(): Gtk.Button {
     const cancelButton = new Gtk.Button();
-    cancelButton.label = configuration.getTexts().CANCEL;
+    cancelButton.label = configuration.getTexts().general.cancel;
     cancelButton.cssClasses = [
       "save-timer-window-button",
       "save-timer-window-button-cancel",

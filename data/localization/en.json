@@ -1,12 +1,20 @@
 {
-    "ADD": " Add",
-    "CANCEL": " Cancel",
-    "addTimer": " Add timer",
-    "runTimer": " Start",
-    "timerEnterEditMode": "Edit saved timers",
-    "timerExitEditMode": "Exit edit mode",
-    "savedTimers": "Saved timers",
-    "runningTimers": "Running timers",
-    "saveTimerAskLabel": "Set timer's time and name to save it.",
-    "saveTimerNamePlaceholder": "Provide timer name eg. pizza, lesson, nap"
+    "general": {
+        "add": "Add",
+        "cancel": "Cancel"
+    },
+    "timer": {
+        "add": "Add timer",
+        "run": "Start",
+        "enterEditMode": "Edit saved timers",
+        "exitEditMode": "Exit edit mode",
+        "saved": "Saved timers",
+        "running": "Running timers",
+        "stateRunning": "Timer is currently running",
+        "statePaused": "Timer is currently paused",
+        "saveAskLabel": "Set timer's time and name to save it. MAX 16 CHARACTERS.",
+        "saveNamePlaceholder": "Provide timer name eg. pizza, lesson, nap",
+        "endNonameNotificationTitle": "Timer finished!",
+        "endNamedNotificationTitle": "Timer {0} finished!"
+    }
 }

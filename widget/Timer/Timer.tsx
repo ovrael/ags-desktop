@@ -3,6 +3,7 @@ import TimerPopover from "./TimerPopover";
 import { timerVariables } from "./TimerVariables";
 import { TimersData } from "./TimersData";
 import { Gtk } from "ags/gtk4";
+import { icons } from "../../models/texts/textIcons";
 
 export function Timer() {
   return (
@@ -21,14 +22,17 @@ export function Timer() {
   function createLabel(timersData: TimersData) {
     if (timersData.runningTimers === 0)
       return (
-        <label class={"timer-button-free timer-button-label"} label={"󰔛"} />
+        <label
+          class={"timer-button-free timer-button-label"}
+          label={icons.alarmClock}
+        />
       );
 
     if (timersData.doneTimers === 0)
       return (
         <label
           class={"timer-button-running timer-button-label"}
-          label={`󰔟 ${timersData.runningTimers}`}
+          label={`${icons.hourglass} ${timersData.runningTimers}`}
         />
       );
 
@@ -36,7 +40,7 @@ export function Timer() {
       return (
         <label
           class={"timer-button-done timer-button-label"}
-          label={`󰞏 ${timersData.doneTimers}`}
+          label={`${icons.alarmOn} ${timersData.doneTimers}`}
         />
       );
 
@@ -44,11 +48,11 @@ export function Timer() {
       <box>
         <label
           class={"timer-button-running-as-left timer-button-label"}
-          label={`󰔟 ${timersData.getUndoneCount()}`}
+          label={`${icons.hourglass} ${timersData.getUndoneCount()}`}
         />
         <label
           class={"timer-button-done-as-right timer-button-label"}
-          label={`󰞏 ${timersData.doneTimers}`}
+          label={`${icons.alarmOn} ${timersData.doneTimers}`}
         />
       </box>
     );

@@ -1,12 +1,20 @@
 {
-    "ADD": " Dodaj",
-    "CANCEL": " Anuluj",
-    "addTimer": " Dodaj minutnik",
-    "runTimer": " Start",
-    "timerEnterEditMode": "Edytuj zapisane minutniki",
-    "timerExitEditMode": "Wyjdź z trybu edycji",
-    "savedTimers": "Zapisane minutniki",
-    "runningTimers": "Uruchomione minutniki",
-    "saveTimerAskLabel": "Ustaw czas oraz nazwę aby zapisać minutnik",
-    "saveTimerNamePlaceholder": "Nazwa minutnika, na przykład: pizza, nauka, drzemka"
+    "general": {
+        "add": "Dodaj",
+        "cancel": "Anuluj"
+    },
+    "timer": {
+        "add": "Dodaj minutnik",
+        "run": "Start",
+        "enterEditMode": "Edytuj zapisane minutniki",
+        "exitEditMode": "Zakończ tryb edycji",
+        "saved": "Zapisane minutniki",
+        "running": "Uruchomione minutniki",
+        "stateRunning": "Minutnik jest uruchomiony",
+        "statePaused": "Minutnik jest wstrzymany",
+        "saveAskLabel": "Ustaw czas i nazwę minutnika, aby go zapisać. MAKS. 16 ZNAKÓW.",
+        "saveNamePlaceholder": "Podaj nazwę minutnika, np. pizza, lekcja, drzemka",
+        "endNonameNotificationTitle": "Minutnik zakończył odliczanie!",
+        "endNamedNotificationTitle": "Minutnik {0} zakończył odliczanie!"
+    }
 }

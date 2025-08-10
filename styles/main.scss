@@ -1,5 +1,6 @@
 @use "saveTimerWindowStyle.scss";
 @use "timer.scss";
+@use "tests.scss";
 
 // https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
 $fg-color: #{"@theme_fg_color"};
@@ -40,6 +41,10 @@ window.Bar {
     border-radius: 4px;
     font-family: "Fira Code";
   }
+}
+
+button {
+  padding: 4px 6px 4px 6px;
 }
 
 .no-padding {

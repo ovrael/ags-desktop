@@ -7,6 +7,7 @@ import { SavedTimer } from "./SavedTimer";
 import { ReorderDirection, TimerDigit } from "./TimerEnums";
 import { TimerDigits } from "./TimerDigits";
 import { configuration } from "../../app";
+import { icons } from "../../models/texts/textIcons";
 
 let inEditSavedTimersMode: State<boolean> = createState(false);
 let timerSeconds: TimerDigits = new TimerDigits();
@@ -17,25 +18,17 @@ export default function TimerPopover() {
 
   return (
     <popover
-      autohide={true}
+      autohide={false}
       hasArrow={false}
+      class={"timer-popover"}
       onClosed={() => {
         inEditSavedTimersMode[1]((v) => false);
       }}
+      widthRequest={410}
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
         {createRunningTimers()}
-        <box orientation={Gtk.Orientation.VERTICAL}>
-          <box orientation={Gtk.Orientation.VERTICAL}>
-            {createTimeEntry()}
-            <button class="" onClicked={timerClicked} hexpand={true}>
-              <label label={configuration.texts[0]((t) => t.runTimer)} />
-            </button>
-          </box>
-          <button onClicked={openSaveTimerWindow} hexpand={true}>
-            <label label={configuration.texts[0]((t) => t.addTimer)} />
-          </button>
-        </box>
+        {createMainInterface()}
         {createSavedTimers()}
       </box>
     </popover>
@@ -44,7 +37,8 @@ export default function TimerPopover() {
   function createTimeEntry() {
     const timeEntryBox = new Gtk.Box({
       orientation: Gtk.Orientation.HORIZONTAL,
-      cssClasses: ["save-timer-window-timeentry-box"],
+      hexpand: true,
+      halign: Gtk.Align.CENTER,
     });
 
     const hoursBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
@@ -67,11 +61,11 @@ export default function TimerPopover() {
 
     const separatorLabel = new Gtk.Label({
       label: ":",
-      cssClasses: ["save-timer-window-time-digit"],
+      cssClasses: ["timer-popover-label-digit"],
     });
     const separatorLabel2 = new Gtk.Label({
       label: ":",
-      cssClasses: ["save-timer-window-time-digit"],
+      cssClasses: ["timer-popover-label-digit"],
     });
 
     timeEntryBox.append(hoursBox);
@@ -79,7 +73,6 @@ export default function TimerPopover() {
     timeEntryBox.append(minutesBox);
     timeEntryBox.append(separatorLabel2);
     timeEntryBox.append(secondsBox);
-
     return timeEntryBox;
   }
 
@@ -87,7 +80,7 @@ export default function TimerPopover() {
     const digitLabel = new Gtk.Label({
       name: digitIndex.toString(),
       label: timerSeconds.getDigit(digitIndex),
-      cssClasses: ["save-timer-window-time-digit"],
+      cssClasses: ["timer-popover-label-digit"],
     });
 
     const scrollController = new Gtk.EventControllerScroll({
@@ -110,61 +103,119 @@ export default function TimerPopover() {
     return digitLabel;
   }
 
-  function timerClicked(): void {
-    const seconds = timerSeconds.getAllSeconds();
-    if (seconds <= 1) return;
+  function createTimeEntryBackground() {
+    const timeEntryBox = new Gtk.Box({
+      orientation: Gtk.Orientation.HORIZONTAL,
+      hexpand: true,
+      halign: Gtk.Align.CENTER,
+    });
 
-    TimerUtils.runTimer(seconds);
-  }
+    const hoursBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+    const hourLabel1 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    const hourLabel2 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    hoursBox.append(hourLabel1);
+    hoursBox.append(hourLabel2);
 
-  function openSaveTimerWindow() {
-    SaveTimerWindow.create();
-  }
+    const minutesBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+    const minutesLabel1 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    const minutesLabel2 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    minutesBox.append(minutesLabel1);
+    minutesBox.append(minutesLabel2);
 
-  function toggleEditMode() {
-    inEditSavedTimersMode[1]((v) => !v);
+    const secondsBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+    const secondsLabel1 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    const secondsLabel2 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    secondsBox.append(secondsLabel1);
+    secondsBox.append(secondsLabel2);
+
+    const separatorLabel = new Gtk.Label({
+      label: ":",
+      cssClasses: ["timer-popover-label-digit"],
+    });
+    const separatorLabel2 = new Gtk.Label({
+      label: ":",
+      cssClasses: ["timer-popover-label-digit"],
+    });
+
+    timeEntryBox.append(hoursBox);
+    timeEntryBox.append(separatorLabel);
+    timeEntryBox.append(minutesBox);
+    timeEntryBox.append(separatorLabel2);
+    timeEntryBox.append(secondsBox);
+    return timeEntryBox;
   }
 
   function createSavedTimers() {
     return (
-      <box orientation={Gtk.Orientation.VERTICAL}>
-        <box>
+      <box
+        orientation={Gtk.Orientation.VERTICAL}
+        cssClasses={["timer-popover-saved-timers-container"]}
+      >
+        <box cssClasses={[""]}>
           <With value={timerVariables.savedTimers[0]}>
             {(savedTimers) =>
               savedTimers.length > 0 && (
                 <box orientation={Gtk.Orientation.HORIZONTAL}>
                   <label
-                    label={configuration.texts[0](
-                      (t) => `--- ${t.savedTimers} ---`
-                    )}
+                    hexpand
+                    label={configuration.texts[0]((t) => `${t.timer.saved}`)}
                   />
+
                   <button
-                    onClicked={toggleEditMode}
+                    name={"Edit saved timers btn"}
+                    class={"timer-popover-edit-timers-button small-button"}
+                    label={inEditSavedTimersMode[0]((v) =>
+                      v ? icons.back : icons.edit
+                    )}
+                    vexpand={false}
+                    hexpand={false}
+                    widthRequest={40}
+                    heightRequest={20}
+                    valign={Gtk.Align.CENTER}
+                    onClicked={() => {
+                      inEditSavedTimersMode[1]((v) => !v);
+                    }}
                     tooltipText={inEditSavedTimersMode[0]((v) =>
                       v
                         ? configuration.texts[0](
-                            (t) => t.timerExitEditMode
+                            (t) => t.timer.exitEditMode
                           ).get()
                         : configuration.texts[0](
-                            (t) => t.timerEnterEditMode
+                            (t) => t.timer.enterEditMode
                           ).get()
                     )}
-                  >
-                    <label
-                      label={inEditSavedTimersMode[0]((v) => (v ? "󰭜" : ""))}
-                    />
-                  </button>
+                  ></button>
                 </box>
               )
             }
           </With>
         </box>
+
         <box orientation={Gtk.Orientation.VERTICAL}>
           <For each={timerVariables.savedTimers[0]}>
             {(item, index: Accessor<number>) => (
               <box
                 orientation={Gtk.Orientation.HORIZONTAL}
                 cssClasses={["timer-popover-saved-timer"]}
+                marginTop={10}
               >
                 {createMoveSaveTimerButtonBox(item)}
                 {item.createLabel(inEditSavedTimersMode[0])}
@@ -173,6 +224,17 @@ export default function TimerPopover() {
             )}
           </For>
         </box>
+
+        <button
+          name={"Create saved timers btn"}
+          class={"timer-popover-add-timer-button"}
+          label={configuration.texts[0]((t) => `${icons.plus} ${t.timer.add}`)}
+          marginTop={10}
+          hexpand
+          onClicked={() => {
+            SaveTimerWindow.create();
+          }}
+        ></button>
       </box>
     );
   }
@@ -186,21 +248,21 @@ export default function TimerPopover() {
               <box>
                 <With value={timerVariables.savedTimers[0]}>
                   {(timers) =>
-                    timers && (
+                    timers.length > 1 && (
                       <box
                         orientation={Gtk.Orientation.VERTICAL}
                         hexpand={false}
                         vexpand={false}
                         widthRequest={30}
-                        heightRequest={50}
+                        heightRequest={20}
                       >
                         {timers.indexOf(savedTimer) > 0 && (
                           <button
-                            label={""}
-                            hexpand={false}
-                            vexpand={true}
+                            label={icons.arrowUp}
                             widthRequest={30}
-                            heightRequest={20}
+                            heightRequest={10}
+                            valign={Gtk.Align.CENTER}
+                            cssClasses={["timer-popover-move-timer-button"]}
                             onClicked={() => {
                               reorderSavedTimers(
                                 ReorderDirection.UP,
@@ -211,11 +273,11 @@ export default function TimerPopover() {
                         )}
                         {timers.indexOf(savedTimer) < timers.length - 1 && (
                           <button
-                            label={""}
-                            hexpand={false}
-                            vexpand={true}
+                            label={icons.arrowDown}
                             widthRequest={30}
-                            heightRequest={20}
+                            heightRequest={10}
+                            valign={Gtk.Align.CENTER}
+                            cssClasses={["timer-popover-move-timer-button"]}
                             onClicked={() => {
                               reorderSavedTimers(
                                 ReorderDirection.DOWN,
@@ -265,18 +327,23 @@ export default function TimerPopover() {
 
   function createDeleteSaveTimerButton(savedTimer: SavedTimer) {
     return (
-      <box>
+      <box name={"Delete saved timer btn container"}>
         <With value={inEditSavedTimersMode[0]}>
           {(canEdit) =>
             canEdit && (
-              <box>
-                <button
-                  label={""}
-                  onClicked={async () => {
-                    await removeTimer(savedTimer);
-                  }}
-                ></button>
-              </box>
+              <button
+                name={"Delete saved timer btn"}
+                class={"timer-popover-remove-timer-button small-button"}
+                label={icons.close}
+                vexpand={false}
+                hexpand={false}
+                widthRequest={20}
+                heightRequest={20}
+                valign={Gtk.Align.CENTER}
+                onClicked={async () => {
+                  await removeTimer(savedTimer);
+                }}
+              ></button>
             )
           }
         </With>
@@ -297,29 +364,51 @@ export default function TimerPopover() {
 
   function createRunningTimers() {
     return (
-      <box orientation={Gtk.Orientation.VERTICAL}>
-        <box>
-          <With value={timerVariables.timersData[0]}>
-            {(td) =>
-              td.runningTimers > 0 && (
-                <box>
-                  <label
-                    label={configuration.texts[0](
-                      (t) => `--- ${t.runningTimers} ---`
-                    )}
-                  />
-                </box>
-              )
-            }
-          </With>
+      <box>
+        <With value={timerVariables.timersData[0]}>
+          {(td) =>
+            td.runningTimers > 0 && (
+              <box orientation={Gtk.Orientation.VERTICAL} marginBottom={30}>
+                <label
+                  label={configuration.texts[0]((t) => `${t.timer.running}`)}
+                />
+                <For each={timerVariables.runningTimers[0]}>
+                  {(item, index: Accessor<number>) =>
+                    index((i) => item.createLabel(i)).get()
+                  }
+                </For>
+              </box>
+            )
+          }
+        </With>
+      </box>
+    );
+  }
+
+  function createMainInterface() {
+    return (
+      <box orientation={Gtk.Orientation.VERTICAL} marginBottom={30}>
+        <box hexpand>
+          <overlay hexpand cssClasses={["timer-popover-label-digit-container"]}>
+            <box hexpand $type="overlay">
+              {createTimeEntry()}
+            </box>
+            <box hexpand>{createTimeEntryBackground()}</box>
+          </overlay>
         </box>
-        <box orientation={Gtk.Orientation.VERTICAL}>
-          <For each={timerVariables.runningTimers[0]}>
-            {(item, index: Accessor<number>) =>
-              index((i) => item.createLabel(i)).get()
-            }
-          </For>
-        </box>
+        <button
+          class={"timer-popover-start-button"}
+          onClicked={() => {
+            TimerUtils.runTimer(timerSeconds.getAllSeconds());
+          }}
+          hexpand
+        >
+          <label
+            label={configuration.texts[0](
+              (t) => `${icons.play} ${t.timer.run}`
+            )}
+          />
+        </button>
       </box>
     );
   }

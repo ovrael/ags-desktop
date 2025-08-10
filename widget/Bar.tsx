@@ -3,6 +3,8 @@ import { Astal, Gtk, Gdk } from "ags/gtk4";
 import { execAsync } from "ags/process";
 import { createPoll } from "ags/time";
 import { Timer } from "./Timer/Timer";
+import { NotificationSender } from "../models/utils/NotificationSender";
+import { NotificationIcon } from "../models/enums/NotificationIcon";
 
 export function Bar(monitor: Gdk.Monitor) {
   if (monitor.description.includes("AW3423DWF")) {
@@ -41,6 +43,17 @@ function MainBar(monitor: Gdk.Monitor) {
         </box>
 
         <box $type="end" hexpand halign={Gtk.Align.END}>
+          <button
+            css={"color:white;"}
+            onClicked={async () => {
+              await NotificationSender.send(
+                "koniec czasu",
+                undefined,
+                NotificationIcon.Timer
+              );
+            }}
+            label={"Testowy przycisk"}
+          ></button>
           <Timer />
         </box>
       </centerbox>

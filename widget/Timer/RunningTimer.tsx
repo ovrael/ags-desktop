@@ -4,8 +4,12 @@ import { createTimeLeft } from "./TimerHelperFunctions";
 import { timerVariables } from "./TimerVariables";
 import { Gtk } from "ags/gtk4";
 import { Process } from "ags/process";
-import { SoundPlayer } from "../../utils/SoundPlayer";
+import { SoundPlayer } from "../../models/utils/SoundPlayer";
 import { configuration } from "../../app";
+import { TIMER_CONSTANTS } from "../../models/constants/timerConstants";
+import { NotificationSender } from "../../models/utils/NotificationSender";
+import { Tools } from "../../models/utils/Tools";
+import { icons } from "../../models/texts/textIcons";
 
 export class RunningTimer {
   public name: string | undefined = undefined;
@@ -45,6 +49,16 @@ export class RunningTimer {
       configuration.timer.alarmSoundFilePath
     );
 
+    const notificationText: string =
+      this.name === undefined
+        ? configuration.getTexts().timer.endNonameNotificationTitle
+        : Tools.formatString(
+            configuration.getTexts().timer.endNamedNotificationTitle,
+            this.name
+          );
+
+    NotificationSender.send(notificationText);
+
     setTimeout(() => {
       if (this.alarmSoundProcess !== undefined) {
         this.alarmSoundProcess.kill();
@@ -74,7 +88,7 @@ export class RunningTimer {
     this.secondsLeft[1]((v) => v + timeChange);
   }
 
-  private pauseTimer() {
+  private toggleTimerPause() {
     this.isPaused[1]((v) => !v);
   }
 
@@ -106,77 +120,113 @@ export class RunningTimer {
     const [secondsGetter, secondsSetter] = this.secondsLeft;
     const [pauseGetter, pauseSetter] = this.isPaused;
 
-    let content = <></>;
-    if (secondsGetter.get() > 0) {
-      content = (
-        <button
-          class=""
-          onClicked={() => {
-            this.pauseTimer();
-          }}
-          hexpand={true}
-        >
-          <label label={pauseGetter((paused) => (paused ? "" : ""))} />
-        </button>
-      );
-    }
-
     const timerName = this.name ?? `#${index + 1}`;
 
     return (
-      <box orientation={Gtk.Orientation.HORIZONTAL}>
-        <box>
-          <overlay>
-            <levelbar
-              cssClasses={["running-timer-bar"]}
-              orientation={Gtk.Orientation.HORIZONTAL}
-              hexpand
-              value={secondsGetter((seconds) => {
-                return 1 - seconds / this.startSeconds;
-              })}
-            />
-            <label
-              $type="overlay"
-              cssClasses={["running-timer-label"]}
-              vexpand
-              hexpand
-              label={secondsGetter(
-                (seconds) =>
-                  `${timerName}\t${createTimeLeft(
-                    seconds
-                  )} - ${this.createPercentageDone(seconds)} `
-              )}
-            ></label>
-          </overlay>
-        </box>
-        <box>
+      <box
+        orientation={Gtk.Orientation.HORIZONTAL}
+        hexpand
+        vexpand
+        marginTop={10}
+      >
+        <box name={"Pause/Play button container"}>
           <With value={secondsGetter}>
             {(seconds) =>
               seconds > 0 && (
                 <button
-                  class=""
+                  name={"Start saved timer btn"}
+                  class={pauseGetter((paused) =>
+                    paused
+                      ? "timer-popover-start-button small-button"
+                      : "timer-popover-pause-timer-button small-button"
+                  )}
+                  label={pauseGetter((paused) =>
+                    paused ? icons.play : icons.pause
+                  )}
+                  tooltipText={pauseGetter((paused) =>
+                    paused
+                      ? configuration.getTexts().timer.statePaused
+                      : configuration.getTexts().timer.stateRunning
+                  )}
+                  vexpand={false}
+                  hexpand={false}
+                  widthRequest={40}
+                  heightRequest={20}
+                  marginEnd={16}
                   onClicked={() => {
-                    this.pauseTimer();
+                    this.toggleTimerPause();
                   }}
-                >
-                  <label
-                    label={pauseGetter((paused) => (paused ? "" : ""))}
-                  />
-                </button>
+                ></button>
               )
             }
           </With>
         </box>
-        <box>
+
+        <box
+          name={"Timer progress container"}
+          marginEnd={16}
+          widthRequest={290}
+          hexpand
+          vexpand
+        >
+          <overlay vexpand hexpand>
+            <levelbar
+              vexpand
+              hexpand
+              cssClasses={["running-timer-bar"]}
+              orientation={Gtk.Orientation.HORIZONTAL}
+              value={secondsGetter((seconds) => {
+                return 1 - seconds / this.startSeconds;
+              })}
+            />
+            <box vexpand hexpand $type="overlay">
+              <label
+                class={"running-timer-label"}
+                label={timerName}
+                widthChars={
+                  TIMER_CONSTANTS.NAME_LENGTH +
+                  TIMER_CONSTANTS.LABEL_SAFESPACE_CHARS
+                }
+                xalign={1.0}
+                marginEnd={10}
+              />
+              <label
+                xalign={0.0}
+                widthChars={
+                  TIMER_CONSTANTS.TIME_LENGTH +
+                  TIMER_CONSTANTS.LABEL_SAFESPACE_CHARS +
+                  8
+                }
+                label={secondsGetter(
+                  (seconds) =>
+                    `${createTimeLeft(seconds)} - ${this.createPercentageDone(
+                      seconds
+                    )} `
+                )}
+              ></label>
+            </box>
+          </overlay>
+        </box>
+
+        <box name={"Remove running timer button container"}>
           <button
+            name={"Start saved timer btn"}
+            class={secondsGetter((seconds) =>
+              seconds > 0
+                ? "timer-popover-remove-timer-button small-button"
+                : "timer-popover-remove-done-timer-button small-button"
+            )}
+            label={secondsGetter((seconds) =>
+              seconds > 0 ? icons.close : icons.alarmFinished
+            )}
+            vexpand={false}
+            hexpand={false}
+            widthRequest={40}
+            heightRequest={20}
             onClicked={() => {
               this.removeTimer();
             }}
-          >
-            <label
-              label={secondsGetter((seconds) => (seconds > 0 ? "" : "󱜞"))}
-            />
-          </button>
+          ></button>
         </box>
       </box>
     );

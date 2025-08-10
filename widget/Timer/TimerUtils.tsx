@@ -3,6 +3,7 @@ import { timerVariables } from "./TimerVariables";
 import { SavedTimer } from "./SavedTimer";
 import { RunningTimer } from "./RunningTimer";
 import { configuration } from "../../app";
+import { Communication } from "../../models/utils/Communication";
 
 export class TimerUtils {
   public static async saveTimersToFile() {
@@ -24,7 +25,10 @@ export class TimerUtils {
         savedTimers.map((t) => new SavedTimer(t.name, t.startSeconds))
       );
     } catch (error) {
-      console.log("Cannot create saved timers => error: " + error);
+      Communication.printError(
+        "Cannot create saved timers => error: " + error,
+        "TimerUtils"
+      );
     }
   }
 
@@ -32,6 +36,8 @@ export class TimerUtils {
     timeInSeconds: number,
     name: string | undefined = undefined
   ) {
+    if (timeInSeconds <= 1) return;
+
     timerVariables.runningTimers[1]((v) => {
       if (v.length < configuration.timer.maxRunningTimers)
         return v.concat(new RunningTimer(timeInSeconds, name));

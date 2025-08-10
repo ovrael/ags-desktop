@@ -4,7 +4,7 @@ export function createTimeLeft(timeInSeconds: number): string {
     const minutes = timeInSeconds / 60;
     const seconds = timeInSeconds % 60;
 
-    return `${formatTimeNumber(hours)}.${formatTimeNumber(minutes)}.${formatTimeNumber(seconds)}`;
+    return `${formatTimeNumber(hours)}:${formatTimeNumber(minutes)}:${formatTimeNumber(seconds)}`;
 }
 
 function formatTimeNumber(timeNumber: number): string {

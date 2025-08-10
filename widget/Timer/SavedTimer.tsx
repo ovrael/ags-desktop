@@ -2,6 +2,7 @@ import { Accessor, With } from "ags";
 import { createTimeLeft } from "./TimerHelperFunctions";
 import { Gtk } from "ags/gtk4";
 import { TimerUtils } from "./TimerUtils";
+import { TIMER_CONSTANTS } from "../../models/constants/timerConstants";
 
 export class SavedTimer {
   public name: string = "";
@@ -14,28 +15,39 @@ export class SavedTimer {
 
   public createLabel(inEditMode: Accessor<boolean>) {
     return (
-      <box orientation={Gtk.Orientation.HORIZONTAL}>
-        <label label={`${this.name}`} />
+      <box name={"Saved timer label"} orientation={Gtk.Orientation.HORIZONTAL}>
         <label
-          vexpand={true}
-          hexpand={true}
-          label={`${createTimeLeft(this.startSeconds)}`}
+          label={`${this.name}`}
+          widthChars={
+            TIMER_CONSTANTS.NAME_LENGTH + TIMER_CONSTANTS.LABEL_SAFESPACE_CHARS
+          }
+          xalign={1.0}
+          marginEnd={10}
         />
-        <box>
+        <label
+          label={`󱎫 ${createTimeLeft(this.startSeconds)}`}
+          widthChars={
+            TIMER_CONSTANTS.TIME_LENGTH + TIMER_CONSTANTS.LABEL_SAFESPACE_CHARS
+          }
+          xalign={0.0}
+          hexpand
+        />
+        <box name={"Start saved timer btn container"}>
           <With value={inEditMode}>
             {(editMode) =>
               !editMode && (
-                <box orientation={Gtk.Orientation.HORIZONTAL}>
-                  <button
-                    class=""
-                    onClicked={() => {
-                      this.runTimer();
-                    }}
-                    hexpand={true}
-                  >
-                    <label label={""} />
-                  </button>
-                </box>
+                <button
+                  name={"Start saved timer btn"}
+                  class={"timer-popover-start-button small-button"}
+                  label={""}
+                  vexpand={false}
+                  hexpand={false}
+                  widthRequest={40}
+                  heightRequest={20}
+                  onClicked={() => {
+                    this.runTimer();
+                  }}
+                ></button>
               )
             }
           </With>

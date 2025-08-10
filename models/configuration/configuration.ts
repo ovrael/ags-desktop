@@ -1,17 +1,19 @@
 import { monitorFile, readFileAsync } from "ags/file";
 import { TimerConfiguration } from "./timerConfiguration";
 import { GeneralConfiguration } from "./generalConfiguration";
-import { LocaliztionTexts } from "../../data/localization/localizationTexts";
+import { LocaliztionTexts } from "../texts/localizationTexts";
 import Gio from "gi://Gio";
-import { Communication } from "../../utils/Communication";
+import { Communication } from "../utils/Communication";
 import { createState, State } from "ags";
-import { configuration, updateConfiguration } from "../../app";
+import { execAsync } from "ags/process";
 
 const CONFIG_PATH = "config/config.json"
 
 export class Configuration {
 
     private static instance: Configuration | undefined = undefined;
+
+    private pwd: string | undefined = undefined;
 
     public general: GeneralConfiguration = new GeneralConfiguration();
     public timer: TimerConfiguration = new TimerConfiguration();
@@ -25,7 +27,7 @@ export class Configuration {
 
     }
 
-    public static async Create(): Promise<Configuration> {
+    public static async create(): Promise<Configuration> {
         if (Configuration.instance !== undefined)
             return Configuration.instance;
 
@@ -47,6 +49,24 @@ export class Configuration {
         Configuration.instance = config;
 
         return config;
+    }
+
+    public async getPwd(): Promise<string> {
+        if (this.pwd !== undefined)
+            return this.pwd;
+
+        try {
+            const output = await execAsync(["pwd"]);
+            if (output === undefined)
+                return "";
+
+            this.pwd = output.trim();
+            return this.pwd;
+        } catch (err) {
+            Communication.printError("Cannot get pwd");
+        }
+
+        return "";
     }
 
     private addFileMonitorHandler() {
@@ -91,9 +111,9 @@ export class Configuration {
 
     }
 
-    public static async GetInstance() {
+    public static async getInstance() {
         if (Configuration.instance !== undefined)
             return Configuration.instance;
-        return Configuration.Create();
+        return Configuration.create();
     }
 }

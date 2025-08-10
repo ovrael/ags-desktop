@@ -1,0 +1,5 @@
+export const TIMER_CONSTANTS = {
+    NAME_LENGTH: 12,
+    TIME_LENGTH: 12,
+    LABEL_SAFESPACE_CHARS: 2
+}
