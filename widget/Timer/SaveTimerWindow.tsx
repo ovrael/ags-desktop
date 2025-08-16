@@ -5,6 +5,7 @@ import { TimerUtils } from "./TimerUtils";
 import { TimerDigits } from "./TimerDigits";
 import { TimerDigit } from "./TimerEnums";
 import { configuration } from "../../app";
+import { icons } from "../../models/texts/textIcons";
 
 export class SaveTimerWindow {
   static instance: SaveTimerWindow | undefined = undefined;
@@ -16,12 +17,14 @@ export class SaveTimerWindow {
 
   constructor() {
     this.window = Gtk.Window.new();
+    this.window.resizable = false;
     this.window.defaultWidth = 400;
     this.window.defaultHeight = 200;
     this.window.widthRequest = 400;
     this.window.heightRequest = 200;
     this.window.title = "Create timer";
     this.window.child = this.createContent();
+    this.window.cssClasses = ["create-save-timer-window"];
 
     this.window.connect("close-request", () => {
       SaveTimerWindow.instance = undefined;
@@ -51,7 +54,9 @@ export class SaveTimerWindow {
     const nameEntry = new Gtk.Entry();
     nameEntry.name = "UserEntry";
     nameEntry.maxLength = 16;
-    nameEntry.placeholderText = configuration.getTexts().timer.saveAskLabel;
+    nameEntry.marginTop = 20;
+    nameEntry.placeholderText =
+      configuration.getTexts().timer.saveNamePlaceholder;
     nameEntry.buffer.connect("inserted-text", (buffer) => {
       this.timerName = buffer.get_text();
     });
@@ -61,7 +66,7 @@ export class SaveTimerWindow {
     content.append(nameEntry);
 
     // Time entry
-    const timeEntry = this.createTimeEntryLabel();
+    const timeEntry = this.createTimeEntry();
     content.append(timeEntry);
 
     // Buttons { ADD | CANCEL }
@@ -76,10 +81,44 @@ export class SaveTimerWindow {
     return content;
   }
 
-  private createTimeEntryLabel(): Gtk.Box {
+  private createTimeEntry(): Gtk.Box {
+    const timeEntryContainer = new Gtk.Box({
+      hexpand: true,
+      marginTop: 40,
+      marginBottom: 40,
+    });
+
+    const overlay = new Gtk.Overlay({
+      hexpand: true,
+      cssClasses: ["timer-popover-label-digit-container"],
+    });
+
+    const foregroundTimeEntryContainer = new Gtk.Box({
+      hexpand: true,
+      name: "save-window-time-entry-foreground",
+    });
+
+    foregroundTimeEntryContainer.append(this.createTimeEntryForeground());
+
+    const backgroundTimeEntryContainer = new Gtk.Box({
+      hexpand: true,
+      name: "save-window-time-entry-background",
+    });
+    backgroundTimeEntryContainer.append(this.createTimeEntryBackground());
+
+    overlay.add_overlay(foregroundTimeEntryContainer);
+    overlay.set_child(backgroundTimeEntryContainer);
+
+    timeEntryContainer.append(overlay);
+
+    return timeEntryContainer;
+  }
+
+  private createTimeEntryForeground(): Gtk.Box {
     const timeEntryBox = new Gtk.Box({
       orientation: Gtk.Orientation.HORIZONTAL,
-      cssClasses: ["save-timer-window-timeentry-box"],
+      hexpand: true,
+      halign: Gtk.Align.CENTER,
     });
 
     const hoursBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
@@ -102,11 +141,11 @@ export class SaveTimerWindow {
 
     const separatorLabel = new Gtk.Label({
       label: ":",
-      cssClasses: ["save-timer-window-time-digit"],
+      cssClasses: ["timer-popover-label-digit"],
     });
     const separatorLabel2 = new Gtk.Label({
       label: ":",
-      cssClasses: ["save-timer-window-time-digit"],
+      cssClasses: ["timer-popover-label-digit"],
     });
 
     timeEntryBox.append(hoursBox);
@@ -122,7 +161,7 @@ export class SaveTimerWindow {
     const digitLabel = new Gtk.Label({
       name: digitIndex.toString(),
       label: "0",
-      cssClasses: ["save-timer-window-time-digit"],
+      cssClasses: ["timer-popover-label-digit"],
     });
 
     const scrollController = new Gtk.EventControllerScroll({
@@ -145,14 +184,73 @@ export class SaveTimerWindow {
     return digitLabel;
   }
 
+  private createTimeEntryBackground() {
+    const timeEntryBox = new Gtk.Box({
+      orientation: Gtk.Orientation.HORIZONTAL,
+      hexpand: true,
+      halign: Gtk.Align.CENTER,
+    });
+
+    const hoursBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+    const hourLabel1 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    const hourLabel2 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    hoursBox.append(hourLabel1);
+    hoursBox.append(hourLabel2);
+
+    const minutesBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+    const minutesLabel1 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    const minutesLabel2 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    minutesBox.append(minutesLabel1);
+    minutesBox.append(minutesLabel2);
+
+    const secondsBox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+    const secondsLabel1 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    const secondsLabel2 = new Gtk.Label({
+      label: "0",
+      cssClasses: ["timer-popover-label-digit-background"],
+    });
+    secondsBox.append(secondsLabel1);
+    secondsBox.append(secondsLabel2);
+
+    const separatorLabel = new Gtk.Label({
+      label: ":",
+      cssClasses: ["timer-popover-label-digit"],
+    });
+    const separatorLabel2 = new Gtk.Label({
+      label: ":",
+      cssClasses: ["timer-popover-label-digit"],
+    });
+
+    timeEntryBox.append(hoursBox);
+    timeEntryBox.append(separatorLabel);
+    timeEntryBox.append(minutesBox);
+    timeEntryBox.append(separatorLabel2);
+    timeEntryBox.append(secondsBox);
+    return timeEntryBox;
+  }
+
   private createAddButton(): Gtk.Button {
-    const addButton = new Gtk.Button();
-    addButton.label = configuration.getTexts().general.add;
-    addButton.cssClasses = [
-      "save-timer-window-button",
-      "save-timer-window-button-add",
-    ];
-    addButton.connect("clicked", async () => {
+    const button = new Gtk.Button();
+    button.label = icons.plus + " " + configuration.getTexts().general.add;
+    button.hexpand = true;
+    button.marginEnd = 12;
+    button.cssClasses = ["timer-popover-start-button"];
+    button.connect("clicked", async () => {
       const allSeconds = this.timerSeconds.getAllSeconds();
       if (
         this.timerName === undefined ||
@@ -172,19 +270,17 @@ export class SaveTimerWindow {
       this.window.close();
     });
 
-    return addButton;
+    return button;
   }
 
   private createCancelButton(): Gtk.Button {
-    const cancelButton = new Gtk.Button();
-    cancelButton.label = configuration.getTexts().general.cancel;
-    cancelButton.cssClasses = [
-      "save-timer-window-button",
-      "save-timer-window-button-cancel",
-    ];
-    cancelButton.connect("clicked", () => {
+    const button = new Gtk.Button();
+    button.label = icons.back + " " + configuration.getTexts().general.cancel;
+    button.hexpand = true;
+    button.cssClasses = ["timer-popover-remove-timer-button"];
+    button.connect("clicked", () => {
       this.window.close();
     });
-    return cancelButton;
+    return button;
   }
 }

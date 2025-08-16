@@ -10,6 +10,7 @@ import { TIMER_CONSTANTS } from "../../models/constants/timerConstants";
 import { NotificationSender } from "../../models/utils/NotificationSender";
 import { Tools } from "../../models/utils/Tools";
 import { icons } from "../../models/texts/textIcons";
+import { NotificationIcon } from "../../models/enums/NotificationIcon";
 
 export class RunningTimer {
   public name: string | undefined = undefined;
@@ -21,7 +22,9 @@ export class RunningTimer {
     return this.intervalReference !== undefined;
   }
   public isPaused = createState<boolean>(false);
+
   private alarmSoundProcess: Process | undefined = undefined;
+  private progressBarRef: Gtk.LevelBar | undefined = undefined;
 
   constructor(secondsToCount: number, name: string | undefined = undefined) {
     this.name = name;
@@ -57,7 +60,15 @@ export class RunningTimer {
             this.name
           );
 
-    NotificationSender.send(notificationText);
+    NotificationSender.send(
+      notificationText,
+      undefined,
+      NotificationIcon.Timer
+    );
+
+    if (this.progressBarRef !== undefined) {
+      this.progressBarRef.cssClasses = ["timer-done"];
+    }
 
     setTimeout(() => {
       if (this.alarmSoundProcess !== undefined) {
@@ -90,30 +101,6 @@ export class RunningTimer {
 
   private toggleTimerPause() {
     this.isPaused[1]((v) => !v);
-  }
-
-  private removeTimer() {
-    if (this.alarmSoundProcess !== undefined) {
-      this.alarmSoundProcess.kill();
-      this.alarmSoundProcess = undefined;
-    }
-
-    if (this.intervalReference !== undefined) {
-      this.intervalReference?.destroy();
-      this.intervalReference = undefined;
-    }
-
-    timerVariables.runningTimers[1]((v) => {
-      const index = v.indexOf(this);
-      const firstPart = v.slice(0, index);
-      const secondPart = v.slice(index + 1);
-      return firstPart.concat(secondPart);
-    });
-
-    timerVariables.timersData[1]((v) => v.updateRunningTimers(-1));
-
-    if (this.secondsLeft[0].get() <= 0)
-      timerVariables.timersData[1]((v) => v.updateDoneTimers(-1));
   }
 
   public createLabel(index: number) {
@@ -152,7 +139,7 @@ export class RunningTimer {
                   hexpand={false}
                   widthRequest={40}
                   heightRequest={20}
-                  marginEnd={16}
+                  marginEnd={10}
                   onClicked={() => {
                     this.toggleTimerPause();
                   }}
@@ -164,10 +151,8 @@ export class RunningTimer {
 
         <box
           name={"Timer progress container"}
-          marginEnd={16}
+          marginEnd={10}
           widthRequest={290}
-          hexpand
-          vexpand
         >
           <overlay vexpand hexpand>
             <levelbar
@@ -178,6 +163,9 @@ export class RunningTimer {
               value={secondsGetter((seconds) => {
                 return 1 - seconds / this.startSeconds;
               })}
+              $={(self) => {
+                this.progressBarRef = self;
+              }}
             />
             <box vexpand hexpand $type="overlay">
               <label
@@ -235,5 +223,29 @@ export class RunningTimer {
   createPercentageDone(secondsLeft: number) {
     const ratio = secondsLeft / this.startSeconds;
     return Math.floor(100 - ratio * 100);
+  }
+
+  private removeTimer() {
+    if (this.alarmSoundProcess !== undefined) {
+      this.alarmSoundProcess.kill();
+      this.alarmSoundProcess = undefined;
+    }
+
+    if (this.intervalReference !== undefined) {
+      this.intervalReference?.destroy();
+      this.intervalReference = undefined;
+    }
+
+    timerVariables.runningTimers[1]((v) => {
+      const index = v.indexOf(this);
+      const firstPart = v.slice(0, index);
+      const secondPart = v.slice(index + 1);
+      return firstPart.concat(secondPart);
+    });
+
+    timerVariables.timersData[1]((v) => v.updateRunningTimers(-1));
+
+    if (this.secondsLeft[0].get() <= 0)
+      timerVariables.timersData[1]((v) => v.updateDoneTimers(-1));
   }
 }

@@ -43,17 +43,6 @@ function MainBar(monitor: Gdk.Monitor) {
         </box>
 
         <box $type="end" hexpand halign={Gtk.Align.END}>
-          <button
-            css={"color:white;"}
-            onClicked={async () => {
-              await NotificationSender.send(
-                "koniec czasu",
-                undefined,
-                NotificationIcon.Timer
-              );
-            }}
-            label={"Testowy przycisk"}
-          ></button>
           <Timer />
         </box>
       </centerbox>
