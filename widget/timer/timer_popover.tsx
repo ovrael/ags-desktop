@@ -18,14 +18,15 @@ export default function TimerPopover() {
 
   return (
     <popover
-      autohide={false}
+      autohide={true}
       hasArrow={false}
       class={"timer-popover"}
       onClosed={() => {
         inEditSavedTimersMode[1](false);
       }}
       widthRequest={400}
-      marginEnd={100}
+      marginEnd={60}
+      marginBottom={30}
       hexpand={false}
     >
       <box

@@ -6,15 +6,15 @@ import { Timer } from "./timer/timer";
 import { NotificationSender } from "../models/utils/notification_sender";
 import { NotificationIcon } from "../models/enums/notification_icon";
 
-export function Bar(monitor: Gdk.Monitor) {
+export function bar(monitor: Gdk.Monitor) {
   if (monitor.description.includes("AW3423DWF")) {
-    return MainBar(monitor);
+    return mainBar(monitor);
   } else {
-    return SecondBar(monitor);
+    return secondBar(monitor);
   }
 }
 
-function MainBar(monitor: Gdk.Monitor) {
+function mainBar(monitor: Gdk.Monitor) {
   const time = createPoll("", 1000, "date");
   const { BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor;
 
@@ -50,7 +50,7 @@ function MainBar(monitor: Gdk.Monitor) {
   );
 }
 
-function SecondBar(monitor: Gdk.Monitor) {
+function secondBar(monitor: Gdk.Monitor) {
   const time = createPoll("", 1000, "date");
   const { BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor;
   let content = `${monitor.model} ${monitor.description}`;

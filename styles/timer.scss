@@ -86,9 +86,9 @@ menubutton > button {
 
 //#region Popover
 .timer-popover {
+  border: 1px rgba(255, 255, 255, 0.2) solid;
   background-color: rgba(0, 0, 0, 0.7);
   padding: 0px;
-  margin: 0px;
 }
 
 popover.timer-popover contents {
@@ -96,7 +96,6 @@ popover.timer-popover contents {
   color: rgba(255, 255, 255, 0.45);
   border-radius: 0px;
   padding: 0px;
-  margin: 0px;
 }
 
 //#endregion

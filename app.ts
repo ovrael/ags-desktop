@@ -1,6 +1,6 @@
 import app from "ags/gtk4/app"
 import mainStyle from "./styles/main.scss"
-import { Bar } from "./widget/bar"
+import { bar } from "./widget/bar"
 import { TimerUtils } from "./widget/timer/timer_utils";
 import { SoundPlayer } from "./models/utils/sound_player";
 import { Configuration } from "./models/configuration/configuration";
@@ -22,7 +22,7 @@ await SoundPlayer.init();
 app.start({
   css: mainStyle,
   main() {
-    Bar(mainMonitor)
+    bar(mainMonitor)
     // Bar(app.get_monitors()[1])
     // app.get_monitors().map(MainBar)
   },
