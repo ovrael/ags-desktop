@@ -1,4 +1,4 @@
-import { TimerDigit } from "./TimerEnums";
+import { TimerDigit } from "./timer_enums";
 
 
 export class TimerDigits {

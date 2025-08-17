@@ -1,16 +1,16 @@
 import { Accessor, createState, State, With } from "ags";
 import GLib from "gi://GLib";
-import { createTimeLeft } from "./TimerHelperFunctions";
-import { timerVariables } from "./TimerVariables";
+import { createTimeLeft } from "./timer_helper_functions";
+import { timerVariables } from "./timer_variables";
 import { Gtk } from "ags/gtk4";
 import { Process } from "ags/process";
-import { SoundPlayer } from "../../models/utils/SoundPlayer";
+import { SoundPlayer } from "../../models/utils/sound_player";
 import { configuration } from "../../app";
-import { TIMER_CONSTANTS } from "../../models/constants/timerConstants";
-import { NotificationSender } from "../../models/utils/NotificationSender";
-import { Tools } from "../../models/utils/Tools";
-import { icons } from "../../models/texts/textIcons";
-import { NotificationIcon } from "../../models/enums/NotificationIcon";
+import { TIMER_CONSTANTS } from "../../models/constants/timer_constants";
+import { NotificationSender } from "../../models/utils/notification_sender";
+import { Tools } from "../../models/utils/tools";
+import { icons } from "../../models/texts/text_icons";
+import { NotificationIcon } from "../../models/enums/notification_icon";
 
 export class RunningTimer {
   public name: string | undefined = undefined;

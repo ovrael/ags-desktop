@@ -1,9 +1,9 @@
 import { readFileAsync, writeFileAsync } from "ags/file";
-import { timerVariables } from "./TimerVariables";
-import { SavedTimer } from "./SavedTimer";
-import { RunningTimer } from "./RunningTimer";
+import { timerVariables } from "./timer_variables";
+import { SavedTimer } from "./saved_timer";
+import { RunningTimer } from "./running_timer";
 import { configuration } from "../../app";
-import { Communication } from "../../models/utils/Communication";
+import { Communication } from "../../models/utils/communication";
 
 export class TimerUtils {
   public static async saveTimersToFile() {

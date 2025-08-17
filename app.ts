@@ -1,8 +1,8 @@
 import app from "ags/gtk4/app"
 import mainStyle from "./styles/main.scss"
-import { Bar } from "./widget/Bar"
-import { TimerUtils } from "./widget/Timer/TimerUtils";
-import { SoundPlayer } from "./models/utils/SoundPlayer";
+import { Bar } from "./widget/bar"
+import { TimerUtils } from "./widget/timer/timer_utils";
+import { SoundPlayer } from "./models/utils/sound_player";
 import { Configuration } from "./models/configuration/configuration";
 
 const monitors = app.get_monitors();

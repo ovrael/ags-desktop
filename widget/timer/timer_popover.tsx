@@ -1,13 +1,13 @@
 import { Gtk } from "ags/gtk4";
-import { timerVariables } from "./TimerVariables";
+import { timerVariables } from "./timer_variables";
 import { Accessor, createState, For, State, With } from "ags";
-import { SaveTimerWindow } from "./SaveTimerWindow";
-import { TimerUtils } from "./TimerUtils";
-import { SavedTimer } from "./SavedTimer";
-import { ReorderDirection, TimerDigit } from "./TimerEnums";
-import { TimerDigits } from "./TimerDigits";
+import { SaveTimerWindow } from "./save_timer_window";
+import { TimerUtils } from "./timer_utils";
+import { SavedTimer } from "./saved_timer";
+import { ReorderDirection, TimerDigit } from "./timer_enums";
+import { TimerDigits } from "./timer_digit";
 import { configuration } from "../../app";
-import { icons } from "../../models/texts/textIcons";
+import { icons } from "../../models/texts/text_icons";
 
 let inEditSavedTimersMode: State<boolean> = createState(false);
 let timerSeconds: TimerDigits = new TimerDigits();

@@ -1,7 +1,7 @@
-import { RunningTimer } from "./RunningTimer";
+import { RunningTimer } from "./running_timer";
 import { createState, State } from "ags";
-import { SavedTimer } from "./SavedTimer";
-import { TimersData } from "./TimersData";
+import { SavedTimer } from "./saved_timer";
+import { TimersData } from "./timers_data";
 
 export type TimerStates = {
   runningTimers: State<RunningTimer[]>;

@@ -1,8 +1,8 @@
 import { Accessor } from "ags";
-import { createTimeLeft } from "./TimerHelperFunctions";
+import { createTimeLeft } from "./timer_helper_functions";
 import { Gtk } from "ags/gtk4";
-import { TimerUtils } from "./TimerUtils";
-import { TIMER_CONSTANTS } from "../../models/constants/timerConstants";
+import { TimerUtils } from "./timer_utils";
+import { TIMER_CONSTANTS } from "../../models/constants/timer_constants";
 
 export class SavedTimer {
   public name: string = "";

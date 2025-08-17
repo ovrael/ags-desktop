@@ -1,6 +1,6 @@
 import { readFile } from "ags/file";
-import { TimerTexts } from "./timerTexts";
-import { GeneralTexts } from "./generalTexts";
+import { TimerTexts } from "./timer_texts";
+import { GeneralTexts } from "./general_texts";
 
 export class LocaliztionTexts {
 

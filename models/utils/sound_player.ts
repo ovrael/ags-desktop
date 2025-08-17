@@ -1,5 +1,5 @@
 import { execAsync, Process, subprocess } from "ags/process";
-import { Communication } from "./Communication";
+import { Communication } from "./communication";
 
 export class SoundPlayer {
     private static playerCommand: string | null = null;

@@ -2,9 +2,9 @@ import app from "ags/gtk4/app";
 import { Astal, Gtk, Gdk } from "ags/gtk4";
 import { execAsync } from "ags/process";
 import { createPoll } from "ags/time";
-import { Timer } from "./Timer/Timer";
-import { NotificationSender } from "../models/utils/NotificationSender";
-import { NotificationIcon } from "../models/enums/NotificationIcon";
+import { Timer } from "./timer/timer";
+import { NotificationSender } from "../models/utils/notification_sender";
+import { NotificationIcon } from "../models/enums/notification_icon";
 
 export function Bar(monitor: Gdk.Monitor) {
   if (monitor.description.includes("AW3423DWF")) {

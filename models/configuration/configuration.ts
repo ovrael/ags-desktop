@@ -1,9 +1,9 @@
 import { monitorFile, readFileAsync } from "ags/file";
-import { TimerConfiguration } from "./timerConfiguration";
-import { GeneralConfiguration } from "./generalConfiguration";
-import { LocaliztionTexts } from "../texts/localizationTexts";
+import { TimerConfiguration } from "./timer_configuration";
+import { GeneralConfiguration } from "./general_configuration";
+import { LocaliztionTexts } from "../texts/localization_texts";
 import Gio from "gi://Gio";
-import { Communication } from "../utils/Communication";
+import { Communication } from "../utils/communication";
 import { createState, State } from "ags";
 import { execAsync } from "ags/process";
 

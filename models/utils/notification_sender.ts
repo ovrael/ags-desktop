@@ -1,6 +1,6 @@
 import { execAsync } from "ags/process";
-import { Communication } from "./Communication";
-import { NotificationIcon } from "../enums/NotificationIcon";
+import { Communication } from "./communication";
+import { NotificationIcon } from "../enums/notification_icon";
 import { configuration } from "../../app";
 
 

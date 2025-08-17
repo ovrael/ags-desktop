@@ -1,11 +1,11 @@
 import { Gtk } from "ags/gtk4";
-import { timerVariables } from "./TimerVariables";
-import { SavedTimer } from "./SavedTimer";
-import { TimerUtils } from "./TimerUtils";
-import { TimerDigits } from "./TimerDigits";
-import { TimerDigit } from "./TimerEnums";
+import { timerVariables } from "./timer_variables";
+import { SavedTimer } from "./saved_timer";
+import { TimerUtils } from "./timer_utils";
+import { TimerDigits } from "./timer_digit";
+import { TimerDigit } from "./timer_enums";
 import { configuration } from "../../app";
-import { icons } from "../../models/texts/textIcons";
+import { icons } from "../../models/texts/text_icons";
 
 export class SaveTimerWindow {
   static instance: SaveTimerWindow | undefined = undefined;

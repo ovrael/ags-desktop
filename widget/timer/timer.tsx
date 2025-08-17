@@ -1,9 +1,9 @@
 import { Accessor, With } from "ags";
-import TimerPopover from "./TimerPopover";
-import { timerVariables } from "./TimerVariables";
-import { TimersData } from "./TimersData";
+import TimerPopover from "./timer_popover";
+import { timerVariables } from "./timer_variables";
+import { TimersData } from "./timers_data";
 import { Gtk } from "ags/gtk4";
-import { icons } from "../../models/texts/textIcons";
+import { icons } from "../../models/texts/text_icons";
 
 export function Timer() {
   return (
