@@ -23,7 +23,7 @@ export function Timer() {
     if (timersData.runningTimers === 0)
       return (
         <label
-          class={"timer-button-free timer-button-label"}
+          class={"timer-button-free bar-button-label"}
           label={icons.alarmClock}
         />
       );
@@ -31,7 +31,7 @@ export function Timer() {
     if (timersData.doneTimers === 0)
       return (
         <label
-          class={"timer-button-running timer-button-label"}
+          class={"timer-button-running bar-button-label"}
           label={`${icons.hourglass} ${timersData.runningTimers}`}
         />
       );
@@ -39,7 +39,7 @@ export function Timer() {
     if (timersData.getUndoneCount() === 0)
       return (
         <label
-          class={"timer-button-done timer-button-label"}
+          class={"timer-button-done bar-button-label"}
           label={`${icons.alarmOn} ${timersData.doneTimers}`}
         />
       );
@@ -47,11 +47,11 @@ export function Timer() {
     return (
       <box>
         <label
-          class={"timer-button-running-as-left timer-button-label"}
+          class={"timer-button-running-as-left bar-button-label"}
           label={`${icons.hourglass} ${timersData.getUndoneCount()}`}
         />
         <label
-          class={"timer-button-done-as-right timer-button-label"}
+          class={"timer-button-done-as-right bar-button-label"}
           label={`${icons.alarmOn} ${timersData.doneTimers}`}
         />
       </box>

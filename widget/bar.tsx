@@ -3,8 +3,7 @@ import { Astal, Gtk, Gdk } from "ags/gtk4";
 import { execAsync } from "ags/process";
 import { createPoll } from "ags/time";
 import { Timer } from "./timer/timer";
-import { NotificationSender } from "../models/utils/notification_sender";
-import { NotificationIcon } from "../models/enums/notification_icon";
+import { NetworkStatus } from "./network_status/network_status";
 
 export function bar(monitor: Gdk.Monitor) {
   if (monitor.description.includes("AW3423DWF")) {
@@ -43,6 +42,7 @@ function mainBar(monitor: Gdk.Monitor) {
         </box>
 
         <box $type="end" hexpand halign={Gtk.Align.END}>
+          <NetworkStatus />
           <Timer />
         </box>
       </centerbox>

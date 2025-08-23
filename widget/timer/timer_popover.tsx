@@ -20,20 +20,16 @@ export default function TimerPopover() {
     <popover
       autohide={true}
       hasArrow={false}
-      class={"timer-popover"}
+      class={"widget-popover"}
       onClosed={() => {
         inEditSavedTimersMode[1](false);
       }}
+      hexpand={false}
       widthRequest={400}
       marginEnd={60}
       marginBottom={30}
-      hexpand={false}
     >
-      <box
-        orientation={Gtk.Orientation.VERTICAL}
-        widthRequest={400}
-        hexpand={false}
-      >
+      <box orientation={Gtk.Orientation.VERTICAL}>
         {createRunningTimers()}
         {createMainInterface()}
         {createSavedTimers()}

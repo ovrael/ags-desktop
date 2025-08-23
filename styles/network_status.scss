@@ -1,0 +1,70 @@
+//#region Main button
+menubutton > button {
+  margin: 0px;
+  padding: 0px;
+}
+.network-button {
+  margin: 0px;
+  padding: 0px;
+}
+
+.network-button-good {
+  color: rgba(50, 180, 100, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(50, 180, 100, 0.2);
+  background-color: rgba(50, 180, 100, 0.1);
+}
+
+.network-button-good:hover {
+  background-color: rgba(50, 180, 100, 0.215);
+}
+
+.network-button-medium {
+  color: rgba(200, 170, 35, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(200, 170, 35, 0.2);
+  background-color: rgba(200, 170, 35, 0.1);
+}
+
+.network-button-running:hover {
+  background-color: rgb(200, 170, 35, 0.215);
+}
+
+.network-button-bad {
+  color: rgba(200, 60, 35, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(200, 60, 35, 0.2);
+  background-color: rgba(200, 60, 35, 0.1);
+}
+
+.network-button-done:hover {
+  background-color: rgba(200, 60, 35, 0.215);
+}
+
+//#endregion
+
+//#region Access Point Label
+.access-point-container {
+  padding: 8px 6px;
+  background-color: transparent;
+}
+
+.access-point-label-container {
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+//#endregion
+
+//#region Connect button
+.network-connect-button {
+  color: rgba(20, 210, 110, 0.95);
+  border-radius: 0px;
+  border: 2px solid rgba(20, 210, 110, 0.2);
+  background-color: rgba(20, 210, 110, 0.1);
+  padding: 2px 8px;
+}
+
+.network-connect-button:hover {
+  background-color: rgba(20, 210, 110, 0.215);
+}
+//#endregion

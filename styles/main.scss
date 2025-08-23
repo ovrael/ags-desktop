@@ -1,4 +1,4 @@
-@use "saveTimerWindowStyle.scss";
+@use "network_status.scss";
 @use "timer.scss";
 @use "tests.scss";
 
@@ -8,7 +8,7 @@ $fg-color: #{"@theme_fg_color"};
 $bg-color: #{"@theme_bg_color"};
 
 * {
-  font-family: "FiraCode Nerd Font", "FiraCode Nerd Font Bold", monospace;
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font Bold", monospace;
   font-feature-settings: "liga" on;
   font-size: 14px;
 }
@@ -47,10 +47,43 @@ button {
   padding: 4px 6px 4px 6px;
 }
 
-.no-padding {
-  padding: 0;
+.bar-button-label {
+  font-size: 26px;
+  font-weight: 700;
+  padding: 2px 12px;
 }
 
-.no-margin {
-  margin: 0;
+//#region Buttons
+
+//#endregion
+
+//#region Popover
+.widget-popover {
+  border: 1px rgba(255, 255, 255, 0.2) solid;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 0px;
+}
+
+popover.widget-popover contents {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: rgba(255, 255, 255, 0.45);
+  border-radius: 0px;
+  padding: 0px;
+}
+
+//#endregion
+
+.container-label {
+  font-size: medium;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: "FiraCode Nerd Font";
+}
+
+.label-text {
+  font-size: 14px;
+}
+
+.label-icon {
+  font-size: 24px;
 }

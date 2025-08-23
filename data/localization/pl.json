@@ -16,5 +16,10 @@
         "saveNamePlaceholder": "Podaj nazwę minutnika, np. pizza, lekcja, drzemka",
         "endNonameNotificationTitle": "Minutnik zakończył odliczanie!",
         "endNamedNotificationTitle": "Minutnik {0} zakończył odliczanie!"
+    },
+    "network": {
+        "availableNetworksLabel": "Dostępne sieci",
+        "searchNetworks": "Szukam dostępnych sieci",
+        "connectButtonLabel": "Połącz"
     }
 }

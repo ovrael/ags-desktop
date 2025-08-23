@@ -4,6 +4,7 @@ import { bar } from "./widget/bar"
 import { TimerUtils } from "./widget/timer/timer_utils";
 import { SoundPlayer } from "./models/utils/sound_player";
 import { Configuration } from "./models/configuration/configuration";
+import Adw from "gi://Adw";
 
 const monitors = app.get_monitors();
 let mainMonitor = monitors.filter(m => m.description.includes("AW3423DWF"))[0];
@@ -18,6 +19,10 @@ export function updateConfiguration(newConfiguration: Configuration) {
 
 await TimerUtils.loadTimersFromFile();
 await SoundPlayer.init();
+
+
+// const styleManager = Adw.StyleManager.get_default();
+// styleManager.colorScheme = Adw.ColorScheme.FORCE_DARK;
 
 app.start({
   css: mainStyle,

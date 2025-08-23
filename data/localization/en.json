@@ -16,5 +16,10 @@
         "saveNamePlaceholder": "Provide timer name eg. pizza, lesson, nap",
         "endNonameNotificationTitle": "Timer finished!",
         "endNamedNotificationTitle": "Timer {0} finished!"
+    },
+    "network": {
+        "availableNetworksLabel": "Available networks",
+        "searchNetworks": "Search for available networks",
+        "connectButtonLabel": "Connect"
     }
 }

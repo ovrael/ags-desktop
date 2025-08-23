@@ -76,28 +76,6 @@ menubutton > button {
   background-color: rgba(80, 200, 35, 0.215);
 }
 
-.timer-button-label {
-  font-size: 20px;
-  font-weight: 700;
-  padding: 4px 12px;
-}
-
-//#endregion
-
-//#region Popover
-.timer-popover {
-  border: 1px rgba(255, 255, 255, 0.2) solid;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 0px;
-}
-
-popover.timer-popover contents {
-  background-color: rgba(0, 0, 0, 0.7);
-  color: rgba(255, 255, 255, 0.45);
-  border-radius: 0px;
-  padding: 0px;
-}
-
 //#endregion
 
 //#region PopoverContent
@@ -106,15 +84,10 @@ popover.timer-popover contents {
 }
 
 .small-button > label {
-  font-size: 12px;
+  font-size: 18px;
 }
 
-.container-label {
-  font-size: medium;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-family: "FiraCode Nerd Font";
-}
+
 
 //#endregion
 
@@ -127,7 +100,7 @@ popover.timer-popover contents {
   font-family: "FS Sevegment", sans-serif;
   font-weight: 200;
   font-size: 50px;
-  color: rgba(175, 5, 5, 0.55);
+  color: rgba(175, 5, 5, 0.7);
   background-color: transparent;
 }
 
@@ -135,7 +108,7 @@ popover.timer-popover contents {
   font-family: "FS Sevegment", sans-serif;
   font-weight: 200;
   font-size: 50px;
-  color: rgb(50, 5, 5);
+  color: rgb(40, 5, 5);
   background-color: transparent;
 }
 //#endregion
