@@ -1,6 +1,6 @@
 class TextIcons {
 
-    // GENERAL
+    //#region General
     public readonly plus: string = "";
     public readonly close: string = "";
     public readonly play: string = "";
@@ -9,27 +9,42 @@ class TextIcons {
     public readonly arrowDown: string = "";
     public readonly back: string = "󰭜";
     public readonly edit: string = "";
+    public readonly save: string = "󰆓";
+    //#endregion
 
-    // TIMER
+    //#region Timer
     public readonly alarmFinished: string = "󱜞";
     public readonly alarmOn: string = "󰞏";
     public readonly alarmClock: string = "󰔛";
     public readonly hourglass: string = "󰔟";
+    //#endregion
 
-    // NETWORK STATUS
+    //#region Network status
+    public readonly searchNetworks: string = "󰜏";
+
+    // State
     public readonly wifiConnectionMax: string = "";
     public readonly wiredConnection: string = "󰈀";
     public readonly noConnection: string = "󰅛";
 
+    // Properties
+    public readonly unknownNetwork: string = "󱙃";
     public readonly lock: string = "";
     public readonly lockOpen: string = "";
+    public readonly networkSpeedSlow: string = "󰾆";
+    public readonly networkSpeedFast: string = "󰓅";
 
-    public readonly searchNetworks: string = "󰜏";
+    // Speeds
     public readonly signalStrength0: string = "󰢿";
     public readonly signalStrength1: string = "󰢼";
     public readonly signalStrength2: string = "󰢽";
     public readonly signalStrength3: string = "󰢾";
 
+    // Stats
+    public readonly download: string = "";
+    public readonly upload: string = "";
+
+    //#endregion
 }
 
 export const icons: TextIcons = new TextIcons();

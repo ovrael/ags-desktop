@@ -1,20 +1,31 @@
-import { Accessor, createBinding, createState, For, State, With } from "ags";
+import { Accessor, createBinding, createState, For, With } from "ags";
 import { Astal, Gtk } from "ags/gtk4";
 import { interval } from "ags/time";
 import AstalIO from "gi://AstalIO?version=0.1";
 import Network from "gi://AstalNetwork";
 import { configuration } from "../../app";
 import { icons } from "../../models/texts/text_icons";
+import GLib from "gi://GLib?version=2.0";
+import { CurrentConnectionStatus } from "./current_connection_status";
 
-type Props = {
+type NetworkProps = {
   network: Network.Network;
 };
 
-export function NetworkStatusPopover({ network }: Props) {
+export function NetworkStatusPopover({ network }: NetworkProps) {
   let scanWifiInterval: AstalIO.Time | undefined;
 
   const wifiState = createBinding(network.wifi, "state");
-  const wifiAvailableNetworks = createBinding(network.wifi, "accessPoints");
+
+  const filterAccessPoints = (arr: Network.AccessPoint[]) => {
+    return arr
+      .filter((ap) => !!ap.ssid && ap !== network.wifi.activeAccessPoint)
+      .sort((a, b) => b.strength - a.strength);
+  };
+  const wifiAvailableNetworks = createBinding(
+    network.wifi,
+    "accessPoints"
+  )(filterAccessPoints);
 
   return (
     <popover
@@ -37,7 +48,7 @@ export function NetworkStatusPopover({ network }: Props) {
       }}
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
-        {currentNetwork()}
+        {CurrentConnectionStatus({ network })}
         <With value={wifiState}>
           {(state) => {
             if (isWifiOk(state)) {
@@ -45,7 +56,9 @@ export function NetworkStatusPopover({ network }: Props) {
             } else {
               return (
                 <box>
-                  <label label={"Wifi is currently unavailable"}></label>
+                  <label
+                    label={configuration.getTexts().network.wifiUnavailable}
+                  ></label>
                 </box>
               );
             }
@@ -65,37 +78,8 @@ export function NetworkStatusPopover({ network }: Props) {
     );
   }
 
-  function currentNetwork() {
-    const activeAccessPoint = createBinding(network.wifi, "activeAccessPoint");
-
-    return (
-      <box marginBottom={10}>
-        <With value={activeAccessPoint}>
-          {(ap) => {
-            if (ap === null || ap === undefined)
-              return (
-                <box>
-                  <label label={"There is no active connection"}></label>
-                </box>
-              );
-
-            return (
-              <box>
-                <label label={"CURRENT NETWORK: " + ap.ssid}></label>
-              </box>
-            );
-          }}
-        </With>
-      </box>
-    );
-  }
-
   function accessPointsList() {
-    const filterAccessPoints = (arr: Network.AccessPoint[]) => {
-      return arr
-        .filter((ap) => !!ap.ssid && ap !== network.wifi.activeAccessPoint)
-        .sort((a, b) => b.strength - a.strength);
-    };
+    const savedConnections: string[] = getSavedConnections();
 
     return (
       <box orientation={Gtk.Orientation.VERTICAL}>
@@ -110,9 +94,11 @@ export function NetworkStatusPopover({ network }: Props) {
             {(aps) =>
               (aps.length > 0 && (
                 <scrolledwindow heightRequest={200}>
-                  <box orientation={Gtk.Orientation.VERTICAL}>
+                  <box orientation={Gtk.Orientation.VERTICAL} marginEnd={6}>
                     <For each={wifiAvailableNetworks(filterAccessPoints)}>
-                      {(ap: Network.AccessPoint) => createAccessPointLabel(ap)}
+                      {(ap: Network.AccessPoint) =>
+                        createAccessPointLabel(ap, savedConnections)
+                      }
                     </For>
                   </box>
                 </scrolledwindow>
@@ -132,12 +118,80 @@ export function NetworkStatusPopover({ network }: Props) {
               )
             }
           </With>
+          {/* <With value={wifiAvailableNetworks}>
+            {(aps: Network.AccessPoint[]) => {
+              // console.log(`${aps.length} available access points`);
+
+              if (aps.length === 0) {
+                return (
+                  <box>
+                    <label
+                      halign={Gtk.Align.CENTER}
+                      cssClasses={["label-text"]}
+                      label={configuration.texts[0](
+                        (t) => `${t.network.searchNetworks}`
+                      )}
+                    ></label>
+                    <label
+                      halign={Gtk.Align.CENTER}
+                      cssClasses={["label-icon"]}
+                      label={icons.searchNetworks}
+                    ></label>
+                  </box>
+                );
+              } else {
+                return (
+                  <scrolledwindow heightRequest={200}>
+                    <box orientation={Gtk.Orientation.VERTICAL} marginEnd={6}>
+                      <For each={wifiAvailableNetworks}>
+                        {(ap: Network.AccessPoint) =>
+                          createAccessPointLabel(ap, savedConnections)
+                        }
+                      </For>
+                    </box>
+                  </scrolledwindow>
+                );
+              }
+            }}
+          </With> */}
         </box>
       </box>
     );
   }
 
-  function createAccessPointLabel(ap: Network.AccessPoint) {
+  function getSavedConnections(): string[] {
+    const connections: string[] = [];
+
+    network.client.connections.forEach((connection) => {
+      if (connection != undefined) {
+        let connectionName = "";
+        const wirelessSetting = connection.get_setting_wireless();
+        if (wirelessSetting != undefined) {
+          const ssidByteArray = wirelessSetting.get_ssid();
+          const ssidArray = ssidByteArray.toArray(); // number[]
+          connectionName = new TextDecoder("utf-8").decode(
+            new Uint8Array(ssidArray)
+          );
+        }
+
+        const connectionSetting = connection.get_setting_connection();
+        if (
+          connectionName !== "" &&
+          connectionSetting &&
+          connectionSetting.timestamp > 0
+        ) {
+          connections.push(connectionName);
+        }
+      }
+    });
+
+    return connections;
+  }
+
+  function createAccessPointLabel(
+    ap: Network.AccessPoint,
+    savedConnections: string[]
+  ) {
     const signalStrengthThreshold = Math.floor(ap.strength / 25);
     let strengthIcon = icons.signalStrength0;
     switch (signalStrengthThreshold) {
@@ -163,7 +217,22 @@ export function NetworkStatusPopover({ network }: Props) {
     }
 
     const passwordIcon = ap.requiresPassword ? icons.lock : icons.lockOpen;
-    const frequency = ap.frequency > 4000 ? "5.0" : "2.4";
+    const passwordIconColor =
+      "access-point-label-icon-" +
+      (passwordIcon === icons.lock ? "bad" : "good");
+
+    const speedIcon =
+      ap.frequency < 4000 ? icons.networkSpeedSlow : icons.networkSpeedFast;
+    const speedIconColor =
+      "access-point-label-icon-" +
+      (speedIcon === icons.networkSpeedSlow ? "bad" : "good");
+
+    const savedIcon = savedConnections.includes(ap.ssid)
+      ? icons.save
+      : icons.unknownNetwork;
+    const savedIconColor =
+      "access-point-label-icon-" +
+      (savedIcon === icons.unknownNetwork ? "bad" : "good");
 
     return (
       <box
@@ -188,13 +257,19 @@ export function NetworkStatusPopover({ network }: Props) {
           <label
             xalign={0}
             marginEnd={6}
-            cssClasses={["label-text"]}
-            label={`${frequency} GHz`}
+            cssClasses={["label-icon", speedIconColor]}
+            label={`${speedIcon}`}
           ></label>
           <label
             xalign={0}
             marginEnd={6}
-            cssClasses={["label-icon"]}
+            cssClasses={["label-icon", savedIconColor]}
+            label={`${savedIcon}`}
+          ></label>
+          <label
+            xalign={0}
+            marginEnd={6}
+            cssClasses={["label-icon", passwordIconColor]}
             label={`${passwordIcon}`}
           ></label>
         </box>
@@ -211,6 +286,11 @@ export function NetworkStatusPopover({ network }: Props) {
 
   async function connectToAccessPoint(ap: Network.AccessPoint) {
     let pw: string | null = null;
+
+    // if(ap.requiresPassword === false)
+    // {
+    //   network.client.add_connection_async()
+    // }
 
     if (ap.get_connections().length == 0 && ap.requiresPassword) {
       // popup asking for password

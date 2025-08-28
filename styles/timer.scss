@@ -87,8 +87,6 @@ menubutton > button {
   font-size: 18px;
 }
 
-
-
 //#endregion
 
 //#region Clock - time entry
@@ -211,6 +209,7 @@ menubutton > button {
 .saved-timer-container {
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0px;
+  padding: 4px 12px;
 }
 
 //#endregion

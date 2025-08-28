@@ -20,6 +20,9 @@
     "network": {
         "availableNetworksLabel": "Available networks",
         "searchNetworks": "Search for available networks",
-        "connectButtonLabel": "Connect"
+        "connectButtonLabel": "Connect",
+        "wifiUnavailable": "Wifi is currently unavailable",
+        "downloadSpeed": "Current download speed",
+        "uploadSpeed": "Current upload speed"
     }
 }

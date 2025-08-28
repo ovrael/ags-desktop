@@ -28,15 +28,9 @@ window.Bar {
     background-color: transparent;
   }
 
-  .icon-button {
-    font-size: 22px;
-    font-weight: 800;
-    margin: 0px;
-    padding: 0px;
-  }
-
   .clock {
-    background: rgb(94, 108, 236);
+    color: rgb(160, 160, 160);
+    background: rgb(0, 0, 0);
     padding: 0px 10px;
     border-radius: 4px;
     font-family: "Fira Code";
@@ -44,13 +38,13 @@ window.Bar {
 }
 
 button {
-  padding: 4px 6px 4px 6px;
+  padding: 1px 4px;
 }
 
 .bar-button-label {
   font-size: 26px;
   font-weight: 700;
-  padding: 2px 12px;
+  padding: 0px 10px;
 }
 
 //#region Buttons
@@ -60,12 +54,12 @@ button {
 //#region Popover
 .widget-popover {
   border: 1px rgba(255, 255, 255, 0.2) solid;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.9);
   padding: 0px;
 }
 
 popover.widget-popover contents {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: transparent;
   color: rgba(255, 255, 255, 0.45);
   border-radius: 0px;
   padding: 0px;
@@ -85,5 +79,5 @@ popover.widget-popover contents {
 }
 
 .label-icon {
-  font-size: 24px;
+  font-size: 28px;
 }

@@ -2,5 +2,13 @@
 	{
 		"name": "test",
 		"startSeconds": 1200
+	},
+	{
+		"name": "Wyrabianie pizzy",
+		"startSeconds": 900
+	},
+	{
+		"name": "Wyrastanie pizzy",
+		"startSeconds": 3600
 	}
 ]
