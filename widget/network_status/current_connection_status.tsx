@@ -8,6 +8,7 @@ import Gio from "gi://Gio";
 import { monitorFile, readFile } from "ags/file";
 import { InternetSpeed } from "./internet_speed";
 import { configuration } from "../../app";
+import { Tools } from "../../models/utils/tools";
 
 type NetworkProps = {
   network: Network.Network;
@@ -35,7 +36,7 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
 
           return (
             <box>
-              <label label={"Unknown network type"}></label>
+              <label label={"No internet connection :("}></label>
             </box>
           );
         }}
@@ -44,117 +45,117 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
   );
 
   function createCurrentWifi(network: Network.Network) {
-    const wifiBinding = createBinding(network, "wifi");
-
     return (
-      <box cssClasses={["current-connection-container"]}>
-        <With value={wifiBinding}>
-          {(wifi) => {
-            return (
-              <box cssClasses={["current-connection-data-container"]} hexpand>
-                <label
-                  cssClasses={["current-connection-icon"]}
-                  label={icons.wifiConnectionMax}
-                  marginEnd={30}
-                ></label>
-                <box hexpand orientation={Gtk.Orientation.VERTICAL}>
-                  <box valign={Gtk.Align.START}>
-                    <With value={createBinding(network.wifi, "ssid")}>
-                      {(ssid: string) => {
-                        return (
-                          <label
-                            valign={Gtk.Align.START}
-                            xalign={0}
-                            hexpand
-                            cssClasses={["label-text"]}
-                            label={ssid}
-                          ></label>
-                        );
-                      }}
-                    </With>
-                  </box>
+      <box cssClasses={["current-connection-container"]} hexpand vexpand>
+        <box cssClasses={["current-connection-data-container"]} hexpand vexpand>
+          <label
+            cssClasses={["current-connection-icon"]}
+            label={icons.wifiConnectionMax}
+            marginEnd={20}
+          ></label>
 
-                  <box
-                    tooltipText={configuration.getTexts().network.downloadSpeed}
-                    marginEnd={20}
-                  >
-                    <With value={downloadSpeed[0]}>
-                      {(speed) => {
-                        return (
-                          <box orientation={Gtk.Orientation.HORIZONTAL}>
-                            <label
-                              xalign={0}
-                              marginEnd={5}
-                              cssClasses={["label-icon"]}
-                              label={icons.download}
-                            ></label>
-                            <label
-                              xalign={1}
-                              yalign={0.75}
-                              widthChars={11} // 6 number + 5 unit
-                              cssClasses={["label-text"]}
-                              label={speed.getSpeed()}
-                            ></label>
-                          </box>
-                        );
-                      }}
-                    </With>
-                  </box>
+          <box orientation={Gtk.Orientation.VERTICAL} hexpand vexpand>
+            {/* NAME */}
+            <box valign={Gtk.Align.START}>
+              <With value={createBinding(network.wifi, "ssid")}>
+                {(ssid: string) => {
+                  return (
+                    <label
+                      valign={Gtk.Align.START}
+                      xalign={0}
+                      hexpand
+                      cssClasses={["current-network-label"]}
+                      label={ssid}
+                    ></label>
+                  );
+                }}
+              </With>
+            </box>
 
-                  <box
-                    tooltipText={configuration.getTexts().network.uploadSpeed}
-                  >
-                    <With value={uploadSpeed[0]}>
-                      {(speed) => {
-                        return (
-                          <box orientation={Gtk.Orientation.HORIZONTAL}>
-                            <label
-                              xalign={0}
-                              marginEnd={5}
-                              cssClasses={["label-icon"]}
-                              label={icons.upload}
-                            ></label>
-                            <label
-                              xalign={1}
-                              yalign={0.75}
-                              cssClasses={["label-text"]}
-                              widthChars={11} // 6 number + 5 unit
-                              label={speed.getSpeed()}
-                            ></label>
-                          </box>
-                        );
-                      }}
-                    </With>
-                  </box>
+            {/* Download speed */}
+            <box tooltipText={configuration.getTexts().network.downloadSpeed}>
+              <With value={downloadSpeed[0]}>
+                {(speed) => {
+                  return (
+                    <box orientation={Gtk.Orientation.HORIZONTAL}>
+                      <label
+                        xalign={0}
+                        marginEnd={5}
+                        cssClasses={["label-icon-no-padding"]}
+                        label={icons.download}
+                      ></label>
+                      <label
+                        xalign={1}
+                        yalign={0.75}
+                        widthChars={11} // 6 number + 5 unit
+                        cssClasses={["label-text"]}
+                        label={speed.getSpeed()}
+                      ></label>
+                    </box>
+                  );
+                }}
+              </With>
+            </box>
 
-                  <box>
-                    <With value={createBinding(wifi, "strength")}>
-                      {(strength: number) => {
-                        return (
-                          <box orientation={Gtk.Orientation.HORIZONTAL}>
-                            <label
-                              valign={Gtk.Align.START}
-                              cssClasses={["label-text"]}
-                              label={"Strenght"}
-                              marginEnd={10}
-                            ></label>
-                            <levelbar
-                              vexpand
-                              hexpand
-                              cssClasses={["network-strength-bar"]}
-                              orientation={Gtk.Orientation.HORIZONTAL}
-                              value={strength / 100}
-                            />
-                          </box>
-                        );
-                      }}
-                    </With>
-                  </box>
-                </box>
-              </box>
-            );
-          }}
-        </With>
+            {/* Upload speed */}
+            <box tooltipText={configuration.getTexts().network.uploadSpeed}>
+              <With value={uploadSpeed[0]}>
+                {(speed) => {
+                  return (
+                    <box orientation={Gtk.Orientation.HORIZONTAL}>
+                      <label
+                        xalign={0}
+                        marginEnd={5}
+                        cssClasses={["label-icon-no-padding"]}
+                        label={icons.upload}
+                      ></label>
+                      <label
+                        xalign={1}
+                        yalign={0.75}
+                        cssClasses={["label-text"]}
+                        widthChars={11} // 6 number + 5 unit
+                        label={speed.getSpeed()}
+                      ></label>
+                    </box>
+                  );
+                }}
+              </With>
+            </box>
+
+            {/* Strength */}
+            <box hexpand vexpand heightRequest={20} css={"padding: 2px 0px;"}>
+              <With value={createBinding(network.wifi, "strength")}>
+                {(strength: number) => {
+                  return (
+                    <overlay
+                      hexpand
+                      vexpand
+                      name={"strength levelbar container"}
+                    >
+                      <levelbar
+                        hexpand
+                        vexpand
+                        cssClasses={["network-strength-bar"]}
+                        orientation={Gtk.Orientation.HORIZONTAL}
+                        value={strength / 100}
+                      />
+                      <box hexpand vexpand $type="overlay">
+                        <label
+                          css={"font-size: 14px;"}
+                          hexpand
+                          vexpand
+                          valign={Gtk.Align.CENTER}
+                          halign={Gtk.Align.CENTER}
+                          label={`${strength} %`}
+                        ></label>
+                      </box>
+                    </overlay>
+                  );
+                }}
+              </With>
+            </box>
+          </box>
+        </box>
       </box>
     );
   }
@@ -169,7 +170,7 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
               <box cssClasses={["current-connection-data-container"]} hexpand>
                 <label
                   cssClasses={["current-connection-icon"]}
-                  label={icons.wifiConnectionMax}
+                  label={icons.wiredConnection}
                 ></label>
                 <box hexpand orientation={Gtk.Orientation.VERTICAL}>
                   <label
@@ -194,6 +195,14 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
   }
 
   function updateConnectionStats() {
+    // Check if connection exists
+    if (
+      network.client == undefined ||
+      network.client.primaryConnection == undefined
+    ) {
+      return;
+    }
+
     // Get interface name e.g. wlan0
     let connectionInterface = "";
     for (let i = 0; i < network.client.primaryConnection.devices.length; i++) {

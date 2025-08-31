@@ -1,4 +1,11 @@
-import { Accessor, createBinding, createState, For, With } from "ags";
+import {
+  Accessor,
+  createBinding,
+  createComputed,
+  createState,
+  For,
+  With,
+} from "ags";
 import { Astal, Gtk } from "ags/gtk4";
 import { interval } from "ags/time";
 import AstalIO from "gi://AstalIO?version=0.1";
@@ -15,17 +22,17 @@ type NetworkProps = {
 export function NetworkStatusPopover({ network }: NetworkProps) {
   let scanWifiInterval: AstalIO.Time | undefined;
 
-  const wifiState = createBinding(network.wifi, "state");
+  const wifi = createBinding(network, "wifi");
+  const primary = createBinding(network, "primary");
 
-  const filterAccessPoints = (arr: Network.AccessPoint[]) => {
-    return arr
-      .filter((ap) => !!ap.ssid && ap !== network.wifi.activeAccessPoint)
-      .sort((a, b) => b.strength - a.strength);
-  };
-  const wifiAvailableNetworks = createBinding(
-    network.wifi,
-    "accessPoints"
-  )(filterAccessPoints);
+  const useWifi = createComputed(
+    [wifi, primary],
+    (a: Network.Wifi, b: Network.Primary) => {
+      if (a == undefined || a == null) return false;
+      if (b !== Network.Primary.WIFI) return false;
+      return true;
+    }
+  );
 
   return (
     <popover
@@ -37,7 +44,8 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
       marginBottom={30}
       onShow={() => {
         scanWifiInterval = interval(5000, () => {
-          if (network.wifi !== undefined) network.wifi.scan();
+          const wifiValue = wifi.get();
+          if (wifiValue !== undefined && wifiValue.enabled) network.wifi.scan();
         });
       }}
       onClosed={() => {
@@ -48,22 +56,52 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
       }}
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
-        {CurrentConnectionStatus({ network })}
-        <With value={wifiState}>
-          {(state) => {
-            if (isWifiOk(state)) {
-              return accessPointsList();
-            } else {
+        <box>{CurrentConnectionStatus({ network })}</box>
+
+        <box
+          visible={wifi(Boolean)}
+          orientation={Gtk.Orientation.HORIZONTAL}
+          halign={Gtk.Align.CENTER}
+          marginTop={20}
+          marginBottom={10}
+        >
+          <label label={"Wifi "}></label>
+          <switch
+            cssClasses={["network-wifi-switch"]}
+            active={wifi((w) => w.enabled)}
+            onNotifyActive={(self) => {
+              network.wifi.set_enabled(self.state);
+            }}
+          ></switch>
+        </box>
+
+        <box visible={useWifi}>
+          <With value={wifi}>
+            {(wifi) => {
               return (
                 <box>
-                  <label
-                    label={configuration.getTexts().network.wifiUnavailable}
-                  ></label>
+                  <With value={createBinding(wifi, "state")}>
+                    {(state: Network.DeviceState) => {
+                      if (isWifiOk(state)) {
+                        return accessPointsList();
+                      } else {
+                        return (
+                          <box>
+                            <label
+                              label={
+                                configuration.getTexts().network.wifiUnavailable
+                              }
+                            ></label>
+                          </box>
+                        );
+                      }
+                    }}
+                  </With>
                 </box>
               );
-            }
-          }}
-        </With>
+            }}
+          </With>
+        </box>
       </box>
     </popover>
   );
@@ -80,6 +118,15 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
 
   function accessPointsList() {
     const savedConnections: string[] = getSavedConnections();
+    const filterAccessPoints = (arr: Network.AccessPoint[]) => {
+      return arr
+        .filter((ap) => !!ap.ssid && ap !== network.wifi.activeAccessPoint)
+        .sort((a, b) => b.strength - a.strength);
+    };
+    const wifiAvailableNetworks = createBinding(
+      network.wifi,
+      "accessPoints"
+    )(filterAccessPoints);
 
     return (
       <box orientation={Gtk.Orientation.VERTICAL}>
@@ -238,7 +285,7 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
       <box
         vexpand={false}
         cssClasses={["access-point-container"]}
-        tooltipText={`Signal strength: ${ap.strength}`}
+        tooltipText={`${ap.ssid} ${ap.strength}/100`}
       >
         <box cssClasses={["access-point-label-container"]} marginEnd={10}>
           <label
@@ -249,6 +296,7 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
           ></label>
           <label
             xalign={0}
+            yalign={0.6}
             hexpand
             marginEnd={6}
             cssClasses={["label-text"]}

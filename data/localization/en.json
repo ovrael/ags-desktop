@@ -18,8 +18,8 @@
         "endNamedNotificationTitle": "Timer {0} finished!"
     },
     "network": {
-        "availableNetworksLabel": "Available networks",
-        "searchNetworks": "Search for available networks",
+        "availableNetworksLabel": "Available wireless networks",
+        "searchNetworks": "Searching",
         "connectButtonLabel": "Connect",
         "wifiUnavailable": "Wifi is currently unavailable",
         "downloadSpeed": "Current download speed",

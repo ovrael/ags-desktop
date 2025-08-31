@@ -18,8 +18,8 @@
         "endNamedNotificationTitle": "Minutnik {0} zakończył odliczanie!"
     },
     "network": {
-        "availableNetworksLabel": "Dostępne sieci",
-        "searchNetworks": "Szukam dostępnych sieci",
+        "availableNetworksLabel": "Dostępne sieci bezprzewodowe",
+        "searchNetworks": "Szukam",
         "connectButtonLabel": "Połącz",
         "wifiUnavailable": "Wifi jest aktualnie niedostępne",
         "downloadSpeed": "Aktualna prędkość pobierania",

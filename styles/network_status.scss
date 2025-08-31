@@ -26,7 +26,7 @@ menubutton > button {
   background-color: rgba(200, 170, 35, 0.1);
 }
 
-.network-button-running:hover {
+.network-button-medium:hover {
   background-color: rgb(200, 170, 35, 0.215);
 }
 
@@ -37,7 +37,7 @@ menubutton > button {
   background-color: rgba(200, 60, 35, 0.1);
 }
 
-.network-button-done:hover {
+.network-button-bad:hover {
   background-color: rgba(200, 60, 35, 0.215);
 }
 
@@ -84,16 +84,23 @@ menubutton > button {
 
 .current-connection-data-container {
   padding: 2px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .current-connection-icon {
   font-size: 64px;
 }
+.current-network-label {
+  font-size: 20px;
+}
 //#endregion
 
 //#region Current connection strength bar
 .network-strength-bar {
+  border-radius: 0px;
+  background-color: transparent;
+}
+
+.network-strength-bar > trough {
   border-radius: 0px;
   background-color: transparent;
 }
@@ -117,4 +124,22 @@ menubutton > button {
   background-color: rgba(30, 255, 0, 0.25);
   border-radius: 0px;
 }
+//#endregion
+
+//#region Wifi switch button
+
+.network-wifi-switch {
+  border-radius: 0px;
+  background-color: rgba(200, 50, 30, 0.5);
+}
+
+.network-wifi-switch:checked {
+  background-color: rgba(30, 200, 80, 0.5);
+}
+
+.network-wifi-switch > slider {
+  background-color: rgb(150, 150, 150);
+  border-radius: 0px;
+}
+
 //#endregion
