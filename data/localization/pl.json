@@ -19,10 +19,11 @@
     },
     "network": {
         "availableNetworksLabel": "Dostępne sieci bezprzewodowe",
-        "searchNetworks": "Szukam",
+        "searchNetworks": "Wyszukuje",
         "connectButtonLabel": "Połącz",
         "wifiUnavailable": "Wifi jest aktualnie niedostępne",
         "downloadSpeed": "Aktualna prędkość pobierania",
-        "uploadSpeed": "Aktualna prędkość wysyłania"
+        "uploadSpeed": "Aktualna prędkość wysyłania",
+        "noCurrentConnection": "Brak połączenia z Internetem"
     }
 }

@@ -1,14 +1,11 @@
-import { Accessor, createBinding, createState, For, With } from "ags";
-import { Astal, Gtk } from "ags/gtk4";
+import { Accessor, createBinding, createState, With } from "ags";
+import { Gtk } from "ags/gtk4";
 import { interval } from "ags/time";
-import AstalIO from "gi://AstalIO?version=0.1";
 import Network from "gi://AstalNetwork";
 import { icons } from "../../models/texts/text_icons";
-import Gio from "gi://Gio";
-import { monitorFile, readFile } from "ags/file";
+import { readFile } from "ags/file";
 import { InternetSpeed } from "./internet_speed";
 import { configuration } from "../../app";
-import { Tools } from "../../models/utils/tools";
 
 type NetworkProps = {
   network: Network.Network;
@@ -19,7 +16,6 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
   const downloadSpeed = createState(new InternetSpeed());
   const uploadSpeed = createState(new InternetSpeed());
 
-  // interval(InternetSpeed.IntervalTimestamp, updateConnectionStats);
   interval(1000, updateConnectionStats);
 
   return (
@@ -32,13 +28,10 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
 
             case Network.Primary.WIRED:
               return createCurrentWired(network);
-          }
 
-          return (
-            <box>
-              <label label={"No internet connection :("}></label>
-            </box>
-          );
+            default:
+              return createNoConnection();
+          }
         }}
       </With>
     </box>
@@ -190,6 +183,35 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
             );
           }}
         </With>
+      </box>
+    );
+  }
+
+  function createNoConnection() {
+    return (
+      <box cssClasses={["current-connection-container"]} hexpand vexpand>
+        <box cssClasses={["current-connection-data-container"]} hexpand vexpand>
+          <label
+            cssClasses={["current-connection-icon"]}
+            label={icons.noConnection}
+            marginEnd={20}
+          ></label>
+
+          <box orientation={Gtk.Orientation.VERTICAL} hexpand vexpand>
+            {/* NAME */}
+            <box valign={Gtk.Align.CENTER}>
+              <label
+                valign={Gtk.Align.CENTER}
+                xalign={0.5}
+                yalign={0.5}
+                hexpand
+                vexpand
+                cssClasses={["current-network-label"]}
+                label={configuration.getTexts().network.noCurrentConnection}
+              ></label>
+            </box>
+          </box>
+        </box>
       </box>
     );
   }

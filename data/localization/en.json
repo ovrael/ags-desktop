@@ -23,6 +23,7 @@
         "connectButtonLabel": "Connect",
         "wifiUnavailable": "Wifi is currently unavailable",
         "downloadSpeed": "Current download speed",
-        "uploadSpeed": "Current upload speed"
+        "uploadSpeed": "Current upload speed",
+        "noCurrentConnection": "No Internet connection"
     }
 }

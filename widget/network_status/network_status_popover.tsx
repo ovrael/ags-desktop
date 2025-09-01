@@ -63,7 +63,6 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
           orientation={Gtk.Orientation.HORIZONTAL}
           halign={Gtk.Align.CENTER}
           marginTop={20}
-          marginBottom={10}
         >
           <label label={"Wifi "}></label>
           <switch
@@ -75,7 +74,7 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
           ></switch>
         </box>
 
-        <box visible={useWifi}>
+        <box visible={useWifi} marginTop={10}>
           <With value={wifi}>
             {(wifi) => {
               return (
@@ -131,6 +130,8 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
     return (
       <box orientation={Gtk.Orientation.VERTICAL}>
         <label
+          hexpand
+          xalign={0.5}
           cssClasses={["container-label"]}
           label={configuration.texts[0](
             (t) => `${t.network.availableNetworksLabel}`
@@ -150,12 +151,13 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
                   </box>
                 </scrolledwindow>
               )) || (
-                <box>
+                <box halign={Gtk.Align.CENTER} valign={Gtk.Align.CENTER}>
                   <label
                     cssClasses={["label-text"]}
                     label={configuration.texts[0](
                       (t) => `${t.network.searchNetworks}`
                     )}
+                    marginEnd={6}
                   ></label>
                   <label
                     cssClasses={["label-icon"]}
