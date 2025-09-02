@@ -65,55 +65,8 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
               </With>
             </box>
 
-            {/* Download speed */}
-            <box tooltipText={configuration.getTexts().network.downloadSpeed}>
-              <With value={downloadSpeed[0]}>
-                {(speed) => {
-                  return (
-                    <box orientation={Gtk.Orientation.HORIZONTAL}>
-                      <label
-                        xalign={0}
-                        marginEnd={5}
-                        cssClasses={["label-icon-no-padding"]}
-                        label={icons.download}
-                      ></label>
-                      <label
-                        xalign={1}
-                        yalign={0.75}
-                        widthChars={11} // 6 number + 5 unit
-                        cssClasses={["label-text"]}
-                        label={speed.getSpeed()}
-                      ></label>
-                    </box>
-                  );
-                }}
-              </With>
-            </box>
-
-            {/* Upload speed */}
-            <box tooltipText={configuration.getTexts().network.uploadSpeed}>
-              <With value={uploadSpeed[0]}>
-                {(speed) => {
-                  return (
-                    <box orientation={Gtk.Orientation.HORIZONTAL}>
-                      <label
-                        xalign={0}
-                        marginEnd={5}
-                        cssClasses={["label-icon-no-padding"]}
-                        label={icons.upload}
-                      ></label>
-                      <label
-                        xalign={1}
-                        yalign={0.75}
-                        cssClasses={["label-text"]}
-                        widthChars={11} // 6 number + 5 unit
-                        label={speed.getSpeed()}
-                      ></label>
-                    </box>
-                  );
-                }}
-              </With>
-            </box>
+            {createDownloadSpeed()}
+            {createUploadSpeed()}
 
             {/* Strength */}
             <box hexpand vexpand heightRequest={20} css={"padding: 2px 0px;"}>
@@ -154,30 +107,28 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
   }
 
   function createCurrentWired(network: Network.Network) {
-    const wiredBinding = createBinding(network, "wired");
     return (
       <box>
-        <With value={wiredBinding}>
-          {(wired) => {
+        <With value={createBinding(network, "wired")}>
+          {(wired: Network.Wired) => {
             return (
               <box cssClasses={["current-connection-data-container"]} hexpand>
                 <label
                   cssClasses={["current-connection-icon"]}
                   label={icons.wiredConnection}
+                  marginEnd={20}
                 ></label>
                 <box hexpand orientation={Gtk.Orientation.VERTICAL}>
                   <label
                     valign={Gtk.Align.START}
+                    xalign={0.0}
                     hexpand
-                    cssClasses={["label-text"]}
-                    label={"Connected to ethernet"}
+                    cssClasses={["current-network-label"]}
+                    label={wired.device.activeConnection.id}
                   ></label>
-                  <label
-                    valign={Gtk.Align.START}
-                    hexpand
-                    cssClasses={["label-text"]}
-                    label={"Speed: " + wired.speed}
-                  ></label>
+
+                  {createDownloadSpeed()}
+                  {createUploadSpeed()}
                 </box>
               </box>
             );
@@ -212,6 +163,62 @@ export function CurrentConnectionStatus({ network }: NetworkProps) {
             </box>
           </box>
         </box>
+      </box>
+    );
+  }
+
+  function createDownloadSpeed() {
+    return (
+      <box tooltipText={configuration.getTexts().network.downloadSpeed}>
+        <With value={downloadSpeed[0]}>
+          {(speed) => {
+            return (
+              <box orientation={Gtk.Orientation.HORIZONTAL}>
+                <label
+                  xalign={0}
+                  marginEnd={5}
+                  cssClasses={["label-icon-no-padding"]}
+                  label={icons.download}
+                ></label>
+                <label
+                  xalign={1}
+                  yalign={0.75}
+                  widthChars={11} // 6 number + 5 unit
+                  cssClasses={["label-text"]}
+                  label={speed.getSpeed()}
+                ></label>
+              </box>
+            );
+          }}
+        </With>
+      </box>
+    );
+  }
+
+  function createUploadSpeed() {
+    return (
+      <box tooltipText={configuration.getTexts().network.uploadSpeed}>
+        <With value={uploadSpeed[0]}>
+          {(speed) => {
+            return (
+              <box orientation={Gtk.Orientation.HORIZONTAL}>
+                <label
+                  xalign={0}
+                  marginEnd={5}
+                  cssClasses={["label-icon-no-padding"]}
+                  label={icons.upload}
+                ></label>
+                <label
+                  xalign={1}
+                  yalign={0.75}
+                  cssClasses={["label-text"]}
+                  widthChars={11} // 6 number + 5 unit
+                  label={speed.getSpeed()}
+                ></label>
+              </box>
+            );
+          }}
+        </With>
       </box>
     );
   }

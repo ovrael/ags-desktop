@@ -57,22 +57,7 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
         <box>{CurrentConnectionStatus({ network })}</box>
-
-        <box
-          visible={wifi(Boolean)}
-          orientation={Gtk.Orientation.HORIZONTAL}
-          halign={Gtk.Align.CENTER}
-          marginTop={20}
-        >
-          <label label={"Wifi "}></label>
-          <switch
-            cssClasses={["network-wifi-switch"]}
-            active={wifi((w) => w.enabled)}
-            onNotifyActive={(self) => {
-              network.wifi.set_enabled(self.state);
-            }}
-          ></switch>
-        </box>
+        <box>{createWifiSwitch()}</box>
 
         <box visible={useWifi} marginTop={10}>
           <With value={wifi}>
@@ -104,6 +89,26 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
       </box>
     </popover>
   );
+
+  function createWifiSwitch() {
+    return (
+      <box
+        visible={useWifi}
+        orientation={Gtk.Orientation.HORIZONTAL}
+        halign={Gtk.Align.CENTER}
+        marginTop={20}
+      >
+        <label label={"Wifi "}></label>
+        <switch
+          cssClasses={["network-wifi-switch"]}
+          active={wifi((w) => w.enabled)}
+          onNotifyActive={(self) => {
+            network.wifi.set_enabled(self.state);
+          }}
+        ></switch>
+      </box>
+    );
+  }
 
   function isWifiOk(state: Network.DeviceState) {
     return (

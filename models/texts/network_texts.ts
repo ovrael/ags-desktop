@@ -7,4 +7,5 @@ export class NetworkTexts {
     public readonly downloadSpeed: string = "Current download speed";
     public readonly uploadSpeed: string = "Current upload speed";
     public readonly noCurrentConnection: string = "No Internet connection";
+
 }
