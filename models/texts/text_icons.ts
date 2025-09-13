@@ -10,6 +10,8 @@ class TextIcons {
     public readonly back: string = "󰭜";
     public readonly edit: string = "";
     public readonly save: string = "󰆓";
+    public readonly warn: string = "";
+
     //#endregion
 
     //#region Timer
@@ -45,6 +47,31 @@ class TextIcons {
     public readonly upload: string = "";
 
     //#endregion
-}
 
+    //#region Weahter
+
+    // nf-weather-
+
+    public readonly cloudyFull: string = "";
+
+    // DAY
+    public readonly daySun: string = "󰖙";
+    public readonly dayCloudyMid: string = "";
+    public readonly dayRain: string = "";
+    public readonly daySnow: string = "";
+    public readonly dayThunderstorm: string = "";
+
+    // NIGHT
+    public readonly nightMoon: string = "";
+    public readonly nightCloudyMid: string = "";
+    public readonly nightRain: string = "";
+    public readonly nightSnow: string = "";
+    public readonly nightThunderstorm: string = "";
+
+    // UNITS
+    public readonly celsiusUnit: string = "";
+    public readonly fahrenheitUnit: string = "";
+
+    //#endregion
+}
 export const icons: TextIcons = new TextIcons();

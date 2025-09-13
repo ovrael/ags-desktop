@@ -26,7 +26,7 @@ export class TimerDigits {
 
     public updateTime(digit: TimerDigit, change: number): void {
 
-        change = 0.125 * Math.sign(change);
+        change = 0.5 * Math.sign(change);
 
         switch (digit) {
             case TimerDigit.Hour1:

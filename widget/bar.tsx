@@ -4,6 +4,7 @@ import { execAsync } from "ags/process";
 import { createPoll } from "ags/time";
 import { Timer } from "./timer/timer";
 import { NetworkStatus } from "./network_status/network_status";
+import { Weather } from "./weather/weather";
 
 export function bar(monitor: Gdk.Monitor) {
   if (monitor.description.includes("AW3423DWF")) {
@@ -28,8 +29,9 @@ function mainBar(monitor: Gdk.Monitor) {
       application={app}
     >
       <centerbox cssName="centerbox">
-        <box $type="start" hexpand halign={Gtk.Align.CENTER}>
-          <label label="TO BE DONE -> workspaces or something else" />
+        <box $type="start" halign={Gtk.Align.START}>
+          <Weather />
+
         </box>
 
         <box $type="center">
@@ -41,7 +43,7 @@ function mainBar(monitor: Gdk.Monitor) {
           </menubutton>
         </box>
 
-        <box $type="end" hexpand halign={Gtk.Align.END}>
+        <box $type="end" halign={Gtk.Align.END}>
           <NetworkStatus />
           <Timer />
         </box>

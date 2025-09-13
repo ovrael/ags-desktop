@@ -6,6 +6,7 @@ import Gio from "gi://Gio";
 import { Communication } from "../utils/communication";
 import { createState, State } from "ags";
 import { execAsync } from "ags/process";
+import { WeatherConfiguration } from "./weather_configuration";
 
 const CONFIG_PATH = "config/config.json"
 
@@ -17,6 +18,8 @@ export class Configuration {
 
     public general: GeneralConfiguration = new GeneralConfiguration();
     public timer: TimerConfiguration = new TimerConfiguration();
+    public weather: WeatherConfiguration = new WeatherConfiguration();
+    public weatherState: State<WeatherConfiguration> = createState(new WeatherConfiguration());
 
     public texts: State<LocaliztionTexts> = createState(new LocaliztionTexts(""));
     public getTexts() { return this.texts[0].get(); };
@@ -39,10 +42,17 @@ export class Configuration {
 
         config.texts[1](new LocaliztionTexts(config.general.languageCode));
 
+        // Timer
         config.timer.defaultTimerTimeSeconds = fileConfig.timer.defaultTimerTimeSeconds;
         config.timer.maxRunningTimers = fileConfig.timer.maxRunningTimers;
         config.timer.alarmSoundFilePath = fileConfig.timer.alarmSoundFilePath;
         config.timer.alarmSoundLengthInSeconds = fileConfig.timer.alarmSoundLengthInSeconds;
+
+        // Weather
+        const weatherConfig = WeatherConfiguration.fromConfigFile(fileConfig.weather);
+        weatherConfig.checkLocalizationNames(); // Ignore await, we don't need this immediately
+        config.weather = weatherConfig;
+        config.weatherState = createState(weatherConfig);
 
         config.addFileMonitorHandler();
 
@@ -109,11 +119,10 @@ export class Configuration {
         const fileConfig = JSON.parse(configJson) as Configuration;
         this.texts[1](new LocaliztionTexts(fileConfig.general.languageCode));
 
-    }
-
-    public static async getInstance() {
-        if (Configuration.instance !== undefined)
-            return Configuration.instance;
-        return Configuration.create();
+        // Weather
+        const weatherConfig = WeatherConfiguration.fromConfigFile(fileConfig.weather);
+        await weatherConfig.checkLocalizationNames();
+        this.weather = weatherConfig;
+        this.weatherState[1](weatherConfig);
     }
 }

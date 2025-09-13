@@ -25,5 +25,9 @@
         "downloadSpeed": "Aktualna prędkość pobierania",
         "uploadSpeed": "Aktualna prędkość wysyłania",
         "noCurrentConnection": "Brak połączenia z Internetem"
+    },
+    "weather": {
+        "badLocalizationsTooltip": "Twój plik konfiguracyjny zawiera błędne dane lokalizacyjne: {0}. \nUpewnij się, że wartość latitude mieści się w zakresie -90 do 90 a wartość longitude w zakresie -180 do 180",
+        "defaultLocationName": "Lokalizacja"
     }
 }

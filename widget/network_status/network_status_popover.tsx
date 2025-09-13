@@ -57,7 +57,9 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
         <box>{CurrentConnectionStatus({ network })}</box>
-        <box>{createWifiSwitch()}</box>
+        <box hexpand halign={Gtk.Align.CENTER}>
+          {createWifiSwitch()}
+        </box>
 
         <box visible={useWifi} marginTop={10}>
           <With value={wifi}>
@@ -91,6 +93,15 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
   );
 
   function createWifiSwitch() {
+    const useWifi = createComputed(
+      [wifi, primary],
+      (a: Network.Wifi, b: Network.Primary) => {
+        if (a == undefined || a == null) return false;
+        if (b === Network.Primary.WIRED) return false;
+        return true;
+      }
+    );
+
     return (
       <box
         visible={useWifi}
@@ -172,42 +183,6 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
               )
             }
           </With>
-          {/* <With value={wifiAvailableNetworks}>
-            {(aps: Network.AccessPoint[]) => {
-              // console.log(`${aps.length} available access points`);
-
-              if (aps.length === 0) {
-                return (
-                  <box>
-                    <label
-                      halign={Gtk.Align.CENTER}
-                      cssClasses={["label-text"]}
-                      label={configuration.texts[0](
-                        (t) => `${t.network.searchNetworks}`
-                      )}
-                    ></label>
-                    <label
-                      halign={Gtk.Align.CENTER}
-                      cssClasses={["label-icon"]}
-                      label={icons.searchNetworks}
-                    ></label>
-                  </box>
-                );
-              } else {
-                return (
-                  <scrolledwindow heightRequest={200}>
-                    <box orientation={Gtk.Orientation.VERTICAL} marginEnd={6}>
-                      <For each={wifiAvailableNetworks}>
-                        {(ap: Network.AccessPoint) =>
-                          createAccessPointLabel(ap, savedConnections)
-                        }
-                      </For>
-                    </box>
-                  </scrolledwindow>
-                );
-              }
-            }}
-          </With> */}
         </box>
       </box>
     );

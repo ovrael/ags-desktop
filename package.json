@@ -1,5 +1,13 @@
 {
   "dependencies": {
     "ags": "*"
+  },
+  "ags": {
+    "build": {
+      "external": [
+        "openmeteo",
+        "openmeteo/*"
+      ]
+    }
   }
 }

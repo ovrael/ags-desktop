@@ -1,0 +1,127 @@
+//#region Main button
+.weather-button {
+  margin: 0px;
+  padding: 0px;
+}
+
+.weather-button-label-container {
+  transition: color 1s ease, background-color 1s ease, border 1s ease;
+}
+
+.weather-button-sun {
+  color: rgba(230, 230, 120, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(230, 230, 120, 0.2);
+  background-color: rgba(230, 230, 120, 0.1);
+}
+
+.weather-button-sun:hover {
+  background-color: rgba(230, 230, 120, 0.215);
+}
+
+.weather-button-moon {
+  color: rgba(160, 160, 160, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(160, 160, 160, 0.2);
+  background-color: rgba(160, 160, 160, 0.1);
+}
+
+.weather-button-moon:hover {
+  background-color: rgba(160, 160, 160, 0.215);
+}
+
+.weather-button-cloud-mid {
+  color: rgba(180, 180, 140, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(180, 180, 140, 0.2);
+  background-color: rgba(180, 180, 140, 0.1);
+}
+
+.weather-button-cloud-mid:hover {
+  background-color: rgba(180, 180, 140, 0.215);
+}
+
+.weather-button-cloud-full {
+  color: rgba(115, 115, 115, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(115, 115, 115, 0.2);
+  background-color: rgba(115, 115, 115, 0.1);
+}
+
+.weather-button-cloud-full:hover {
+  background-color: rgba(115, 115, 115, 0.215);
+}
+
+.weather-button-rain {
+  color: rgba(130, 180, 250, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(130, 180, 250, 0.2);
+  background-color: rgba(130, 180, 250, 0.1);
+}
+
+.weather-button-rain:hover {
+  background-color: rgba(130, 180, 250, 0.215);
+}
+
+.weather-button-snow {
+  color: rgba(230, 230, 230, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(230, 230, 230, 0.2);
+  background-color: rgba(230, 230, 230, 0.1);
+}
+
+.weather-button-snow:hover {
+  background-color: rgba(230, 230, 230, 0.215);
+}
+
+.weather-button-thunderstorm {
+  color: rgba(50, 90, 135, 0.9);
+  border-radius: 4px;
+  border: 2px solid rgba(50, 90, 135, 0.2);
+  background-color: rgba(50, 90, 135, 0.1);
+}
+
+.weather-button-thunderstorm:hover {
+  background-color: rgba(50, 90, 135, 0.215);
+}
+
+//#endregion
+
+//#region popover
+
+.current-weather-icon {
+  line-height: 0.5;
+  font-size: 100px;
+  font-weight: 700;
+  padding: 4px;
+}
+
+.weather-icon-sun {
+  color: rgba(230, 230, 100, 0.95);
+}
+
+.weather-icon-moon {
+  color: rgba(160, 160, 160, 0.95);
+}
+
+.weather-icon-cloud-mid {
+  color: rgba(180, 180, 140, 0.95);
+}
+
+.weather-icon-cloud-full {
+  color: rgba(115, 115, 115, 0.95);
+}
+
+.weather-icon-rain {
+  color: rgba(130, 180, 250, 0.95);
+}
+
+.weather-icon-snow {
+  color: rgba(230, 230, 230, 0.95);
+}
+
+.weather-icon-thunderstorm {
+  color: rgba(50, 90, 135, 0.9);
+}
+
+//#endregion

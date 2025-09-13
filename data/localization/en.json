@@ -25,5 +25,9 @@
         "downloadSpeed": "Current download speed",
         "uploadSpeed": "Current upload speed",
         "noCurrentConnection": "No Internet connection"
+    },
+    "weather": {
+        "badLocalizationsTooltip": "Your configuration file contains bad localizations coordinates: {0}. \nMake sure that latitude value is between -90 and 90, and longitude value in between -180 and 180",
+        "defaultLocationName": "Localization"
     }
 }

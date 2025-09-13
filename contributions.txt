@@ -1,0 +1,2 @@
+Localization data (city/village name) for autogetLocalizationName configuration is provided from OpenStreetMap (openstreetmap.org).
+OPENMETEO

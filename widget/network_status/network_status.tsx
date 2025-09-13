@@ -15,7 +15,6 @@ export function NetworkStatus() {
         <With value={networkState}>
           {(state) => {
             if (state === null || state === undefined) {
-              console.log("STATE IS NULL?");
               return null;
             }
             return createLabel(state);
