@@ -6,121 +6,205 @@ import { WeatherData } from "./weather_data";
 import { icons } from "../../models/texts/text_icons";
 import { WeatherIconStyle } from "./weather_icon_style";
 import { weatherApi } from "./weather_api";
-
-type WeatherProps = {
-  weatherAccessor: Accessor<WeatherData>;
-};
+import { Tools } from "../../models/utils/tools";
+import { LocalizationWeatherData } from "./localization_weather_data";
+import { DateTools } from "../../models/utils/date_tools";
 
 export function WeatherPopover() {
+  const currentLocalization = createState("LocalizationTab0");
+  const tabNameTemplate = "LocalizationTab{0}";
+
   return (
     <popover
       autohide={false}
       hasArrow={false}
       class={"widget-popover"}
-      widthRequest={500}
-      marginEnd={60}
+      marginStart={60}
       marginBottom={30}
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
-        <label label={"POGODA"}></label>
-        <box orientation={Gtk.Orientation.HORIZONTAL}>
-          <For each={weatherApi.localizationWeathers[0]}>
-            {(localization, index: Accessor<number>) => (
-              <box
-                orientation={Gtk.Orientation.VERTICAL}
-                hexpand
-                marginEnd={30}
-              >
+        <box orientation={Gtk.Orientation.VERTICAL}>
+          <box orientation={Gtk.Orientation.HORIZONTAL} marginBottom={10}>
+            <For each={weatherApi.localizationWeathers[0]}>
+              {(
+                localization: LocalizationWeatherData,
+                index: Accessor<number>
+              ) => (
                 <box>
-                  <label
-                    visible={localization.name.length > 0}
-                    label={localization.name}
-                  ></label>
-
-                  <label
-                    visible={localization.name.length === 0}
-                    label={index.as(
-                      (i) =>
-                        `${
-                          configuration.getTexts().weather.defaultLocationName
-                        } #${i + 1}`
-                    )}
-                  ></label>
+                  {createWeatherStackPageButton(index.get(), localization)}
                 </box>
-                <label
-                  cssClasses={[
-                    "current-weather-icon",
-                    localization.current.getClass(),
-                  ]}
-                  label={localization.current.icon}
-                ></label>
-                <label label={`${localization.current.temperature} C`}></label>
-                <label
-                  label={`${localization.current.precipitationProbability} %`}
-                ></label>
-              </box>
-            )}
-          </For>
+              )}
+            </For>
+          </box>
+          <box>
+            <stack visibleChildName={currentLocalization[0]}>
+              <For each={weatherApi.localizationWeathers[0]}>
+                {(
+                  localization: LocalizationWeatherData,
+                  index: Accessor<number>
+                ) => (
+                  <box
+                    $type="named"
+                    name={Tools.formatString(tabNameTemplate, index.get())}
+                    orientation={Gtk.Orientation.VERTICAL}
+                    spacing={40}
+                  >
+                    <box orientation={Gtk.Orientation.VERTICAL}>
+                      <label label={"Current weather"}></label>
+                      {createCurrentWeather(localization)}
+                    </box>
+                    <box orientation={Gtk.Orientation.VERTICAL}>
+                      <label label={"Hourly weather"}></label>
+                      {createHourlyWeather(localization.hourly)}
+                    </box>
+                    <box orientation={Gtk.Orientation.VERTICAL}>
+                      <label label={"Daily weather"}></label>
+                      {createDailyWeather(localization.daily)}
+                    </box>
+                    {/* {createDailyWeather(localization.daily)} */}
+                  </box>
+                )}
+              </For>
+            </stack>
+          </box>
         </box>
       </box>
     </popover>
   );
 
-  function createIconStyle(weatherData: WeatherData): WeatherIconStyle {
-    // return new WeatherStyle();
-    // From most alarming to least
+  function createWeatherStackPageButton(
+    index: number,
+    localization: LocalizationWeatherData
+  ): Gtk.Button {
+    const button = new Gtk.Button();
+    const tabName = Tools.formatString(tabNameTemplate, index);
 
-    // Thunderstorm
-    if (weatherData.code >= 90) {
-      return new WeatherIconStyle(
-        weatherData.isDay ? icons.dayThunderstorm : icons.nightThunderstorm,
-        "weather-icon-thunderstorm"
+    button.label =
+      localization.name.length === 0
+        ? `${configuration.getTexts().weather.defaultLocationName} #${
+            index + 1
+          }`
+        : localization.name;
+
+    currentLocalization[0].subscribe(() => {
+      button.cssClasses =
+        currentLocalization[0].get() === tabName
+          ? ["weather-localization-button", "weather-current-localization"]
+          : ["weather-localization-button"];
+    });
+
+    button.cssClasses =
+      currentLocalization[0].get() === tabName
+        ? ["weather-localization-button", "weather-current-localization"]
+        : ["weather-localization-button"];
+
+    button.connect("clicked", () => {
+      currentLocalization[1](tabName);
+    });
+    return button;
+  }
+
+  function createCurrentWeather(
+    localization: LocalizationWeatherData
+  ): Gtk.Box {
+    const box = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
+
+    // const nameLabel = new Gtk.Label();
+    // nameLabel.label =
+    //   localization.name.length === 0
+    //     ? `${configuration.getTexts().weather.defaultLocationName} #${
+    //         index + 1
+    //       }`
+    //     : localization.name;
+    // page.append(nameLabel);
+
+    const iconLabel = new Gtk.Label();
+    iconLabel.label = localization.current.icon;
+    iconLabel.cssClasses = [
+      "current-weather-icon",
+      localization.current.getClass(),
+    ];
+    box.append(iconLabel);
+
+    const temperatureLabel = new Gtk.Label();
+    temperatureLabel.label = `${localization.current.temperature} C`;
+    box.append(temperatureLabel);
+
+    const precipitationLabel = new Gtk.Label();
+    precipitationLabel.label = `${localization.current.precipitationProbability} %`;
+    box.append(precipitationLabel);
+
+    return box;
+  }
+
+  function createHourlyWeather(forecast: WeatherData[]): Gtk.Box {
+    const box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+
+    for (let i = 0; i < forecast.length; i++) {
+      const hourBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
+
+      const iconLabel = new Gtk.Label();
+      iconLabel.label = forecast[i].icon;
+      iconLabel.cssClasses = ["current-weather-icon", forecast[i].getClass()];
+      hourBox.append(iconLabel);
+
+      const temperatureLabel = new Gtk.Label();
+      temperatureLabel.label = `${forecast[i].temperature} C`;
+      hourBox.append(temperatureLabel);
+
+      const precipitationLabel = new Gtk.Label();
+      precipitationLabel.label = `${forecast[i].precipitationProbability} %`;
+      hourBox.append(precipitationLabel);
+
+      // Time is YYYY-MM-DDTHH:MM format
+      const timeParts: string[] = forecast[i].time.split("T");
+      if (timeParts.length == 2) {
+        const timeLabel = new Gtk.Label();
+        const time: string = DateTools.formatTime(
+          timeParts[1],
+          configuration.general.timeFormat
+        );
+        timeLabel.label = `${time}`;
+        hourBox.append(timeLabel);
+      } // else - something weird happened
+
+      box.append(hourBox);
+    }
+
+    return box;
+  }
+
+  function createDailyWeather(forecast: WeatherData[]): Gtk.Box {
+    const box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
+
+    for (let i = 0; i < forecast.length; i++) {
+      const dayBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
+
+      const iconLabel = new Gtk.Label();
+      iconLabel.label = forecast[i].icon;
+      iconLabel.cssClasses = ["current-weather-icon", forecast[i].getClass()];
+      dayBox.append(iconLabel);
+
+      const temperatureLabel = new Gtk.Label();
+      temperatureLabel.label = `${forecast[i].temperature} C`;
+      dayBox.append(temperatureLabel);
+
+      const precipitationLabel = new Gtk.Label();
+      precipitationLabel.label = `${forecast[i].precipitationProbability} %`;
+      dayBox.append(precipitationLabel);
+
+      // Time is YYYY-MM-DD format
+      const timeLabel = new Gtk.Label();
+      const date = new Date(forecast[i].time);
+      timeLabel.label = DateTools.toShortFormatDate(
+        date,
+        configuration.general.dateFormat
       );
+      dayBox.append(timeLabel);
+
+      box.append(dayBox);
     }
 
-    // Snow
-    if (
-      (weatherData.code >= 70 && weatherData.code < 80) ||
-      (weatherData.code >= 85 && weatherData.code < 90)
-    ) {
-      return new WeatherIconStyle(
-        weatherData.isDay ? icons.daySnow : icons.nightSnow,
-        "weather-icon-snow"
-      );
-    }
-
-    // Rain
-    if (
-      (weatherData.code >= 80 && weatherData.code < 85) ||
-      (weatherData.code >= 50 && weatherData.code < 70)
-    ) {
-      return new WeatherIconStyle(
-        weatherData.isDay ? icons.dayRain : icons.nightRain,
-        "weather-icon-rain"
-      );
-    }
-
-    // Overcast
-    if (weatherData.code === 3) {
-      return new WeatherIconStyle(icons.cloudyFull, "weather-icon-cloud-full");
-    }
-
-    // Partly cloudy
-    if (weatherData.code === 2) {
-      return new WeatherIconStyle(
-        weatherData.isDay ? icons.dayCloudyMid : icons.nightCloudyMid,
-        "weather-icon-cloud-mid"
-      );
-    }
-
-    // Clear sky
-    if (weatherData.code <= 1) {
-      return weatherData.isDay
-        ? new WeatherIconStyle(icons.daySun, "weather-icon-sun")
-        : new WeatherIconStyle(icons.nightMoon, "weather-icon-moon");
-    }
-
-    // Default
-    return new WeatherIconStyle(icons.daySun, "weather-icon-sun");
+    return box;
   }
 }

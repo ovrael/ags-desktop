@@ -14,7 +14,7 @@ export function Weather() {
           <box
             cssClasses={weatherApi.localizationWeathers[0]((v) => [
               "weather-button-label-container",
-              v[0].current.getClass(),
+              v[0].current.getClass(true),
             ])}
           >
             <label

@@ -1,6 +1,8 @@
 {
     "general": {
-        "languageCode": "pl"
+        "languageCode": "pl",
+        "timeFormat": "24",
+        "dateFormat": "DD-MM-YYYY"
     },
     "timer": {
         "defaultTimerTimeSeconds": 600,

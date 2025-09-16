@@ -30,27 +30,15 @@ class WeatherApi {
         const weatherConfig = configuration.weather;
         this.localizations = weatherConfig.localizations;
         this.temperatureUnit = weatherConfig.temperatureUnit;
-
-        const weathers: LocalizationWeatherData[] = [];
-        for (let i = 0; i < weatherConfig.localizations.length; i++) {
-            weathers.push(new LocalizationWeatherData(weatherConfig.localizations[i].name));
-        }
-        this.localizationWeathers[1](weathers);
-
+        this.localizationWeathers[1](weatherConfig.localizations.map(l => new LocalizationWeatherData(l.name)));
         await this.fetchData();
 
         configuration.weatherState[0].subscribe(async () => {
-            console.log('SUBSCRIBE');
             const currentState = configuration.weatherState[0].get();
             this.localizations = currentState.localizations;
             this.temperatureUnit = currentState.temperatureUnit;
-            const weathersSubscribe: LocalizationWeatherData[] = [];
-            for (let i = 0; i < weatherConfig.localizations.length; i++) {
-                weathersSubscribe.push(new LocalizationWeatherData(weatherConfig.localizations[i].name));
-            }
-            this.localizationWeathers[1](weathersSubscribe);
+            this.localizationWeathers[1](weatherConfig.localizations.map(l => new LocalizationWeatherData(l.name)));
             await this.fetchData();
-
         })
     }
 

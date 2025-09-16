@@ -55,7 +55,7 @@ class TextIcons {
     public readonly cloudyFull: string = "";
 
     // DAY
-    public readonly daySun: string = "󰖙";
+    public readonly daySun: string = "";
     public readonly dayCloudyMid: string = "";
     public readonly dayRain: string = "";
     public readonly daySnow: string = "";
