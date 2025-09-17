@@ -136,4 +136,19 @@
   background-color: rgb(200, 200, 200);
 }
 
+.weather-panel-label {
+  color: rgb(200, 200, 200);
+}
+
+.weather-panel {
+  padding: 6px;
+  border-radius: 0px;
+  border: 1px solid rgb(200, 200, 200);
+}
+
+.weather-time-panel {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 4px;
+}
+
 //#endregion

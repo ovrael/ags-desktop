@@ -8,13 +8,14 @@ import { WeatherConfiguration } from "../../models/configuration/weather_configu
 import { LocalizationWeatherData } from "./localization_weather_data";
 import { icons } from "../../models/texts/text_icons";
 import { Tools } from "../../models/utils/tools";
+import { Communication } from "../../models/utils/communication";
 
 class WeatherApi {
 
     private localizations: WeatherLocalization[] = [];
     private temperatureUnit: string = "C";
 
-    private readonly fetchIntervalTimeMs: number = 10000;
+    private readonly fetchIntervalTimeMs: number = 5 * 60_000; // Every 5min
     private fetchInterval: Time;
 
     public localizationWeathers = createState([] as LocalizationWeatherData[]);
@@ -62,8 +63,14 @@ class WeatherApi {
 
         const url = `${baseUrl}?latitude=${latitudes}&longitude=${longitudes}${currentParams}${hourlyParams}${dailyParams}${tempUnitParam}${timezone}`;
 
-        const response = await fetch(url);
-        let json = await response.json();
+        let json = undefined;
+        try {
+            const response = await fetch(url);
+            json = await response.json();
+        } catch (error) {
+            Communication.printError(`Cannot fetch weather data: ${error}`, "weather_api");
+            return;
+        }
 
         if (!Array.isArray(json)) {
             json = [json];
@@ -90,7 +97,7 @@ class WeatherApi {
             localizationWeathers.push(forecast);
         }
 
-        this.localizationWeathers[1](v => localizationWeathers);
+        this.localizationWeathers[1](localizationWeathers);
     }
 
     private createCurrentWeatherData(jsonField: any): WeatherData {
