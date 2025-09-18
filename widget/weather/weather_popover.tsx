@@ -1,10 +1,7 @@
-import { Accessor, createComputed, createState, For, With } from "ags";
+import { Accessor, createComputed, createState, For } from "ags";
 import { Gtk } from "ags/gtk4";
 import { configuration } from "../../app";
-import { WeatherConfiguration } from "../../models/configuration/weather_configuration";
 import { WeatherData } from "./weather_data";
-import { icons } from "../../models/texts/text_icons";
-import { WeatherIconStyle } from "./weather_icon_style";
 import { weatherApi } from "./weather_api";
 import { Tools } from "../../models/utils/tools";
 import { LocalizationWeatherData } from "./localization_weather_data";
@@ -13,10 +10,6 @@ import { DateTools } from "../../models/utils/date_tools";
 export function WeatherPopover() {
   const currentLocalization = createState("LocalizationTab0");
   const tabNameTemplate = "LocalizationTab{0}";
-
-  currentLocalization[0].subscribe(() => {
-    console.log(`Current localization tab: ${currentLocalization[0].get()}`);
-  });
 
   return (
     <popover
@@ -89,10 +82,20 @@ export function WeatherPopover() {
                               minContentHeight={100}
                               minContentWidth={100}
                               vscrollbarPolicy={Gtk.PolicyType.NEVER}
-                              hscrollbarPolicy={Gtk.PolicyType.AUTOMATIC}
+                              hscrollbarPolicy={Gtk.PolicyType.ALWAYS}
                             >
                               {createHourlyWeather(localization.hourly)}
                             </scrolledwindow>
+                          </box>
+                        </box>
+                        <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
+                          <label
+                            cssClasses={["weather-panel-label"]}
+                            label={"Hourly"}
+                            xalign={0}
+                          ></label>
+                          <box cssClasses={["weather-panel"]}>
+                            {createHourlyWeather_notebook(localization.hourly)}
                           </box>
                         </box>
                         <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
@@ -111,77 +114,6 @@ export function WeatherPopover() {
                 )}
               </For>
             </box>
-            {/* <box visible={false}>
-              <stack visibleChildName={currentLocalization[0]}>
-                <For each={weatherApi.localizationWeathers[0]}>
-                  {(
-                    localization: LocalizationWeatherData,
-                    index: Accessor<number>
-                  ) => (
-                    <box
-                      $type="named"
-                      name={Tools.formatString(tabNameTemplate, index.get())}
-                      orientation={Gtk.Orientation.HORIZONTAL}
-                      spacing={12}
-                    >
-                      <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
-                        <label
-                          cssClasses={["weather-panel-label"]}
-                          label={"Current"}
-                          xalign={0}
-                        ></label>
-                        <box cssClasses={["weather-panel"]} vexpand>
-                          {createCurrentWeather(localization)}
-                        </box>
-                      </box>
-                      <box
-                        orientation={Gtk.Orientation.VERTICAL}
-                        spacing={12}
-                        vexpand
-                      >
-                        <box
-                          orientation={Gtk.Orientation.VERTICAL}
-                          spacing={4}
-                          vexpand
-                        >
-                          <label
-                            cssClasses={["weather-panel-label"]}
-                            label={"Hourly"}
-                            xalign={0}
-                          ></label>
-                          <box
-                            vexpand
-                            cssClasses={["weather-panel"]}
-                            overflow={Gtk.Overflow.HIDDEN}
-                          >
-                            <scrolledwindow
-                              vexpand
-                              hexpand
-                              minContentHeight={100}
-                              minContentWidth={100}
-                              vscrollbarPolicy={Gtk.PolicyType.NEVER}
-                              hscrollbarPolicy={Gtk.PolicyType.AUTOMATIC}
-                            >
-                              {createHourlyWeather(localization.hourly)}
-                            </scrolledwindow>
-                          </box>
-                        </box>
-                        <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
-                          <label
-                            cssClasses={["weather-panel-label"]}
-                            label={"Daily"}
-                            xalign={0}
-                          ></label>
-                          <box cssClasses={["weather-panel"]}>
-                            {createDailyWeather(localization.daily)}
-                          </box>
-                        </box>
-                      </box>
-                    </box>
-                  )}
-                </For>
-              </stack>
-            </box> */}
           </box>
         </box>
       </box>
@@ -293,6 +225,62 @@ export function WeatherPopover() {
 
       box.append(hourBox);
     }
+
+    return box;
+  }
+
+  function createHourlyWeather_notebook(forecast: WeatherData[]): Gtk.Box {
+    const box = new Gtk.Box({
+      orientation: Gtk.Orientation.HORIZONTAL,
+      spacing: 6,
+      cssClasses: [""],
+    });
+
+    const notebook = new Gtk.Notebook();
+    let pageIndex = 0;
+    let notebookPage = new Gtk.Box();
+
+    for (let i = 0; i < forecast.length; i++) {
+      const hourBox = new Gtk.Box({
+        orientation: Gtk.Orientation.VERTICAL,
+        cssClasses: ["weather-time-panel"],
+      });
+
+      // Time is YYYY-MM-DDTHH:MM format
+      const timeParts: string[] = forecast[i].time.split("T");
+      if (timeParts.length == 2) {
+        const timeLabel = new Gtk.Label();
+        const time: string = DateTools.formatTime(
+          timeParts[1],
+          configuration.general.timeFormat
+        );
+        timeLabel.label = `${time}`;
+        hourBox.append(timeLabel);
+      } // else - something weird happened
+
+      const iconLabel = new Gtk.Label();
+      iconLabel.label = forecast[i].icon;
+      iconLabel.cssClasses = ["current-weather-icon", forecast[i].getClass()];
+      hourBox.append(iconLabel);
+
+      const temperatureLabel = new Gtk.Label();
+      temperatureLabel.label = `${forecast[i].temperature} C`;
+      hourBox.append(temperatureLabel);
+
+      const precipitationLabel = new Gtk.Label();
+      precipitationLabel.label = `${forecast[i].precipitationProbability} %`;
+      hourBox.append(precipitationLabel);
+
+      notebookPage.append(hourBox);
+
+      if (i > 0 && i % 7 === 0) {
+        notebook.append_page(notebookPage, null);
+        notebookPage = new Gtk.Box();
+        pageIndex++;
+      }
+    }
+
+    box.append(notebook);
 
     return box;
   }

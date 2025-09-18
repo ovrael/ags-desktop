@@ -1,13 +1,10 @@
-import { fetch, URL } from "ags/fetch";
+import { fetch } from "ags/fetch";
 import { WeatherLocalization } from "./weather_localization";
 import { WeatherData } from "./weather_data";
 import { configuration } from "../../app";
-import { interval, Time, timeout } from "ags/time";
-import { Accessor, createState } from "ags";
-import { WeatherConfiguration } from "../../models/configuration/weather_configuration";
+import { interval, Time } from "ags/time";
+import { createState } from "ags";
 import { LocalizationWeatherData } from "./localization_weather_data";
-import { icons } from "../../models/texts/text_icons";
-import { Tools } from "../../models/utils/tools";
 import { Communication } from "../../models/utils/communication";
 
 class WeatherApi {
@@ -31,14 +28,14 @@ class WeatherApi {
         const weatherConfig = configuration.weather;
         this.localizations = weatherConfig.localizations;
         this.temperatureUnit = weatherConfig.temperatureUnit;
-        this.localizationWeathers[1](weatherConfig.localizations.map(l => new LocalizationWeatherData(l.name)));
+        this.localizationWeathers[1](weatherConfig.localizations.map(l => new LocalizationWeatherData(l.name, l.isMain)));
         await this.fetchData();
 
         configuration.weatherState[0].subscribe(async () => {
             const currentState = configuration.weatherState[0].get();
             this.localizations = currentState.localizations;
             this.temperatureUnit = currentState.temperatureUnit;
-            this.localizationWeathers[1](weatherConfig.localizations.map(l => new LocalizationWeatherData(l.name)));
+            this.localizationWeathers[1](weatherConfig.localizations.map(l => new LocalizationWeatherData(l.name, l.isMain)));
             await this.fetchData();
         })
     }
@@ -56,7 +53,7 @@ class WeatherApi {
         const latitudes = this.localizations.map(l => l.latitude).join(',');
         const longitudes = this.localizations.map(l => l.longitude).join(',');
         const currentParams = "&current=weather_code,temperature_2m,precipitation_probability,is_day";
-        const hourlyParams = "&forecast_hours=12&past_hours=0&hourly=weather_code,temperature_2m,precipitation_probability,is_day"; // STARTS FROM CURRENT HOUR
+        const hourlyParams = "&forecast_hours=21&past_hours=0&hourly=weather_code,temperature_2m,precipitation_probability,is_day"; // STARTS FROM CURRENT HOUR
         const dailyParams = "&daily=weather_code,temperature_2m_mean,precipitation_probability_mean"; // STARTS FROM CURRENT DAY
         let tempUnitParam = this.temperatureUnit === 'F' ? '&temperature_unit=fahrenheit' : '';
         const timezone = '&timezone=auto';
@@ -90,8 +87,10 @@ class WeatherApi {
             const hourly = this.createMultipleWeatherData(json[i].hourly);
             const daily = this.createMultipleWeatherData(json[i].daily);
 
+            // Check if in localization array bounds
             const name = configuration.weather.localizations.length > i ? configuration.weather.localizations[i].name : "";
-            const forecast = new LocalizationWeatherData(name);
+            const isMain = configuration.weather.localizations.length > i ? configuration.weather.localizations[i].isMain : false;
+            const forecast = new LocalizationWeatherData(name, isMain);
             forecast.updateWeather(current, hourly, daily);
 
             localizationWeathers.push(forecast);

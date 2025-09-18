@@ -7,41 +7,35 @@ import { configuration } from "../../app";
 import { weatherApi } from "./weather_api";
 
 export function Weather() {
+  const mainLocalization = weatherApi.localizationWeathers[0](
+    (v) => v.find((l) => l.isMain) ?? v[0]
+  );
+
   return (
     <box>
       <menubutton>
         <box cssClasses={["weather-button"]} overflow={Gtk.Overflow.HIDDEN}>
           <box
-            cssClasses={weatherApi.localizationWeathers[0]((v) => [
+            cssClasses={mainLocalization((v) => [
               "weather-button-label-container",
-              v[0].current.getClass(true),
+              v.current.getClass(true),
             ])}
           >
             <label
               cssClasses={["bar-button-label"]}
-              label={weatherApi.localizationWeathers[0](
-                (v) => v[0].current.icon
-              )}
+              label={mainLocalization((v) => v.current.icon)}
             />
             <box>
               <With value={configuration.weatherState[0]}>
                 {(state) => {
                   if (state.showLocationName === true) {
-                    return (
-                      <label
-                        label={weatherApi.localizationWeathers[0](
-                          (v) => v[0].name
-                        )}
-                      />
-                    );
+                    return <label label={mainLocalization((v) => v.name)} />;
                   } else return <box></box>;
                 }}
               </With>
             </box>
             <label
-              label={weatherApi.localizationWeathers[0](
-                (v) => `${v[0].current.temperature}`
-              )}
+              label={mainLocalization((v) => `${v.current.temperature}`)}
             />
             <label
               cssClasses={["bar-button-label"]}
