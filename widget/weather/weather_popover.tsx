@@ -6,6 +6,7 @@ import { weatherApi } from "./weather_api";
 import { Tools } from "../../models/utils/tools";
 import { LocalizationWeatherData } from "./localization_weather_data";
 import { DateTools } from "../../models/utils/date_tools";
+import { icons } from "../../models/texts/text_icons";
 
 export function WeatherPopover() {
   const currentLocalization = createState("LocalizationTab0");
@@ -13,10 +14,10 @@ export function WeatherPopover() {
 
   return (
     <popover
-      autohide={false}
+      name={"Weather popover"}
+      autohide
       hasArrow={false}
       class={"widget-popover"}
-      marginStart={60}
       marginBottom={30}
     >
       <box orientation={Gtk.Orientation.VERTICAL}>
@@ -91,16 +92,6 @@ export function WeatherPopover() {
                         <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
                           <label
                             cssClasses={["weather-panel-label"]}
-                            label={"Hourly"}
-                            xalign={0}
-                          ></label>
-                          <box cssClasses={["weather-panel"]}>
-                            {createHourlyWeather_notebook(localization.hourly)}
-                          </box>
-                        </box>
-                        <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
-                          <label
-                            cssClasses={["weather-panel-label"]}
                             label={"Daily"}
                             xalign={0}
                           ></label>
@@ -124,7 +115,7 @@ export function WeatherPopover() {
     index: number,
     localization: LocalizationWeatherData
   ): Gtk.Button {
-    const button = new Gtk.Button();
+    const button = new Gtk.Button({ hexpand: true });
     const tabName = Tools.formatString(tabNameTemplate, index);
 
     button.label =
@@ -155,16 +146,10 @@ export function WeatherPopover() {
   function createCurrentWeather(
     localization: LocalizationWeatherData
   ): Gtk.Box {
-    const box = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
-
-    // const nameLabel = new Gtk.Label();
-    // nameLabel.label =
-    //   localization.name.length === 0
-    //     ? `${configuration.getTexts().weather.defaultLocationName} #${
-    //         index + 1
-    //       }`
-    //     : localization.name;
-    // page.append(nameLabel);
+    const box = new Gtk.Box({
+      orientation: Gtk.Orientation.VERTICAL,
+      valign: Gtk.Align.CENTER,
+    });
 
     const iconLabel = new Gtk.Label();
     iconLabel.label = localization.current.icon;
@@ -175,11 +160,11 @@ export function WeatherPopover() {
     box.append(iconLabel);
 
     const temperatureLabel = new Gtk.Label();
-    temperatureLabel.label = `${localization.current.temperature} C`;
+    temperatureLabel.label = `${localization.current.temperature} ${localization.current.temperatureUnit}`;
     box.append(temperatureLabel);
 
     const precipitationLabel = new Gtk.Label();
-    precipitationLabel.label = `${localization.current.precipitationProbability} %`;
+    precipitationLabel.label = `${icons.precipitationProbability} ${localization.current.precipitationProbability} %`;
     box.append(precipitationLabel);
 
     return box;
@@ -188,7 +173,7 @@ export function WeatherPopover() {
   function createHourlyWeather(forecast: WeatherData[]): Gtk.Box {
     const box = new Gtk.Box({
       orientation: Gtk.Orientation.HORIZONTAL,
-      spacing: 6,
+      spacing: 12,
       cssClasses: [""],
     });
 
@@ -212,75 +197,19 @@ export function WeatherPopover() {
 
       const iconLabel = new Gtk.Label();
       iconLabel.label = forecast[i].icon;
-      iconLabel.cssClasses = ["current-weather-icon", forecast[i].getClass()];
+      iconLabel.cssClasses = ["weather-icon-hourly", forecast[i].getClass()];
       hourBox.append(iconLabel);
 
       const temperatureLabel = new Gtk.Label();
-      temperatureLabel.label = `${forecast[i].temperature} C`;
+      temperatureLabel.label = `${forecast[i].temperature} ${forecast[i].temperatureUnit}`;
       hourBox.append(temperatureLabel);
 
       const precipitationLabel = new Gtk.Label();
-      precipitationLabel.label = `${forecast[i].precipitationProbability} %`;
+      precipitationLabel.label = `${icons.precipitationProbability} ${forecast[i].precipitationProbability} %`;
       hourBox.append(precipitationLabel);
 
       box.append(hourBox);
     }
-
-    return box;
-  }
-
-  function createHourlyWeather_notebook(forecast: WeatherData[]): Gtk.Box {
-    const box = new Gtk.Box({
-      orientation: Gtk.Orientation.HORIZONTAL,
-      spacing: 6,
-      cssClasses: [""],
-    });
-
-    const notebook = new Gtk.Notebook();
-    let pageIndex = 0;
-    let notebookPage = new Gtk.Box();
-
-    for (let i = 0; i < forecast.length; i++) {
-      const hourBox = new Gtk.Box({
-        orientation: Gtk.Orientation.VERTICAL,
-        cssClasses: ["weather-time-panel"],
-      });
-
-      // Time is YYYY-MM-DDTHH:MM format
-      const timeParts: string[] = forecast[i].time.split("T");
-      if (timeParts.length == 2) {
-        const timeLabel = new Gtk.Label();
-        const time: string = DateTools.formatTime(
-          timeParts[1],
-          configuration.general.timeFormat
-        );
-        timeLabel.label = `${time}`;
-        hourBox.append(timeLabel);
-      } // else - something weird happened
-
-      const iconLabel = new Gtk.Label();
-      iconLabel.label = forecast[i].icon;
-      iconLabel.cssClasses = ["current-weather-icon", forecast[i].getClass()];
-      hourBox.append(iconLabel);
-
-      const temperatureLabel = new Gtk.Label();
-      temperatureLabel.label = `${forecast[i].temperature} C`;
-      hourBox.append(temperatureLabel);
-
-      const precipitationLabel = new Gtk.Label();
-      precipitationLabel.label = `${forecast[i].precipitationProbability} %`;
-      hourBox.append(precipitationLabel);
-
-      notebookPage.append(hourBox);
-
-      if (i > 0 && i % 7 === 0) {
-        notebook.append_page(notebookPage, null);
-        notebookPage = new Gtk.Box();
-        pageIndex++;
-      }
-    }
-
-    box.append(notebook);
 
     return box;
   }
@@ -295,28 +224,33 @@ export function WeatherPopover() {
       const dayBox = new Gtk.Box({
         orientation: Gtk.Orientation.VERTICAL,
         cssClasses: ["weather-time-panel"],
+        width_request: 100,
       });
 
       // Time is YYYY-MM-DD format
-      const timeLabel = new Gtk.Label();
       const date = new Date(forecast[i].time);
-      timeLabel.label = DateTools.toShortFormatDate(
+      const dayName = new Gtk.Label();
+      dayName.label = DateTools.getDayName(date);
+      dayBox.append(dayName);
+
+      const dateLabel = new Gtk.Label();
+      dateLabel.label = DateTools.toShortFormatDate(
         date,
         configuration.general.dateFormat
       );
-      dayBox.append(timeLabel);
+      dayBox.append(dateLabel);
 
       const iconLabel = new Gtk.Label();
       iconLabel.label = forecast[i].icon;
-      iconLabel.cssClasses = ["current-weather-icon", forecast[i].getClass()];
+      iconLabel.cssClasses = ["weather-icon-daily", forecast[i].getClass()];
       dayBox.append(iconLabel);
 
       const temperatureLabel = new Gtk.Label();
-      temperatureLabel.label = `${forecast[i].temperature} C`;
+      temperatureLabel.label = `${forecast[i].temperature} ${forecast[i].temperatureUnit}`;
       dayBox.append(temperatureLabel);
 
       const precipitationLabel = new Gtk.Label();
-      precipitationLabel.label = `${forecast[i].precipitationProbability} %`;
+      precipitationLabel.label = `${icons.precipitationProbability} ${forecast[i].precipitationProbability} %`;
       dayBox.append(precipitationLabel);
 
       box.append(dayBox);

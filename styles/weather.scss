@@ -8,6 +8,13 @@
   transition: color 1s ease, background-color 1s ease, border 1s ease;
 }
 
+.weather-button-status-label {
+  font-size: 44px;
+  line-height: 22px;
+  margin: 0px;
+  padding: 0px;
+}
+
 .weather-button-sun {
   color: rgba(230, 230, 120, 0.95);
   border-radius: 4px;
@@ -91,37 +98,48 @@
 
 .current-weather-icon {
   line-height: 0.5;
-  font-size: 100px;
-  font-weight: 700;
+  font-size: 160px;
+  padding: 4px 12px;
+}
+
+.weather-icon-hourly {
+  line-height: 0.5;
+  font-size: 90px;
+  padding: 4px;
+}
+
+.weather-icon-daily {
+  line-height: 60px;
+  font-size: 120px;
   padding: 4px;
 }
 
 .weather-icon-sun {
-  color: rgba(230, 230, 100, 0.95);
+  color: rgba(180, 180, 80, 0.8);
 }
 
 .weather-icon-moon {
-  color: rgba(160, 160, 160, 0.95);
+  color: rgba(160, 160, 160, 0.8);
 }
 
 .weather-icon-cloud-mid {
-  color: rgba(180, 180, 140, 0.95);
+  color: rgba(180, 180, 140, 0.8);
 }
 
 .weather-icon-cloud-full {
-  color: rgba(115, 115, 115, 0.95);
+  color: rgba(115, 115, 115, 0.8);
 }
 
 .weather-icon-rain {
-  color: rgba(130, 180, 250, 0.95);
+  color: rgba(90, 120, 170, 0.8);
 }
 
 .weather-icon-snow {
-  color: rgba(230, 230, 230, 0.95);
+  color: rgba(210, 210, 210, 0.8);
 }
 
 .weather-icon-thunderstorm {
-  color: rgba(50, 90, 135, 0.9);
+  color: rgba(40, 75, 115, 0.8);
 }
 
 .weather-localization-button {
@@ -147,7 +165,20 @@
 }
 
 .weather-time-panel {
+  color: rgb(173, 173, 173);
   background-color: rgba(255, 255, 255, 0.1);
+  padding: 4px;
+}
+
+.weather-temperature-label {
+  line-height: 0.5;
+  font-size: 16px;
+  padding: 0px;
+}
+
+.current-weather-temperature-label {
+  line-height: 0.5;
+  font-size: 90px;
   padding: 4px;
 }
 

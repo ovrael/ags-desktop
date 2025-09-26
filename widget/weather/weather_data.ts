@@ -2,11 +2,13 @@ import { icons } from "../../models/texts/text_icons";
 
 export class WeatherData {
     public time: string = "";
-    public code: number = -1;
+    public time2: string = ""; // f.q. day name
     public isDay: boolean = true;
-    public temperature: number = 0;
-    public precipitationProbability: number = 0;
+    public code: number = -1;
     public icon: string = '';
+    public temperature: number = 0;
+    public temperatureUnit: string = '';
+    public precipitationProbability: number = 0;
     private cssClass: string = '';
 
     public getClass(forButton: boolean = false) {

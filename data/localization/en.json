@@ -1,7 +1,16 @@
 {
     "general": {
         "add": "Add",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "daysOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+        ]
     },
     "timer": {
         "add": "Add timer",

@@ -1,7 +1,16 @@
 {
     "general": {
         "add": "Dodaj",
-        "cancel": "Anuluj"
+        "cancel": "Anuluj",
+        "daysOfWeek": [
+            "Poniedziałek",
+            "Wtorek",
+            "Środa",
+            "Czwartek",
+            "Piątek",
+            "Sobota",
+            "Niedziela"
+        ]
     },
     "timer": {
         "add": "Dodaj minutnik",

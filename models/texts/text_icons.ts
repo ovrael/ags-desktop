@@ -53,6 +53,7 @@ class TextIcons {
     // nf-weather-
 
     public readonly cloudyFull: string = "";
+    public readonly precipitationProbability: string = "";
 
     // DAY
     public readonly daySun: string = "";
@@ -63,15 +64,18 @@ class TextIcons {
 
     // NIGHT
     public readonly nightMoon: string = "";
-    public readonly nightCloudyMid: string = "";
-    public readonly nightRain: string = "";
-    public readonly nightSnow: string = "";
-    public readonly nightThunderstorm: string = "";
+    public readonly nightCloudyMid: string = "";
+    public readonly nightRain: string = "";
+    public readonly nightSnow: string = "";
+    public readonly nightThunderstorm: string = "";
 
-    // UNITS
-    public readonly celsiusUnit: string = "";
-    public readonly fahrenheitUnit: string = "";
+    //#endregion
 
+    //#region
+    public readonly volumeMute: string = "";
+    public readonly volumeLow: string = "";
+    public readonly volumeMid: string = "";
+    public readonly volumeHigh: string = "";
     //#endregion
 }
 export const icons: TextIcons = new TextIcons();

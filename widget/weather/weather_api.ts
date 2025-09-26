@@ -6,6 +6,7 @@ import { interval, Time } from "ags/time";
 import { createState } from "ags";
 import { LocalizationWeatherData } from "./localization_weather_data";
 import { Communication } from "../../models/utils/communication";
+import { icons } from "../../models/texts/text_icons";
 
 class WeatherApi {
 
@@ -109,6 +110,7 @@ class WeatherApi {
         weather.isDay = jsonField.is_day;
         weather.temperature = jsonField.temperature_2m;
         weather.precipitationProbability = jsonField.precipitation_probability;
+        weather.temperatureUnit = configuration.weather.temperatureUnit === "F" ? "°F" : "°C";
         weather.updateStyle();
 
         return weather;
@@ -131,6 +133,7 @@ class WeatherApi {
             weather.isDay = jsonField.is_day !== undefined ? jsonField.is_day[i] : 1;
             weather.temperature = jsonField.temperature_2m !== undefined ? jsonField.temperature_2m[i] : jsonField.temperature_2m_mean[i];
             weather.precipitationProbability = jsonField.precipitation_probability !== undefined ? jsonField.precipitation_probability[i] : jsonField.precipitation_probability_mean[i];
+            weather.temperatureUnit = configuration.weather.temperatureUnit === "F" ? "°F" : "°C";
             weather.updateStyle();
             weatherForecast.push(weather);
         }

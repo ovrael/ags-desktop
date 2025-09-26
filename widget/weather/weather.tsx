@@ -5,6 +5,7 @@ import { WeatherPopover } from "./weather_popover";
 import { WeatherLocalization } from "./weather_localization";
 import { configuration } from "../../app";
 import { weatherApi } from "./weather_api";
+import Pango from "gi://Pango";
 
 export function Weather() {
   const mainLocalization = weatherApi.localizationWeathers[0](
@@ -16,33 +17,40 @@ export function Weather() {
       <menubutton>
         <box cssClasses={["weather-button"]} overflow={Gtk.Overflow.HIDDEN}>
           <box
+            heightRequest={20}
+            widthRequest={20}
             cssClasses={mainLocalization((v) => [
               "weather-button-label-container",
               v.current.getClass(true),
             ])}
           >
-            <label
-              cssClasses={["bar-button-label"]}
-              label={mainLocalization((v) => v.current.icon)}
-            />
+            <box overflow={Gtk.Overflow.HIDDEN} marginEnd={4}>
+              <label
+                valign={Gtk.Align.CENTER}
+                halign={Gtk.Align.CENTER}
+                cssClasses={["weather-button-status-label"]}
+                label={mainLocalization((v) => v.current.icon)}
+              />
+            </box>
             <box>
               <With value={configuration.weatherState[0]}>
                 {(state) => {
                   if (state.showLocationName === true) {
-                    return <label label={mainLocalization((v) => v.name)} />;
+                    return (
+                      <label
+                        marginEnd={6}
+                        cssClasses={["weather-button-name-label"]}
+                        label={mainLocalization((v) => v.name)}
+                      />
+                    );
                   } else return <box></box>;
                 }}
               </With>
             </box>
             <label
-              label={mainLocalization((v) => `${v.current.temperature}`)}
-            />
-            <label
-              cssClasses={["bar-button-label"]}
-              label={configuration.weatherState[0]((w) =>
-                w.temperatureUnit === "F"
-                  ? icons.fahrenheitUnit
-                  : icons.celsiusUnit
+              cssClasses={["weather-button-temperature-label"]}
+              label={mainLocalization(
+                (v) => `${v.current.temperature} ${v.current.temperatureUnit}`
               )}
             />
           </box>

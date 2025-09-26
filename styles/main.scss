@@ -1,5 +1,6 @@
 @use "weather.scss";
 @use "network_status.scss";
+@use "sound_status.scss";
 @use "timer.scss";
 @use "tests.scss";
 
@@ -46,7 +47,6 @@ menubutton > button {
   margin: 0px;
   padding: 0px;
 }
-
 
 .bar-button-label {
   line-height: 0.5;

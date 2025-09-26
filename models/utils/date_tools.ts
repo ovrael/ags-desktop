@@ -1,3 +1,5 @@
+import { configuration } from "../../app";
+
 export class DateTools {
     public static formatDate(date: Date, format: string): string {
         const yyyy = String(date.getFullYear());
@@ -50,6 +52,12 @@ export class DateTools {
         return format
             .replace("MM", mm)
             .replace("DD", dd);
+    }
+
+    public static getDayName(date: Date) {
+        const names = configuration.getTexts().general.daysOfWeek;
+        const dayIndex = (date.getDay() + 6) % 7;
+        return names[dayIndex];
     }
 
     public static formatTime(time: string, format: string) {
