@@ -1,11 +1,11 @@
 import { Accessor, createBinding, createState, With } from "ags";
 import { Gtk } from "ags/gtk4";
 import { Tools } from "../../models/utils/tools";
-import { SoundStatusPopover } from "./sound_status_popover";
+import { AudioManagerPopover } from "./audio_manager_popover";
 import { icons } from "../../models/texts/text_icons";
 import Wp from "gi://AstalWp";
 
-export function SoundStatus() {
+export function AudioManager() {
   const wp = Wp.get_default();
   const default_speaker = wp.audio.default_speaker;
   let systemVolume: Accessor<number> = createBinding(default_speaker, "volume");
@@ -19,7 +19,7 @@ export function SoundStatus() {
       <box cssClasses={["sound-status-button"]} overflow={Gtk.Overflow.HIDDEN}>
         <With value={systemVolume}>{(volume) => createLabel(volume)}</With>
       </box>
-      <SoundStatusPopover />
+      <AudioManagerPopover />
     </menubutton>
   );
 

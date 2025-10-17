@@ -5,7 +5,7 @@ import { createPoll } from "ags/time";
 import { Timer } from "./timer/timer";
 import { NetworkStatus } from "./network_status/network_status";
 import { Weather } from "./weather/weather";
-import { SoundStatus } from "./sound_status/sound_status";
+import { AudioManager } from "./audio_manager/audio_manager";
 
 export function bar(monitor: Gdk.Monitor) {
   if (monitor.description.includes("AW3423DWF")) {
@@ -45,7 +45,7 @@ function mainBar(monitor: Gdk.Monitor) {
         </box>
 
         <box $type="end" halign={Gtk.Align.END}>
-          <SoundStatus />
+          <AudioManager />
           <NetworkStatus />
         </box>
       </centerbox>

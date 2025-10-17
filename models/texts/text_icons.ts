@@ -76,6 +76,12 @@ class TextIcons {
     public readonly volumeLow: string = "";
     public readonly volumeMid: string = "";
     public readonly volumeHigh: string = "";
+
+    public readonly speakerTab: string = "󰓃";
+    public readonly microphoneTab: string = "";
+
+    public readonly microphone: string = "";
+    public readonly microphoneMute: string = "";
     //#endregion
 }
 export const icons: TextIcons = new TextIcons();

@@ -1,0 +1,119 @@
+.sound-status-button {
+  margin: 0px;
+  padding: 0px;
+}
+
+.sound-status-button {
+  color: rgba(150, 150, 150, 0.95);
+  border-radius: 4px;
+  border: 2px solid rgba(150, 150, 150, 0.2);
+  background-color: rgba(150, 150, 150, 0.1);
+}
+
+.sound-status-button:hover {
+  background-color: rgba(150, 150, 150, 0.215);
+}
+
+.sound-level-mute-button {
+  font-size: 40px;
+  line-height: 20px;
+}
+
+//#region Buttons
+
+.audio-button {
+  border-radius: 0px;
+  border: 1px solid rgb(128, 128, 128);
+  color: rgb(200, 200, 200);
+  background-color: rgb(0, 0, 0);
+}
+
+.audio-button.active {
+  color: rgb(0, 0, 0);
+  background-color: rgb(200, 200, 200);
+}
+
+//#endregion
+
+//#region Volume slider
+.volume-slider {
+}
+
+.volume-slider > trough > highlight {
+  background-color: rgb(180, 180, 180);
+  border-radius: 0px;
+}
+
+.volume-slider > trough > slider {
+  background-color: black;
+  border: solid 1px rgb(200, 200, 200);
+  border-radius: 0px;
+}
+
+.volume-slider > trough {
+  background-color: rgb(110, 110, 110);
+  border-radius: 0px;
+}
+
+//#region Devices dropdown
+.devices-dropdown {
+  border: 2px solid rgb(180, 180, 180);
+  border-radius: 0px;
+}
+
+.devices-dropdown > popover > contents > box {
+  border: 0px solid transparent;
+  border-radius: 0px;
+}
+
+.devices-dropdown > popover > contents > box > scrolledwindow {
+  border: 0px solid transparent;
+  border-radius: 0px;
+}
+
+.devices-dropdown > popover > contents > box > scrolledwindow > listview {
+  border: 0px solid transparent;
+  border-radius: 0px;
+  padding: 0px;
+}
+
+.devices-dropdown > popover > contents > box > scrolledwindow > listview > row {
+  background-color: rgba(0, 0, 0, 1);
+  border: 2px solid rgb(170, 170, 170);
+  border-radius: 0px;
+  margin: 0;
+}
+
+.devices-dropdown
+  > popover
+  > contents
+  > box
+  > scrolledwindow
+  > listview
+  > row:hover {
+  filter: brightness(1.3);
+  background-color: rgba(10, 10, 10, 1);
+}
+
+.devices-dropdown
+  > popover
+  > contents
+  > box
+  > scrolledwindow
+  > listview
+  > row
+  > box {
+}
+
+.devices-dropdown
+  > popover
+  > contents
+  > box
+  > scrolledwindow
+  > listview
+  > row
+  > box
+  > label {
+}
+
+//#endregion

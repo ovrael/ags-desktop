@@ -2,6 +2,8 @@
     "general": {
         "add": "Add",
         "cancel": "Cancel",
+        "name": "Name",
+        "description": "Description",
         "daysOfWeek": [
             "Monday",
             "Tuesday",
@@ -38,5 +40,17 @@
     "weather": {
         "badLocalizationsTooltip": "Your configuration file contains bad localizations coordinates: {0}. \nMake sure that latitude value is between -90 and 90, and longitude value in between -180 and 180",
         "defaultLocationName": "Localization"
+    },
+    "audioManager": {
+        "waitingForDevice": "Waiting for audio device",
+        "streams": "Streams",
+        "records": "Records",
+        "devices": "Devices",
+        "output": "Output",
+        "input": "Input",
+        "outputDevice": "Output device",
+        "inputDevice": "Input device",
+        "noStreams": "Nothing is streaming audio",
+        "noRecords": "Nothing is recording audio"
     }
 }

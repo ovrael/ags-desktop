@@ -2,6 +2,8 @@
     "general": {
         "add": "Dodaj",
         "cancel": "Anuluj",
+        "name": "Nazwa",
+        "description": "Opis",
         "daysOfWeek": [
             "Poniedziałek",
             "Wtorek",
@@ -38,5 +40,17 @@
     "weather": {
         "badLocalizationsTooltip": "Twój plik konfiguracyjny zawiera błędne dane lokalizacyjne: {0}. \nUpewnij się, że wartość latitude mieści się w zakresie -90 do 90 a wartość longitude w zakresie -180 do 180",
         "defaultLocationName": "Lokalizacja"
+    },
+    "audioManager": {
+        "waitingForDevice": "Oczekiwanie na urządzenie audio",
+        "streams": "Źródła",
+        "records": "Nasłuchiwacze",
+        "devices": "Urządzenia",
+        "output": "Wyjście",
+        "input": "Wejście",
+        "outputDevice": "Urządzenie wyjściowe",
+        "inputDevice": "Urządzenie wejściowe",
+        "noStreams": "Nic nie odtwarza dźwięku",
+        "noRecords": "Nic nie nagrywa dźwięku"
     }
 }

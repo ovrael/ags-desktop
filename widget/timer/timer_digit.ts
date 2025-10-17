@@ -24,9 +24,9 @@ export class TimerDigits {
         this.second2 = Math.floor(seconds % 10);
     }
 
-    public updateTime(digit: TimerDigit, change: number): void {
+    public updateTime(digit: TimerDigit, scrollChange: number): void {
 
-        change = 0.5 * Math.sign(change);
+        const change = 0.1 * Math.sign(scrollChange);
 
         switch (digit) {
             case TimerDigit.Hour1:
