@@ -133,99 +133,122 @@ export function AudioManagerPopover() {
           label={texts.noStreams}
           visible={streams((all) => all.length === 0)}
         ></label>
-        <For each={streams}>
-          {(stream) => {
-            const mute = createBinding(stream, "mute");
-            const volume = createBinding(stream, "volume");
-            const muteVolumeControl = createComputed([mute, volume]);
-            const targetEndpoint = createBinding(stream, "targetEndpoint");
-            let autoChange = false;
+        <scrolledwindow
+          vexpand
+          hexpand
+          propagateNaturalHeight
+          minContentHeight={200}
+          maxContentHeight={300}
+          minContentWidth={100}
+          vscrollbarPolicy={Gtk.PolicyType.AUTOMATIC}
+          hscrollbarPolicy={Gtk.PolicyType.NEVER}
+        >
+          <box
+            orientation={Gtk.Orientation.VERTICAL}
+            vexpand
+            hexpand
+            marginEnd={30}
+          >
+            <For each={streams}>
+              {(stream) => {
+                const mute = createBinding(stream, "mute");
+                const volume = createBinding(stream, "volume");
+                const muteVolumeControl = createComputed([mute, volume]);
+                const targetEndpoint = createBinding(stream, "targetEndpoint");
+                let autoChange = false;
 
-            return (
-              <box orientation={Gtk.Orientation.VERTICAL} marginTop={20}>
-                <label
-                  xalign={0.0}
-                  widthChars={30}
-                  maxWidthChars={30}
-                  ellipsize={Pango.EllipsizeMode.END}
-                  tooltipText={`${configuration.getTexts().general.name}: ${
-                    stream.name
-                  }\n${configuration.getTexts().general.description}: ${
-                    stream.description
-                  }`}
-                  label={`${stream.description} - ${stream.name}`}
-                ></label>
-                <box>
-                  <button onClicked={() => stream.set_mute(!stream.mute)}>
-                    <With value={muteVolumeControl}>
-                      {(value) => (
-                        <label
-                          cssClasses={["sound-level-mute-button"]}
-                          label={getVolumeIcon(value[0], value[1])}
-                        ></label>
-                      )}
-                    </With>
-                  </button>
-                  <slider
-                    sensitive={mute((m) => !m)}
-                    hexpand
-                    min={0}
-                    max={1}
-                    value={volume}
-                    class={"volume-slider"}
-                    onChangeValue={({ value }) => stream.set_volume(value)}
-                    marginEnd={6}
-                  ></slider>
-                  <label
-                    widthChars={3}
-                    label={volume.as((v) => (v * 100).toFixed())}
-                  ></label>
-                </box>
-                <box>
-                  <With value={targetEndpoint}>
-                    {(target) => {
-                      if (target == undefined) target = wp.defaultSpeaker;
-                      if (target == undefined) return <box></box>;
+                return (
+                  <box
+                    orientation={Gtk.Orientation.VERTICAL}
+                    marginTop={20}
+                    vexpand
+                  >
+                    <label
+                      xalign={0.0}
+                      widthChars={30}
+                      maxWidthChars={30}
+                      ellipsize={Pango.EllipsizeMode.END}
+                      tooltipText={`${configuration.getTexts().general.name}: ${
+                        stream.name
+                      }\n${configuration.getTexts().general.description}: ${
+                        stream.description
+                      }`}
+                      label={`${stream.description} - ${stream.name}`}
+                    ></label>
+                    <box>
+                      <button onClicked={() => stream.set_mute(!stream.mute)}>
+                        <With value={muteVolumeControl}>
+                          {(value) => (
+                            <label
+                              cssClasses={["sound-level-mute-button"]}
+                              label={getVolumeIcon(value[0], value[1])}
+                            ></label>
+                          )}
+                        </With>
+                      </button>
+                      <slider
+                        sensitive={mute((m) => !m)}
+                        hexpand
+                        min={0}
+                        max={1}
+                        value={volume}
+                        class={"volume-slider"}
+                        onChangeValue={({ value }) => stream.set_volume(value)}
+                        marginEnd={6}
+                      ></slider>
+                      <label
+                        widthChars={3}
+                        label={volume.as((v) => (v * 100).toFixed())}
+                      ></label>
+                    </box>
+                    <box>
+                      <With value={targetEndpoint}>
+                        {(target) => {
+                          if (target == undefined) target = wp.defaultSpeaker;
+                          if (target == undefined) return <box></box>;
 
-                      autoChange = true;
+                          autoChange = true;
 
-                      const selectedIndex = speakers((all) =>
-                        all.findIndex((s) => s.id === target.id)
-                      );
+                          const selectedIndex = speakers((all) =>
+                            all.findIndex((s) => s.id === target.id)
+                          );
 
-                      setTimeout(() => (autoChange = false), 0);
+                          setTimeout(() => (autoChange = false), 0);
 
-                      return (
-                        <box>
-                          <label label={`${texts.outputDevice}:`}></label>
-                          <Gtk.DropDown
-                            model={speakersListModel}
-                            cssClasses={["devices-dropdown"]}
-                            selected={selectedIndex}
-                            onNotifySelected={(dropdown, y) => {
-                              if (autoChange) return;
+                          return (
+                            <box>
+                              <label label={`${texts.outputDevice}:`}></label>
+                              <Gtk.DropDown
+                                model={speakersListModel}
+                                cssClasses={["devices-dropdown"]}
+                                selected={selectedIndex}
+                                onNotifySelected={(dropdown, y) => {
+                                  if (autoChange) return;
 
-                              const all = speakers.get();
-                              const selectedDevice = all[dropdown.selected];
-                              if (!selectedDevice) return;
+                                  const all = speakers.get();
+                                  const selectedDevice = all[dropdown.selected];
+                                  if (!selectedDevice) return;
 
-                              if (
-                                stream.targetEndpoint == undefined ||
-                                stream.targetEndpoint.id !== selectedDevice.id
-                              ) {
-                                stream.set_target_endpoint(selectedDevice);
-                              }
-                            }}
-                          ></Gtk.DropDown>
-                        </box>
-                      );
-                    }}
-                  </With>
-                </box>
-              </box>
-            );
-          }}
-        </For>
+                                  if (
+                                    stream.targetEndpoint == undefined ||
+                                    stream.targetEndpoint.id !==
+                                      selectedDevice.id
+                                  ) {
+                                    stream.set_target_endpoint(selectedDevice);
+                                  }
+                                }}
+                              ></Gtk.DropDown>
+                            </box>
+                          );
+                        }}
+                      </With>
+                    </box>
+                  </box>
+                );
+              }}
+            </For>
+          </box>
+        </scrolledwindow>
       </box>
     );
   }
@@ -234,59 +257,81 @@ export function AudioManagerPopover() {
     const speakers = createBinding(wp.audio, "speakers");
 
     return (
-      <box orientation={Gtk.Orientation.VERTICAL} marginTop={30}>
+      <box
+        orientation={Gtk.Orientation.VERTICAL}
+        marginTop={30}
+        marginBottom={15}
+      >
         <label css={"font-size: 28px;"} label={texts.devices}></label>
-        <For each={speakers((s) => s.sort((a, b) => a.id - b.id))}>
-          {(speaker: AstalWp.Endpoint) => {
-            const volume = createBinding(speaker, "volume");
-            const mute = createBinding(speaker, "mute");
-            const muteVolumeControl = createComputed([mute, volume]);
+        <scrolledwindow
+          vexpand
+          hexpand
+          propagateNaturalHeight
+          minContentHeight={120}
+          maxContentHeight={180}
+          minContentWidth={100}
+          vscrollbarPolicy={Gtk.PolicyType.AUTOMATIC}
+          hscrollbarPolicy={Gtk.PolicyType.NEVER}
+        >
+          <box
+            orientation={Gtk.Orientation.VERTICAL}
+            vexpand
+            hexpand
+            marginEnd={30}
+          >
+            <For each={speakers((s) => s.sort((a, b) => a.id - b.id))}>
+              {(speaker: AstalWp.Endpoint) => {
+                const volume = createBinding(speaker, "volume");
+                const mute = createBinding(speaker, "mute");
+                const muteVolumeControl = createComputed([mute, volume]);
 
-            return (
-              <box orientation={Gtk.Orientation.VERTICAL} marginTop={20}>
-                <label
-                  widthChars={30}
-                  maxWidthChars={30}
-                  ellipsize={Pango.EllipsizeMode.END}
-                  tooltipText={`${configuration.getTexts().general.name}: ${
-                    speaker.name
-                  }\n${configuration.getTexts().general.description}: ${
-                    speaker.description
-                  }`}
-                  xalign={0}
-                  label={`${speaker.description}`}
-                ></label>
-                <box>
-                  <button onClicked={() => speaker.set_mute(!speaker.mute)}>
-                    <With value={muteVolumeControl}>
-                      {(value) => (
-                        <label
-                          cssClasses={["sound-level-mute-button"]}
-                          label={getVolumeIcon(value[0], value[1])}
-                        ></label>
-                      )}
-                    </With>
-                  </button>
-                  <slider
-                    sensitive={mute((m) => !m)}
-                    class={"volume-slider"}
-                    hexpand
-                    min={0}
-                    max={1}
-                    value={volume.as((v) => Math.round(v * 100) / 100)}
-                    onChangeValue={({ value }) => speaker.set_volume(value)}
-                    marginEnd={6}
-                  ></slider>
+                return (
+                  <box orientation={Gtk.Orientation.VERTICAL} marginTop={10}>
+                    <label
+                      widthChars={30}
+                      maxWidthChars={30}
+                      ellipsize={Pango.EllipsizeMode.END}
+                      tooltipText={`${configuration.getTexts().general.name}: ${
+                        speaker.name
+                      }\n${configuration.getTexts().general.description}: ${
+                        speaker.description
+                      }`}
+                      xalign={0}
+                      label={`${speaker.description}`}
+                    ></label>
+                    <box>
+                      <button onClicked={() => speaker.set_mute(!speaker.mute)}>
+                        <With value={muteVolumeControl}>
+                          {(value) => (
+                            <label
+                              cssClasses={["sound-level-mute-button"]}
+                              label={getVolumeIcon(value[0], value[1])}
+                            ></label>
+                          )}
+                        </With>
+                      </button>
+                      <slider
+                        sensitive={mute((m) => !m)}
+                        class={"volume-slider"}
+                        hexpand
+                        min={0}
+                        max={1}
+                        value={volume.as((v) => Math.round(v * 100) / 100)}
+                        onChangeValue={({ value }) => speaker.set_volume(value)}
+                        marginEnd={6}
+                      ></slider>
 
-                  <label
-                    widthChars={3}
-                    label={volume.as((v) => (v * 100).toFixed())}
-                  ></label>
-                </box>
-              </box>
-            );
-          }}
-        </For>
+                      <label
+                        widthChars={3}
+                        label={volume.as((v) => (v * 100).toFixed())}
+                      ></label>
+                    </box>
+                  </box>
+                );
+              }}
+            </For>
+          </box>
+        </scrolledwindow>
       </box>
     );
   }
@@ -319,96 +364,116 @@ export function AudioManagerPopover() {
           label={texts.noRecords}
           visible={recorders((all) => all.length === 0)}
         ></label>
-        <For each={recorders}>
-          {(record) => {
-            const mute = createBinding(record, "mute");
-            const volume = createBinding(record, "volume");
-            const targetEndpoint = createBinding(record, "targetEndpoint");
-            let autoChange = false;
+        <scrolledwindow
+          vexpand
+          hexpand
+          propagateNaturalHeight
+          minContentHeight={200}
+          maxContentHeight={300}
+          minContentWidth={100}
+          vscrollbarPolicy={Gtk.PolicyType.AUTOMATIC}
+          hscrollbarPolicy={Gtk.PolicyType.NEVER}
+        >
+          <box
+            orientation={Gtk.Orientation.VERTICAL}
+            vexpand
+            hexpand
+            marginEnd={30}
+          >
+            <For each={recorders}>
+              {(record) => {
+                const mute = createBinding(record, "mute");
+                const volume = createBinding(record, "volume");
+                const targetEndpoint = createBinding(record, "targetEndpoint");
+                let autoChange = false;
 
-            return (
-              <box orientation={Gtk.Orientation.VERTICAL} marginTop={20}>
-                <label
-                  xalign={0.0}
-                  widthChars={30}
-                  maxWidthChars={30}
-                  ellipsize={Pango.EllipsizeMode.END}
-                  tooltipText={`${configuration.getTexts().general.name}: ${
-                    record.name
-                  }\n${configuration.getTexts().general.description}: ${
-                    record.description
-                  }`}
-                  label={`${record.description} - ${record.name}`}
-                ></label>
-                <box>
-                  <button onClicked={() => record.set_mute(!record.mute)}>
+                return (
+                  <box orientation={Gtk.Orientation.VERTICAL} marginTop={20}>
                     <label
-                      cssClasses={["sound-level-mute-button"]}
-                      label={mute((m) =>
-                        m === true ? icons.microphoneMute : icons.microphone
-                      )}
+                      xalign={0.0}
+                      widthChars={30}
+                      maxWidthChars={30}
+                      ellipsize={Pango.EllipsizeMode.END}
+                      tooltipText={`${configuration.getTexts().general.name}: ${
+                        record.name
+                      }\n${configuration.getTexts().general.description}: ${
+                        record.description
+                      }`}
+                      label={`${record.description} - ${record.name}`}
                     ></label>
-                  </button>
-                  <slider
-                    sensitive={mute((m) => !m)}
-                    class={"volume-slider"}
-                    hexpand
-                    min={0}
-                    max={1}
-                    value={volume}
-                    onChangeValue={({ value }) => record.set_volume(value)}
-                    marginEnd={6}
-                  ></slider>
-                  <label
-                    widthChars={3}
-                    label={volume.as((v) => (v * 100).toFixed())}
-                  ></label>
-                </box>
-                <box>
-                  <With value={targetEndpoint}>
-                    {(target) => {
-                      if (target == undefined) target = wp.defaultMicrophone;
-                      if (target == undefined) return <box></box>;
+                    <box>
+                      <button onClicked={() => record.set_mute(!record.mute)}>
+                        <label
+                          cssClasses={["sound-level-mute-button"]}
+                          label={mute((m) =>
+                            m === true ? icons.microphoneMute : icons.microphone
+                          )}
+                        ></label>
+                      </button>
+                      <slider
+                        sensitive={mute((m) => !m)}
+                        class={"volume-slider"}
+                        hexpand
+                        min={0}
+                        max={1}
+                        value={volume}
+                        onChangeValue={({ value }) => record.set_volume(value)}
+                        marginEnd={6}
+                      ></slider>
+                      <label
+                        widthChars={3}
+                        label={volume.as((v) => (v * 100).toFixed())}
+                      ></label>
+                    </box>
+                    <box>
+                      <With value={targetEndpoint}>
+                        {(target) => {
+                          if (target == undefined)
+                            target = wp.defaultMicrophone;
+                          if (target == undefined) return <box></box>;
 
-                      autoChange = true;
+                          autoChange = true;
 
-                      const selectedIndex = microphones((all) =>
-                        all.findIndex((s) => s.id === target.id)
-                      );
+                          const selectedIndex = microphones((all) =>
+                            all.findIndex((s) => s.id === target.id)
+                          );
 
-                      setTimeout(() => (autoChange = false), 0);
+                          setTimeout(() => (autoChange = false), 0);
 
-                      return (
-                        <box>
-                          <label label={`${texts.inputDevice}:`}></label>
-                          <Gtk.DropDown
-                            model={microphonesListModel}
-                            cssClasses={["devices-dropdown"]}
-                            selected={selectedIndex}
-                            onNotifySelected={(dropdown, y) => {
-                              if (autoChange) return;
+                          return (
+                            <box>
+                              <label label={`${texts.inputDevice}:`}></label>
+                              <Gtk.DropDown
+                                model={microphonesListModel}
+                                cssClasses={["devices-dropdown"]}
+                                selected={selectedIndex}
+                                onNotifySelected={(dropdown, y) => {
+                                  if (autoChange) return;
 
-                              const all = microphones.get();
-                              const selectedDevice = all[dropdown.selected];
-                              if (!selectedDevice) return;
+                                  const all = microphones.get();
+                                  const selectedDevice = all[dropdown.selected];
+                                  if (!selectedDevice) return;
 
-                              if (
-                                record.targetEndpoint == undefined ||
-                                record.targetEndpoint.id !== selectedDevice.id
-                              ) {
-                                record.set_target_endpoint(selectedDevice);
-                              }
-                            }}
-                          ></Gtk.DropDown>
-                        </box>
-                      );
-                    }}
-                  </With>
-                </box>
-              </box>
-            );
-          }}
-        </For>
+                                  if (
+                                    record.targetEndpoint == undefined ||
+                                    record.targetEndpoint.id !==
+                                      selectedDevice.id
+                                  ) {
+                                    record.set_target_endpoint(selectedDevice);
+                                  }
+                                }}
+                              ></Gtk.DropDown>
+                            </box>
+                          );
+                        }}
+                      </With>
+                    </box>
+                  </box>
+                );
+              }}
+            </For>
+          </box>
+        </scrolledwindow>
       </box>
     );
   }
@@ -417,56 +482,78 @@ export function AudioManagerPopover() {
     const microphones = createBinding(wp.audio, "microphones");
 
     return (
-      <box orientation={Gtk.Orientation.VERTICAL} marginTop={30}>
+      <box
+        orientation={Gtk.Orientation.VERTICAL}
+        marginTop={30}
+        marginBottom={15}
+      >
         <label css={"font-size: 28px;"} label={texts.devices}></label>
-        <For each={microphones((s) => s.sort((a, b) => a.id - b.id))}>
-          {(speaker: AstalWp.Endpoint) => {
-            const volume = createBinding(speaker, "volume");
-            const mute = createBinding(speaker, "mute");
+        <scrolledwindow
+          vexpand
+          hexpand
+          propagateNaturalHeight
+          minContentHeight={120}
+          maxContentHeight={180}
+          minContentWidth={100}
+          vscrollbarPolicy={Gtk.PolicyType.AUTOMATIC}
+          hscrollbarPolicy={Gtk.PolicyType.NEVER}
+        >
+          <box
+            orientation={Gtk.Orientation.VERTICAL}
+            vexpand
+            hexpand
+            marginEnd={30}
+          >
+            <For each={microphones((s) => s.sort((a, b) => a.id - b.id))}>
+              {(speaker: AstalWp.Endpoint) => {
+                const volume = createBinding(speaker, "volume");
+                const mute = createBinding(speaker, "mute");
 
-            return (
-              <box orientation={Gtk.Orientation.VERTICAL} marginTop={20}>
-                <label
-                  widthChars={30}
-                  maxWidthChars={30}
-                  ellipsize={Pango.EllipsizeMode.END}
-                  tooltipText={`${configuration.getTexts().general.name}: ${
-                    speaker.name
-                  }\n${configuration.getTexts().general.description}: ${
-                    speaker.description
-                  }`}
-                  xalign={0}
-                  label={`${speaker.description}`}
-                ></label>
-                <box>
-                  <button onClicked={() => speaker.set_mute(!speaker.mute)}>
+                return (
+                  <box orientation={Gtk.Orientation.VERTICAL} marginTop={20}>
                     <label
-                      cssClasses={["sound-level-mute-button"]}
-                      label={mute((m) =>
-                        m === true ? icons.microphoneMute : icons.microphone
-                      )}
+                      widthChars={30}
+                      maxWidthChars={30}
+                      ellipsize={Pango.EllipsizeMode.END}
+                      tooltipText={`${configuration.getTexts().general.name}: ${
+                        speaker.name
+                      }\n${configuration.getTexts().general.description}: ${
+                        speaker.description
+                      }`}
+                      xalign={0}
+                      label={`${speaker.description}`}
                     ></label>
-                  </button>
-                  <slider
-                    sensitive={mute((m) => !m)}
-                    hexpand
-                    class={"volume-slider"}
-                    min={0}
-                    max={1}
-                    value={volume.as((v) => Math.round(v * 100) / 100)}
-                    onChangeValue={({ value }) => speaker.set_volume(value)}
-                    marginEnd={6}
-                  ></slider>
+                    <box>
+                      <button onClicked={() => speaker.set_mute(!speaker.mute)}>
+                        <label
+                          cssClasses={["sound-level-mute-button"]}
+                          label={mute((m) =>
+                            m === true ? icons.microphoneMute : icons.microphone
+                          )}
+                        ></label>
+                      </button>
+                      <slider
+                        sensitive={mute((m) => !m)}
+                        hexpand
+                        class={"volume-slider"}
+                        min={0}
+                        max={1}
+                        value={volume.as((v) => Math.round(v * 100) / 100)}
+                        onChangeValue={({ value }) => speaker.set_volume(value)}
+                        marginEnd={6}
+                      ></slider>
 
-                  <label
-                    widthChars={3}
-                    label={volume.as((v) => (v * 100).toFixed())}
-                  ></label>
-                </box>
-              </box>
-            );
-          }}
-        </For>
+                      <label
+                        widthChars={3}
+                        label={volume.as((v) => (v * 100).toFixed())}
+                      ></label>
+                    </box>
+                  </box>
+                );
+              }}
+            </For>
+          </box>
+        </scrolledwindow>
       </box>
     );
   }

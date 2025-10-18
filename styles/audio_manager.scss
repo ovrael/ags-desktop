@@ -57,7 +57,7 @@
 
 //#region Devices dropdown
 .devices-dropdown {
-  border: 2px solid rgb(180, 180, 180);
+  border: 1px solid rgb(180, 180, 180, 0.5);
   border-radius: 0px;
 }
 
@@ -79,7 +79,7 @@
 
 .devices-dropdown > popover > contents > box > scrolledwindow > listview > row {
   background-color: rgba(0, 0, 0, 1);
-  border: 2px solid rgb(170, 170, 170);
+  border: 1px solid rgb(170, 170, 170, 0.5);
   border-radius: 0px;
   margin: 0;
 }
