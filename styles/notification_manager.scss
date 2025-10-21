@@ -1,0 +1,61 @@
+.notification {
+  background-color: black;
+  border-radius: 0px;
+  color: white;
+}
+
+.notification-low {
+  border: 1px green solid;
+}
+
+.notification-normal {
+  border: 1px orange solid;
+}
+
+.notification-critical {
+  border: 1px red solid;
+}
+
+//#region Separator
+.separate-bar-low {
+  background-color: green;
+  border-radius: 0px;
+}
+
+.separate-bar-normal {
+  background-color: orange;
+  border-radius: 0px;
+}
+
+.separate-bar-critical {
+  background-color: red;
+  border-radius: 0px;
+}
+//#endregion
+
+//#region Timeout bar
+.timeout-bar {
+  border-radius: 0px;
+  background-color: transparent;
+}
+
+.timeout-bar > trough > block.empty {
+  background-color: transparent;
+  border-radius: 0px;
+}
+
+.timeout-bar-low > trough > block.filled {
+  background-color: green;
+  border-radius: 0px;
+}
+
+.timeout-bar-normal > trough > block.filled {
+  background-color: orange;
+  border-radius: 0px;
+}
+
+.timeout-bar-critical > trough > block.filled {
+  background-color: red;
+  border-radius: 0px;
+}
+//#endregion

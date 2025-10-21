@@ -1,4 +1,4 @@
-import { Accessor, createComputed, createState, For } from "ags";
+import { Accessor, createComputed, createState, For, onCleanup } from "ags";
 import { Gtk } from "ags/gtk4";
 import { configuration } from "../../app";
 import { WeatherData } from "./weather_data";
@@ -137,9 +137,14 @@ export function WeatherPopover() {
         ? ["weather-localization-button", "weather-current-localization"]
         : ["weather-localization-button"];
 
-    button.connect("clicked", () => {
+    const clickHandler = button.connect("clicked", () => {
       currentLocalization[1](tabName);
     });
+
+    onCleanup(() => {
+      button.disconnect(clickHandler);
+    });
+
     return button;
   }
 

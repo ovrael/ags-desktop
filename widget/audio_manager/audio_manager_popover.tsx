@@ -5,6 +5,7 @@ import {
   createConnection,
   createState,
   For,
+  onCleanup,
   With,
 } from "ags";
 import { Astal, Gtk } from "ags/gtk4";
@@ -26,9 +27,13 @@ export function AudioManagerPopover() {
   const currentTabName = createState(TabName.OUTPUT);
   const texts = configuration.getTexts().audioManager;
 
-  wp.connect("ready", () => {
+  const readyHandler = wp.connect("ready", () => {
     console.log("ready");
     wpReady[1](true);
+  });
+
+  onCleanup(() => {
+    wp.disconnect(readyHandler);
   });
 
   return (
@@ -225,8 +230,11 @@ export function AudioManagerPopover() {
                                 onNotifySelected={(dropdown, y) => {
                                   if (autoChange) return;
 
+                                  const selected = dropdown.selected;
                                   const all = speakers.get();
-                                  const selectedDevice = all[dropdown.selected];
+                                  if (all.length <= selected || selected < 0)
+                                    return;
+                                  const selectedDevice = all[selected];
                                   if (!selectedDevice) return;
 
                                   if (
@@ -450,8 +458,11 @@ export function AudioManagerPopover() {
                                 onNotifySelected={(dropdown, y) => {
                                   if (autoChange) return;
 
+                                  const selected = dropdown.selected;
                                   const all = microphones.get();
-                                  const selectedDevice = all[dropdown.selected];
+                                  if (all.length <= selected || selected < 0)
+                                    return;
+                                  const selectedDevice = all[selected];
                                   if (!selectedDevice) return;
 
                                   if (

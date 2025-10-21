@@ -6,6 +6,7 @@ import { TimerDigits } from "./timer_digit";
 import { TimerDigit } from "./timer_enums";
 import { configuration } from "../../app";
 import { icons } from "../../models/texts/text_icons";
+import { onCleanup } from "ags";
 
 export class SaveTimerWindow {
   static instance: SaveTimerWindow | undefined = undefined;
@@ -26,9 +27,13 @@ export class SaveTimerWindow {
     this.window.child = this.createContent();
     this.window.cssClasses = ["create-save-timer-window"];
 
-    this.window.connect("close-request", () => {
+    const closeHandler = this.window.connect("close-request", () => {
       SaveTimerWindow.instance = undefined;
       return false; // close window
+    });
+
+    onCleanup(() => {
+      this.window.disconnect(closeHandler);
     });
 
     this.window.present();
@@ -57,12 +62,24 @@ export class SaveTimerWindow {
     nameEntry.marginTop = 20;
     nameEntry.placeholderText =
       configuration.getTexts().timer.saveNamePlaceholder;
-    nameEntry.buffer.connect("inserted-text", (buffer) => {
-      this.timerName = buffer.get_text();
+    const insertTextHandler = nameEntry.buffer.connect(
+      "inserted-text",
+      (buffer) => {
+        this.timerName = buffer.get_text();
+      }
+    );
+    const deleteTextHandler = nameEntry.buffer.connect(
+      "deleted-text",
+      (buffer) => {
+        this.timerName = buffer.get_text();
+      }
+    );
+
+    onCleanup(() => {
+      nameEntry.buffer.disconnect(insertTextHandler);
+      nameEntry.buffer.disconnect(deleteTextHandler);
     });
-    nameEntry.buffer.connect("deleted-text", (buffer) => {
-      this.timerName = buffer.get_text();
-    });
+
     content.append(nameEntry);
 
     // Time entry
@@ -169,15 +186,20 @@ export class SaveTimerWindow {
       flags: Gtk.EventControllerScrollFlags.VERTICAL,
     });
 
-    scrollController.connect("scroll", (controller, dx, dy) => {
-      this.timerSeconds.updateTime(digitIndex, -dy);
-      this.digitLabels.forEach((label) => {
-        label.label = this.timerSeconds.getDigit(
-          label.name as unknown as TimerDigit
-        );
-      });
+    const scrollHandler = scrollController.connect(
+      "scroll",
+      (controller, dx, dy) => {
+        this.timerSeconds.updateTime(digitIndex, -dy);
+        this.digitLabels.forEach((label) => {
+          label.label = this.timerSeconds.getDigit(
+            label.name as unknown as TimerDigit
+          );
+        });
+      }
+    );
+    onCleanup(() => {
+      scrollController.disconnect(scrollHandler);
     });
-
     digitLabel.add_controller(scrollController);
     this.digitLabels.push(digitLabel);
 
@@ -278,8 +300,11 @@ export class SaveTimerWindow {
     button.label = icons.back + " " + configuration.getTexts().general.cancel;
     button.hexpand = true;
     button.cssClasses = ["timer-popover-remove-timer-button"];
-    button.connect("clicked", () => {
+    const clickHandler = button.connect("clicked", () => {
       this.window.close();
+    });
+    onCleanup(() => {
+      button.disconnect(clickHandler);
     });
     return button;
   }

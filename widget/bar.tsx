@@ -6,6 +6,8 @@ import { Timer } from "./timer/timer";
 import { NetworkStatus } from "./network_status/network_status";
 import { Weather } from "./weather/weather";
 import { AudioManager } from "./audio_manager/audio_manager";
+import NotificationManager from "./notification_manager/notification_manager";
+import { NotificationHistory } from "./notification_history/notification_history";
 
 export function bar(monitor: Gdk.Monitor) {
   if (monitor.description.includes("AW3423DWF")) {
@@ -45,6 +47,7 @@ function mainBar(monitor: Gdk.Monitor) {
         </box>
 
         <box $type="end" halign={Gtk.Align.END}>
+          <NotificationHistory />
           <AudioManager />
           <NetworkStatus />
         </box>

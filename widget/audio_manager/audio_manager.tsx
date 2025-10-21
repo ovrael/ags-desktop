@@ -24,12 +24,29 @@ export function AudioManager() {
   );
 
   function createLabel(volume: number) {
+    const volumeInt = (volume * 100).toFixed();
+
     if (volume < 0.3)
-      return <label class={"bar-button-label"} label={`${icons.volumeLow}`} />;
+      return (
+        <box>
+          <label class={"bar-button-label"} label={`${icons.volumeLow}`} />
+          <label label={volumeInt}></label>
+        </box>
+      );
 
     if (volume < 0.7)
-      return <label class={"bar-button-label"} label={`${icons.volumeMid}`} />;
+      return (
+        <box>
+          <label class={"bar-button-label"} label={`${icons.volumeMid}`} />
+          <label label={volumeInt}></label>
+        </box>
+      );
 
-    return <label class={"bar-button-label"} label={`${icons.volumeHigh}`} />;
+    return (
+      <box>
+        <label class={"bar-button-label"} label={`${icons.volumeHigh}`} />
+        <label label={volumeInt}></label>
+      </box>
+    );
   }
 }

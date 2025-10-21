@@ -7,6 +7,7 @@ import { Communication } from "../utils/communication";
 import { createState, State } from "ags";
 import { execAsync } from "ags/process";
 import { WeatherConfiguration } from "./weather_configuration";
+import { NotificationConfiguration } from "./notification_configuration";
 
 const CONFIG_PATH = "config/config.json"
 
@@ -20,6 +21,7 @@ export class Configuration {
     public timer: TimerConfiguration = new TimerConfiguration();
     public weather: WeatherConfiguration = new WeatherConfiguration();
     public weatherState: State<WeatherConfiguration> = createState(new WeatherConfiguration());
+    public notifiaction: NotificationConfiguration = new NotificationConfiguration();
 
     public texts: State<LocaliztionTexts> = createState(new LocaliztionTexts(""));
     public getTexts() { return this.texts[0].get(); };
@@ -38,9 +40,14 @@ export class Configuration {
         const fileConfig = JSON.parse(configJson) as Configuration;
 
         const config = new Configuration();
-        config.general.languageCode = fileConfig.general.languageCode;
 
+        // Texts
         config.texts[1](new LocaliztionTexts(config.general.languageCode));
+
+        // General
+        config.general.languageCode = fileConfig.general.languageCode;
+        config.general.dateFormat = fileConfig.general.dateFormat;
+        config.general.timeFormat = fileConfig.general.timeFormat;
 
         // Timer
         config.timer.defaultTimerTimeSeconds = fileConfig.timer.defaultTimerTimeSeconds;
@@ -54,8 +61,12 @@ export class Configuration {
         config.weather = weatherConfig;
         config.weatherState = createState(weatherConfig);
 
-        config.addFileMonitorHandler();
 
+        // Notification
+        config.notifiaction.historyEntries = config.notifiaction.historyEntries;
+        config.notifiaction.historyPath = config.notifiaction.historyPath;
+
+        config.addFileMonitorHandler();
         Configuration.instance = config;
 
         return config;
@@ -115,14 +126,20 @@ export class Configuration {
     }
 
     private async update() {
-        const configJson = await readFileAsync(`${CONFIG_PATH}`);
-        const fileConfig = JSON.parse(configJson) as Configuration;
-        this.texts[1](new LocaliztionTexts(fileConfig.general.languageCode));
+        try {
 
-        // Weather
-        const weatherConfig = WeatherConfiguration.fromConfigFile(fileConfig.weather);
-        await weatherConfig.checkLocalizationNames();
-        this.weather = weatherConfig;
-        this.weatherState[1](weatherConfig);
+            const configJson = await readFileAsync(`${CONFIG_PATH}`);
+            const fileConfig = JSON.parse(configJson) as Configuration;
+            this.texts[1](new LocaliztionTexts(fileConfig.general.languageCode));
+
+            // Weather
+            const weatherConfig = WeatherConfiguration.fromConfigFile(fileConfig.weather);
+            await weatherConfig.checkLocalizationNames();
+            this.weather = weatherConfig;
+            this.weatherState[1](weatherConfig);
+
+        } catch (error) {
+            Communication.printError("Cannot update configuration, please reload AGS");
+        }
     }
 }

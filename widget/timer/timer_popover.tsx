@@ -1,6 +1,6 @@
 import { Gtk } from "ags/gtk4";
 import { timerVariables } from "./timer_variables";
-import { Accessor, createState, For, State, With } from "ags";
+import { Accessor, createState, For, onCleanup, State, With } from "ags";
 import { SaveTimerWindow } from "./save_timer_window";
 import { TimerUtils } from "./timer_utils";
 import { SavedTimer } from "./saved_timer";
@@ -91,13 +91,20 @@ export default function TimerPopover() {
       flags: Gtk.EventControllerScrollFlags.VERTICAL,
     });
 
-    scrollController.connect("scroll", (controller, dx, dy) => {
-      timerSeconds.updateTime(digitIndex, -dy);
-      digitLabels.forEach((label) => {
-        label.label = timerSeconds.getDigit(
-          label.name as unknown as TimerDigit
-        );
-      });
+    const scrollHandler = scrollController.connect(
+      "scroll",
+      (controller, dx, dy) => {
+        timerSeconds.updateTime(digitIndex, -dy);
+        digitLabels.forEach((label) => {
+          label.label = timerSeconds.getDigit(
+            label.name as unknown as TimerDigit
+          );
+        });
+      }
+    );
+
+    onCleanup(() => {
+      scrollController.disconnect(scrollHandler);
     });
 
     digitLabel.add_controller(scrollController);
