@@ -39,7 +39,7 @@ export function AudioManagerPopover() {
   return (
     <popover
       name={"Sound status popover"}
-      autohide={false}
+      autohide={true}
       hasArrow={false}
       class={"widget-popover"}
       marginEnd={60}
@@ -122,7 +122,11 @@ export function AudioManagerPopover() {
         .sort((a, b) => a.id - b.id)
     );
 
-    const speakers = createBinding(wp.audio, "speakers");
+    const speakers = createBinding(
+      wp.audio,
+      "speakers"
+    )((s) => s.sort((a, b) => a.id - b.id));
+
     const speakersListModel = speakers(
       (all) =>
         new Gtk.StringList({
@@ -214,9 +218,19 @@ export function AudioManagerPopover() {
 
                           autoChange = true;
 
-                          const selectedIndex = speakers((all) =>
-                            all.findIndex((s) => s.id === target.id)
-                          );
+                          const selectedIndex = speakers((all) => {
+                            let index = all.findIndex(
+                              (s) => s.id === target.id
+                            );
+
+                            if (index < 0) {
+                              index = all.findIndex(
+                                (s) => s.isDefault === true
+                              );
+                            }
+
+                            return index >= 0 ? index : 0;
+                          });
 
                           setTimeout(() => (autoChange = false), 0);
 
@@ -232,7 +246,7 @@ export function AudioManagerPopover() {
 
                                   const selected = dropdown.selected;
                                   const all = speakers.get();
-                                  if (all.length <= selected || selected < 0)
+                                  if (selected >= all.length || selected < 0)
                                     return;
                                   const selectedDevice = all[selected];
                                   if (!selectedDevice) return;
@@ -275,8 +289,8 @@ export function AudioManagerPopover() {
           vexpand
           hexpand
           propagateNaturalHeight
-          minContentHeight={120}
-          maxContentHeight={180}
+          minContentHeight={150}
+          maxContentHeight={200}
           minContentWidth={100}
           vscrollbarPolicy={Gtk.PolicyType.AUTOMATIC}
           hscrollbarPolicy={Gtk.PolicyType.NEVER}
@@ -294,7 +308,7 @@ export function AudioManagerPopover() {
                 const muteVolumeControl = createComputed([mute, volume]);
 
                 return (
-                  <box orientation={Gtk.Orientation.VERTICAL} marginTop={10}>
+                  <box orientation={Gtk.Orientation.VERTICAL} marginTop={20}>
                     <label
                       widthChars={30}
                       maxWidthChars={30}
@@ -396,7 +410,11 @@ export function AudioManagerPopover() {
                 let autoChange = false;
 
                 return (
-                  <box orientation={Gtk.Orientation.VERTICAL} marginTop={20}>
+                  <box
+                    orientation={Gtk.Orientation.VERTICAL}
+                    marginTop={20}
+                    vexpand
+                  >
                     <label
                       xalign={0.0}
                       widthChars={30}
@@ -442,9 +460,19 @@ export function AudioManagerPopover() {
 
                           autoChange = true;
 
-                          const selectedIndex = microphones((all) =>
-                            all.findIndex((s) => s.id === target.id)
-                          );
+                          const selectedIndex = microphones((all) => {
+                            let index = all.findIndex(
+                              (s) => s.id === target.id
+                            );
+
+                            if (index < 0) {
+                              index = all.findIndex(
+                                (s) => s.isDefault === true
+                              );
+                            }
+
+                            return index >= 0 ? index : 0;
+                          });
 
                           setTimeout(() => (autoChange = false), 0);
 
@@ -503,8 +531,8 @@ export function AudioManagerPopover() {
           vexpand
           hexpand
           propagateNaturalHeight
-          minContentHeight={120}
-          maxContentHeight={180}
+          minContentHeight={150}
+          maxContentHeight={200}
           minContentWidth={100}
           vscrollbarPolicy={Gtk.PolicyType.AUTOMATIC}
           hscrollbarPolicy={Gtk.PolicyType.NEVER}
