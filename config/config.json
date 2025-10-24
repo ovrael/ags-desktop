@@ -62,5 +62,13 @@
     "notification": {
         "historyEntries": 100,
         "historyPath": "data/notification/history.json"
+    },
+    "hyprworkspaces": {
+        "workspaces": [
+            "main",
+            "gaming",
+            "coding",
+            "terminal"
+        ]
     }
 }

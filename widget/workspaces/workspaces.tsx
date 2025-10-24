@@ -1,43 +1,73 @@
-import { createBinding, createComputed, For, With } from "ags";
+import {
+  createBinding,
+  createComputed,
+  createSettings,
+  createState,
+  For,
+  With,
+} from "ags";
 import Hyprland from "gi://AstalHyprland";
+import { configuration } from "../../app";
+import { icons } from "../../models/texts/text_icons";
+import { Gtk } from "ags/gtk4";
 
 // Read order from configuration
 
 export function Workspaces() {
   const hyprland = Hyprland.get_default();
-  const workspaces = createBinding(hyprland, "workspaces")((all) => all.sort());
+
+  const workspaces = configuration.hyprworkspaces.workspaces;
+  const maxLength = configuration.hyprworkspaces.workspaces
+    .map((w) => w.length)
+    .toSorted((a, b) => b - a)[0];
   const activeWorkspace = createBinding(hyprland, "focusedWorkspace");
-  const workspaceData = createComputed([workspaces, activeWorkspace]);
 
   return (
-    <box cssClasses={["workspaces-status"]} spacing={20}>
+    <box cssClasses={["workspaces-status"]} spacing={5}>
       <box>
         <label
-          widthChars={20}
-          label={activeWorkspace((w) => `[${w.id}] ${w.name}`)}
+          widthChars={maxLength + 2}
+          label={activeWorkspace((w) => `${w.name ?? w.id}`)}
         ></label>
       </box>
       <box>
-        <With value={workspaceData}>
-          {([all, active]) => {
+        <With value={activeWorkspace}>
+          {(active) => {
             return (
-              <box spacing={10}>
-                {all.map((w) => {
-                  if (w === active) {
+              <box spacing={2}>
+                {workspaces.map((w) => {
+                  if (w === active.name) {
                     return (
-                      <box>
-                        <label label={""} css={"color:red;"}></label>
+                      <box valign={Gtk.Align.CENTER}>
+                        <button
+                          class={"workspace-button"}
+                          valign={Gtk.Align.CENTER}
+                        >
+                          <label
+                            yalign={0.5}
+                            valign={Gtk.Align.CENTER}
+                            label={icons.currentWorkspace}
+                            class={"workspace-current"}
+                          ></label>
+                        </button>
                       </box>
                     );
                   } else {
                     return (
-                      <box>
+                      <box valign={Gtk.Align.CENTER}>
                         <button
+                          class={"workspace-button"}
+                          valign={Gtk.Align.CENTER}
                           onClicked={() => {
-                            hyprland.dispatch("workspace", `${w.name ?? w.id}`);
+                            hyprland.dispatch("workspace", `name:${w}`);
                           }}
                         >
-                          <label label={""} css={"color:white;"}></label>
+                          <label
+                            yalign={0.5}
+                            valign={Gtk.Align.CENTER}
+                            label={icons.emptyWorkspace}
+                            class={"workspace-empty"}
+                          ></label>
                         </button>
                       </box>
                     );

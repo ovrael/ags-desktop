@@ -71,7 +71,7 @@ class TextIcons {
 
     //#endregion
 
-    //#region
+    //#region Audio control
     public readonly volumeMute: string = "";
     public readonly volumeLow: string = "";
     public readonly volumeMid: string = "";
@@ -82,6 +82,11 @@ class TextIcons {
 
     public readonly microphone: string = "";
     public readonly microphoneMute: string = "";
+    //#endregion
+
+    //#region Workspace control
+    public readonly currentWorkspace: string = "󰝤";
+    public readonly emptyWorkspace: string = "󰝣";
     //#endregion
 }
 export const icons: TextIcons = new TextIcons();

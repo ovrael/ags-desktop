@@ -8,6 +8,7 @@ import { createState, State } from "ags";
 import { execAsync } from "ags/process";
 import { WeatherConfiguration } from "./weather_configuration";
 import { NotificationConfiguration } from "./notification_configuration";
+import { HyprworkspacesConfiguration } from "./hyprworkspaces_configuration";
 
 const CONFIG_PATH = "config/config.json"
 
@@ -21,7 +22,8 @@ export class Configuration {
     public timer: TimerConfiguration = new TimerConfiguration();
     public weather: WeatherConfiguration = new WeatherConfiguration();
     public weatherState: State<WeatherConfiguration> = createState(new WeatherConfiguration());
-    public notifiaction: NotificationConfiguration = new NotificationConfiguration();
+    public notification: NotificationConfiguration = new NotificationConfiguration();
+    public hyprworkspaces: HyprworkspacesConfiguration = new HyprworkspacesConfiguration();
 
     public texts: State<LocaliztionTexts> = createState(new LocaliztionTexts(""));
     public getTexts() { return this.texts[0].get(); };
@@ -63,8 +65,12 @@ export class Configuration {
 
 
         // Notification
-        config.notifiaction.historyEntries = config.notifiaction.historyEntries;
-        config.notifiaction.historyPath = config.notifiaction.historyPath;
+        config.notification.historyEntries = fileConfig.notification.historyEntries;
+        config.notification.historyPath = fileConfig.notification.historyPath;
+
+
+        // Hypr workspaces
+        config.hyprworkspaces.workspaces = fileConfig.hyprworkspaces.workspaces;
 
         config.addFileMonitorHandler();
         Configuration.instance = config;
@@ -137,7 +143,6 @@ export class Configuration {
             await weatherConfig.checkLocalizationNames();
             this.weather = weatherConfig;
             this.weatherState[1](weatherConfig);
-
         } catch (error) {
             Communication.printError("Cannot update configuration, please reload AGS");
         }

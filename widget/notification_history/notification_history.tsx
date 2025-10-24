@@ -13,7 +13,7 @@ export function NotificationHistory() {
     print(n.summary, n.body);
   });
 
-  const historyPath = configuration.notifiaction.historyPath;
+  const historyPath = configuration.notification.historyPath;
 
   const [getHistory, setHistory] = createState([]);
   return (
