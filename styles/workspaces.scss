@@ -7,24 +7,12 @@
   background-color: rgba(10, 130, 190, 0.1);
 }
 
-.workspace-button {
-  margin: 0px;
-  padding: 0px;
-  background-color: transparent;
-}
-
-.workspace-button:hover {
-  background-color: transparent;
-  transform: none;
-  filter: none;
-}
-
 .workspace-current {
-  color: rgb(5, 200, 230);
+  color: rgb(5, 200, 230, 0.6);
   font-size: 17px;
 }
 
 .workspace-empty {
-  color: rgb(5, 110, 230);
+  color: rgb(5, 110, 230, 0.4);
   font-size: 13px;
 }

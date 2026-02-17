@@ -27,48 +27,35 @@ export function Workspaces() {
       <box>
         <label
           widthChars={maxLength + 2}
-          label={activeWorkspace((w) => `${w.name ?? w.id}`)}
+          label={activeWorkspace((w) => (w ? `${w.name ?? w.id}` : "Unknown"))}
         ></label>
       </box>
       <box>
         <With value={activeWorkspace}>
           {(active) => {
             return (
-              <box spacing={2}>
+              <box spacing={6}>
                 {workspaces.map((w) => {
-                  if (w === active.name) {
+                  if (active != null && w === active.name) {
                     return (
                       <box valign={Gtk.Align.CENTER}>
-                        <button
-                          class={"workspace-button"}
+                        <label
+                          yalign={0.5}
                           valign={Gtk.Align.CENTER}
-                        >
-                          <label
-                            yalign={0.5}
-                            valign={Gtk.Align.CENTER}
-                            label={icons.currentWorkspace}
-                            class={"workspace-current"}
-                          ></label>
-                        </button>
+                          label={icons.currentWorkspace}
+                          class={"workspace-current"}
+                        ></label>
                       </box>
                     );
                   } else {
                     return (
                       <box valign={Gtk.Align.CENTER}>
-                        <button
-                          class={"workspace-button"}
+                        <label
+                          yalign={0.5}
                           valign={Gtk.Align.CENTER}
-                          onClicked={() => {
-                            hyprland.dispatch("workspace", `name:${w}`);
-                          }}
-                        >
-                          <label
-                            yalign={0.5}
-                            valign={Gtk.Align.CENTER}
-                            label={icons.emptyWorkspace}
-                            class={"workspace-empty"}
-                          ></label>
-                        </button>
+                          label={icons.emptyWorkspace}
+                          class={"workspace-empty"}
+                        ></label>
                       </box>
                     );
                   }

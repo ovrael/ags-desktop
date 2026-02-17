@@ -5,6 +5,7 @@ import NotificationPopup from "./notification_popup";
 import { createBinding, For, createState, onCleanup } from "ags";
 import GLib from "gi://GLib";
 import Adw from "gi://Adw";
+import { configuration } from "../../app";
 
 export default function NotificationManager() {
   const monitors = createBinding(app, "monitors");
@@ -19,12 +20,43 @@ export default function NotificationManager() {
   const notifiedHandler = notifd.connect("notified", (_, id, replaced) => {
     console.log("NOTIFIED");
     const notification = notifd.get_notification(id);
+
+    if (notification.expireTimeout === -1) {
+      if (
+        notification.urgency === AstalNotifd.Urgency.LOW &&
+        configuration.notification.defaultTimeoutForUrgency.low >= 0
+      ) {
+        notification.expireTimeout =
+          configuration.notification.defaultTimeoutForUrgency.low;
+      }
+      if (
+        notification.urgency === AstalNotifd.Urgency.NORMAL &&
+        configuration.notification.defaultTimeoutForUrgency.normal >= 0
+      ) {
+        notification.expireTimeout =
+          configuration.notification.defaultTimeoutForUrgency.normal;
+      }
+      if (
+        notification.urgency === AstalNotifd.Urgency.CRITICAL &&
+        configuration.notification.defaultTimeoutForUrgency.critical >= 0
+      ) {
+        notification.expireTimeout =
+          configuration.notification.defaultTimeoutForUrgency.critical;
+      }
+    }
+
     console.log(`${notification.summary} ${notification.body}`);
 
-    if (replaced && notifications.get().some((n) => n.id === id)) {
-      setNotifications((ns) => ns.map((n) => (n.id === id ? notification : n)));
-    } else {
-      setNotifications((ns) => [notification, ...ns]);
+    try {
+      if (replaced && notifications.get().some((n) => n.id === id)) {
+        setNotifications((ns) =>
+          ns.map((n) => (n.id === id ? notification : n))
+        );
+      } else {
+        setNotifications((ns) => [notification, ...ns]);
+      }
+    } catch (error) {
+      console.log(`Error when setNotifications: ${error}`);
     }
   });
 
@@ -50,11 +82,11 @@ export default function NotificationManager() {
         .map((n) => n.id)
         .join(", ")}`
     );
-    const x = notifications((n) => n.find((n2) => n2.id === id));
-    const n2 = x.get();
-    console.log(`${n2?.summary} ${n2?.body}`);
-
-    setNotifications((ns) => ns.filter((n) => n.id !== id));
+    try {
+      setNotifications((ns) => ns.filter((n) => n.id !== id));
+    } catch (error) {
+      console.log(`Error when setNotifications: ${error}`);
+    }
   });
 
   onCleanup(() => {

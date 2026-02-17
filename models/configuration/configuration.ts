@@ -9,6 +9,7 @@ import { execAsync } from "ags/process";
 import { WeatherConfiguration } from "./weather_configuration";
 import { NotificationConfiguration } from "./notification_configuration";
 import { HyprworkspacesConfiguration } from "./hyprworkspaces_configuration";
+import { CalendarConfiguration } from "./calendar_configuration";
 
 const CONFIG_PATH = "config/config.json"
 
@@ -24,6 +25,7 @@ export class Configuration {
     public weatherState: State<WeatherConfiguration> = createState(new WeatherConfiguration());
     public notification: NotificationConfiguration = new NotificationConfiguration();
     public hyprworkspaces: HyprworkspacesConfiguration = new HyprworkspacesConfiguration();
+    public calendar: CalendarConfiguration = new CalendarConfiguration();
 
     public texts: State<LocaliztionTexts> = createState(new LocaliztionTexts(""));
     public getTexts() { return this.texts[0].get(); };

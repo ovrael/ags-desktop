@@ -28,11 +28,14 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
   const useWifi = createComputed(
     [wifi, primary],
     (a: Network.Wifi, b: Network.Primary) => {
-      if (a == undefined || a == null) return false;
-      if (b !== Network.Primary.WIFI) return false;
+        if (a == undefined || a == null) return false;
+        if (b === Network.Primary.WIRED) return false;
+        return true;
       return true;
     }
   );
+
+  console.log(`USE WIFI: ${useWifi.get()}`)
 
   return (
     <popover
@@ -93,14 +96,14 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
   );
 
   function createWifiSwitch() {
-    const useWifi = createComputed(
-      [wifi, primary],
-      (a: Network.Wifi, b: Network.Primary) => {
-        if (a == undefined || a == null) return false;
-        if (b === Network.Primary.WIRED) return false;
-        return true;
-      }
-    );
+    // const useWifi = createComputed(
+    //   [wifi, primary],
+    //   (a: Network.Wifi, b: Network.Primary) => {
+    //     if (a == undefined || a == null) return false;
+    //     if (b === Network.Primary.WIRED) return false;
+    //     return true;
+    //   }
+    // );
 
     return (
       <box
@@ -109,7 +112,7 @@ export function NetworkStatusPopover({ network }: NetworkProps) {
         halign={Gtk.Align.CENTER}
         marginTop={20}
       >
-        <label label={"Wifi "}></label>
+        <label label={"Wifi"}></label>
         <switch
           cssClasses={["network-wifi-switch"]}
           active={wifi((w) => w.enabled)}

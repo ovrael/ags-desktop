@@ -2,6 +2,8 @@
     "general": {
         "add": "Dodaj",
         "cancel": "Anuluj",
+        "change": "Zmień",
+        "ok": "Ok",
         "name": "Nazwa",
         "description": "Opis",
         "daysOfWeek": [
@@ -44,7 +46,7 @@
     "audioManager": {
         "waitingForDevice": "Oczekiwanie na urządzenie audio",
         "streams": "Źródła",
-        "records": "Nasłuchiwacze",
+        "records": "Mikrofony",
         "devices": "Urządzenia",
         "output": "Wyjście",
         "input": "Wejście",
@@ -52,5 +54,12 @@
         "inputDevice": "Urządzenie wejściowe",
         "noStreams": "Nic nie odtwarza dźwięku",
         "noRecords": "Nic nie nagrywa dźwięku"
+    },
+    "bluetoothManager": {
+        "paired": "Połączone",
+        "unpaired": "Nowe",
+        "searchForDevices": "Szukaj urządzeń",
+        "changeAliasWindowTitle": "Zmień alias urządzenia",
+        "changeAliasWindowText": "Podaj nowy alias dla urządzenia {0} lub zostaw puste pole aby usunąć.\nMax 30 znaków."
     }
 }

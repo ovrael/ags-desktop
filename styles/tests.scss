@@ -73,3 +73,20 @@
   color: orange;
 }
 //#endregion
+
+//#region Buttons
+
+.test-button-1 {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 0px;
+
+  color: goldenrod;
+  background-color: rebeccapurple;
+}
+
+.test-button-1:hover {
+  color: rebeccapurple;
+  background-color: goldenrod;
+}
+
+//#endregion

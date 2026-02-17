@@ -8,23 +8,24 @@ import {
   onCleanup,
   With,
 } from "ags";
-import { Astal, Gtk } from "ags/gtk4";
+import { Astal, Gdk, Gtk } from "ags/gtk4";
 import Wp from "gi://AstalWp";
 import { icons } from "../../models/texts/text_icons";
 import AstalWp from "gi://AstalWp?version=0.1";
 import Pango from "gi://Pango?version=1.0";
 import { configuration } from "../../app";
+import { cursors } from "../../models/utils/cursors";
 
 export function AudioManagerPopover() {
   enum TabName {
     OUTPUT,
     INPUT,
   }
+  const currentTabName = createState(TabName.OUTPUT);
 
   const wpReady = createState(false);
   const wp = Wp.get_default();
 
-  const currentTabName = createState(TabName.OUTPUT);
   const texts = configuration.getTexts().audioManager;
 
   const readyHandler = wp.connect("ready", () => {
@@ -38,7 +39,7 @@ export function AudioManagerPopover() {
 
   return (
     <popover
-      name={"Sound status popover"}
+      name={"Audio manager popover"}
       autohide={true}
       hasArrow={false}
       class={"widget-popover"}
@@ -68,6 +69,7 @@ export function AudioManagerPopover() {
                     )}
                     hexpand
                     onClicked={() => currentTabName[1](TabName.OUTPUT)}
+                    cursor={cursors.pointer}
                   ></button>
                   <button
                     label={`${icons.microphoneTab} ${texts.input}`}
@@ -78,6 +80,7 @@ export function AudioManagerPopover() {
                     )}
                     hexpand
                     onClicked={() => currentTabName[1](TabName.INPUT)}
+                    cursor={cursors.pointer}
                   ></button>
                 </box>
                 <box widthRequest={300} heightRequest={400}>
@@ -185,7 +188,10 @@ export function AudioManagerPopover() {
                       label={`${stream.description} - ${stream.name}`}
                     ></label>
                     <box>
-                      <button onClicked={() => stream.set_mute(!stream.mute)}>
+                      <button
+                        onClicked={() => stream.set_mute(!stream.mute)}
+                        cursor={cursors.pointer}
+                      >
                         <With value={muteVolumeControl}>
                           {(value) => (
                             <label
@@ -204,6 +210,7 @@ export function AudioManagerPopover() {
                         class={"volume-slider"}
                         onChangeValue={({ value }) => stream.set_volume(value)}
                         marginEnd={6}
+                        cursor={cursors.pointer}
                       ></slider>
                       <label
                         widthChars={3}
@@ -322,7 +329,10 @@ export function AudioManagerPopover() {
                       label={`${speaker.description}`}
                     ></label>
                     <box>
-                      <button onClicked={() => speaker.set_mute(!speaker.mute)}>
+                      <button
+                        onClicked={() => speaker.set_mute(!speaker.mute)}
+                        cursor={cursors.pointer}
+                      >
                         <With value={muteVolumeControl}>
                           {(value) => (
                             <label
@@ -341,6 +351,7 @@ export function AudioManagerPopover() {
                         value={volume.as((v) => Math.round(v * 100) / 100)}
                         onChangeValue={({ value }) => speaker.set_volume(value)}
                         marginEnd={6}
+                        cursor={cursors.pointer}
                       ></slider>
 
                       <label
@@ -428,7 +439,10 @@ export function AudioManagerPopover() {
                       label={`${record.description} - ${record.name}`}
                     ></label>
                     <box>
-                      <button onClicked={() => record.set_mute(!record.mute)}>
+                      <button
+                        onClicked={() => record.set_mute(!record.mute)}
+                        cursor={cursors.pointer}
+                      >
                         <label
                           cssClasses={["sound-level-mute-button"]}
                           label={mute((m) =>
@@ -445,6 +459,7 @@ export function AudioManagerPopover() {
                         value={volume}
                         onChangeValue={({ value }) => record.set_volume(value)}
                         marginEnd={6}
+                        cursor={cursors.pointer}
                       ></slider>
                       <label
                         widthChars={3}
@@ -563,7 +578,10 @@ export function AudioManagerPopover() {
                       label={`${speaker.description}`}
                     ></label>
                     <box>
-                      <button onClicked={() => speaker.set_mute(!speaker.mute)}>
+                      <button
+                        onClicked={() => speaker.set_mute(!speaker.mute)}
+                        cursor={cursors.pointer}
+                      >
                         <label
                           cssClasses={["sound-level-mute-button"]}
                           label={mute((m) =>
@@ -580,6 +598,7 @@ export function AudioManagerPopover() {
                         value={volume.as((v) => Math.round(v * 100) / 100)}
                         onChangeValue={({ value }) => speaker.set_volume(value)}
                         marginEnd={6}
+                        cursor={cursors.pointer}
                       ></slider>
 
                       <label

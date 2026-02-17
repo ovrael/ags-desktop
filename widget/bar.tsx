@@ -8,6 +8,8 @@ import { Weather } from "./weather/weather";
 import { AudioManager } from "./audio_manager/audio_manager";
 import { NotificationHistory } from "./notification_history/notification_history";
 import { Workspaces } from "./workspaces/workspaces";
+import { Calendar } from "./calendar/calendar";
+import { BluetoothManager } from "./bluetooth_manager/bluetooth_manager";
 
 export function bar(monitor: Gdk.Monitor) {
   if (monitor.description.includes("AW3423DWF")) {
@@ -18,7 +20,6 @@ export function bar(monitor: Gdk.Monitor) {
 }
 
 function mainBar(monitor: Gdk.Monitor) {
-  const time = createPoll("", 1000, "date");
   const { BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor;
 
   return (
@@ -33,22 +34,18 @@ function mainBar(monitor: Gdk.Monitor) {
     >
       <centerbox cssName="centerbox">
         <box $type="start" halign={Gtk.Align.START}>
-          <Workspaces />
           <Weather />
+          <Workspaces />
           <Timer />
         </box>
 
         <box $type="center">
-          <menubutton class="clock" hexpand halign={Gtk.Align.CENTER}>
-            <label label={time} />
-            <popover>
-              <Gtk.Calendar />
-            </popover>
-          </menubutton>
+          <Calendar />
         </box>
 
         <box $type="end" halign={Gtk.Align.END}>
           {/* <NotificationHistory /> */}
+          <BluetoothManager />
           <AudioManager />
           <NetworkStatus />
         </box>

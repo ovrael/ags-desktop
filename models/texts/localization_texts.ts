@@ -4,6 +4,7 @@ import { GeneralTexts } from "./general_texts";
 import { NetworkTexts } from "./network_texts";
 import { WeatherTexts } from "./weather_texts";
 import { AudioManagerTexts } from "./audio_manager_texts";
+import { BluetoothManagerTexts } from "./bluetooth_manager_texts";
 
 export class LocaliztionTexts {
 
@@ -12,6 +13,7 @@ export class LocaliztionTexts {
     public readonly network: NetworkTexts = new NetworkTexts();
     public readonly weather: WeatherTexts = new WeatherTexts();
     public readonly audioManager: AudioManagerTexts = new AudioManagerTexts();
+    public readonly bluetoothManager: BluetoothManagerTexts = new BluetoothManagerTexts();
 
 
     constructor(language: string = "en") {

@@ -2,6 +2,8 @@
     "general": {
         "add": "Add",
         "cancel": "Cancel",
+        "change": "Change",
+        "ok": "Ok",
         "name": "Name",
         "description": "Description",
         "daysOfWeek": [
@@ -52,5 +54,12 @@
         "inputDevice": "Input device",
         "noStreams": "Nothing is streaming audio",
         "noRecords": "Nothing is recording audio"
+    },
+    "bluetoothManager": {
+        "paired": "Paired",
+        "unpaired": "New",
+        "searchForDevices": "Search for devices",
+        "changeAliasWindowTitle": "Change device alias",
+        "changeAliasWindowText": "Provide new alias for device {0} leave empty to remove it.\nMax 30 characters."
     }
 }

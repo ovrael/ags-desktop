@@ -3,8 +3,10 @@
 @use "notification_history.scss";
 @use "notification_manager.scss";
 @use "audio_manager.scss";
+@use "bluetooth_manager.scss";
 @use "timer.scss";
 @use "workspaces.scss";
+@use "calendar.scss";
 @use "tests.scss";
 
 // https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
@@ -117,4 +119,28 @@ popover.widget-popover contents {
 .label-icon-no-padding {
   font-size: 28px;
   line-height: 0.5em;
+}
+
+.fg-good {
+  color: rgb(50, 135, 40);
+}
+
+.fg-change {
+  color: rgb(180, 125, 45);
+}
+
+.fg-bad {
+  color: rgb(170, 55, 50);
+}
+
+.bg-good {
+  background-color: rgb(50, 135, 40);
+}
+
+.bg-change {
+  background-color: rgb(210, 150, 60);
+}
+
+.bg-bad {
+  background-color: rgb(210, 70, 60);
 }

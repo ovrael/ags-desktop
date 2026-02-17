@@ -50,18 +50,20 @@ export default function NotificationPopup({
 
   if (n.expireTimeout > 0) {
     setLeftTimeout(n.expireTimeout);
+
     timeoutInterval = interval(20, () => {
-      setLeftTimeout((v) => v - 20);
+      setLeftTimeout((v) => (v - 20 >= 0 ? v - 20 : 0));
     });
 
     timeout(n.expireTimeout, () => {
       if (timeoutInterval) timeoutInterval.cancel();
+      n.dismiss();
     });
   }
 
-  // onCleanup(() => {
-  //   if (timeoutInterval) timeoutInterval.cancel();
-  // });
+  onCleanup(() => {
+    if (timeoutInterval) timeoutInterval.cancel();
+  });
 
   return (
     <Adw.Clamp maximumSize={400}>

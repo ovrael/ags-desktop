@@ -1,0 +1,91 @@
+//#region Main button
+.bluetooth-button {
+  margin: 0px;
+  padding: 0px;
+  color: rgba(0, 130, 255);
+  border-radius: 4px;
+  border: 2px solid rgba(0, 130, 255, 0.2);
+  background-color: rgba(0, 130, 255, 0.1);
+}
+
+.bluetooth-button:hover {
+  background-color: rgba(0, 130, 255, 0.215);
+}
+
+//#endregion
+
+//#region Tab button
+.bluetooth-tab-button {
+  border-radius: 0px;
+  border: 1px solid rgb(128, 128, 128);
+  color: rgb(200, 200, 200);
+  background-color: rgb(0, 0, 0);
+}
+
+.bluetooth-tab-button.active {
+  color: rgb(0, 0, 0);
+  background-color: rgb(200, 200, 200);
+}
+//#endregion
+
+.device-box {
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 0px;
+  // padding: 4px;
+}
+
+.device-box-button-last {
+  border-radius: 0px;
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  padding: 0px;
+}
+
+.device-box-button {
+  border-radius: 0px;
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  border-right: 1px solid rgba(255, 255, 255, 0.7);
+  padding: 0px;
+}
+
+.device-box-button-icon {
+  padding: 0px;
+  // margin: 0px;
+  margin: 12px 0px 0px 0px;
+  font-size: 32px;
+  line-height: 16px;
+}
+.device-box-button-text {
+  padding: 0px;
+  margin: 6px 0px;
+  font-size: 12px;
+}
+
+.bluetooth-device-battery-bar {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 0px;
+}
+
+.bluetooth-device-battery-bar > trough > block.filled.verylow {
+  background-color: rgb(160, 40, 25);
+}
+
+.bluetooth-device-battery-bar > trough > block.filled.low {
+  background-color: rgb(170, 105, 30);
+}
+
+.bluetooth-device-battery-bar > trough > block.filled.mid {
+  background-color: rgb(160, 130, 20);
+}
+
+.bluetooth-device-battery-bar > trough > block.filled.high {
+  background-color: rgb(125, 165, 25);
+}
+
+.bluetooth-device-battery-bar > trough > block.filled.full {
+  background-color: rgb(40, 150, 20);
+}
+
+.device-box-property-icon {
+  font-size: 18px;
+}
